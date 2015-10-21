@@ -1,7 +1,7 @@
 PHP merchant
 ------------
 
-Payment merchants library in PHP
+Payment merchants library for PHP
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/php-merchant/v/stable.png)](https://packagist.org/packages/hiqdev/php-merchant)
 [![Total Downloads](https://poser.pugx.org/hiqdev/php-merchant/downloads.png)](https://packagist.org/packages/hiqdev/php-merchant)
