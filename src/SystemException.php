@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * PHP merchant
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (https://hiqdev.com/)
+ */
+
 namespace hiqdev\php\merchant;
 
 /**
