@@ -1,0 +1,11 @@
+package:
+    name:           php-merchant
+    namespace:      hiqdev\php\merchant
+    title:          PHP merchant
+    type:           library
+    keywords:       php, merchant, paypal, webmoney, ecoin, paxum, okpay, qiwi, yandex.money
+    description:    Payment merchants library for PHP
+
+require:
+    hiqdev/hidev-config:        "*"
+    hiqdev/hidev-config-php:    "*"

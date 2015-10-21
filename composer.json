@@ -1,0 +1,56 @@
+{
+    "name": "hiqdev/php-merchant",
+    "type": "library",
+    "description": "PHP merchant",
+    "keywords": [
+        "php",
+        "merchant",
+        "paypal",
+        "webmoney",
+        "ecoin",
+        "paxum",
+        "okpay",
+        "qiwi",
+        "yandex.money"
+    ],
+    "homepage": "https://github.com/hiqdev/php-merchant",
+    "license": "BSD-3-Clause",
+    "support": {
+        "email": "support@hiqdev.com",
+        "source": "https://github.com/hiqdev/php-merchant",
+        "issues": "https://github.com/hiqdev/php-merchant/issues",
+        "wiki": "https://github.com/hiqdev/php-merchant/wiki",
+        "forum": "https://forum.hiqdev.com/"
+    },
+    "authors": [
+        {
+            "name": "Andrii Vasyliev",
+            "role": "Project lead",
+            "email": "sol@hiqdev.com",
+            "homepage": "https://hipanel.com/"
+        },
+        {
+            "name": "Dmitry Naumenko",
+            "role": "Lead backend developer",
+            "email": "silverfire@hiqdev.com",
+            "homepage": "http://silverfire.me/"
+        },
+        {
+            "name": "Andrey Klochok",
+            "role": "Lead frontend developer",
+            "email": "tafid@hiqdev.com",
+            "homepage": "https://hiqdev.com/"
+        },
+        {
+            "name": "Yuriy Myronchuk",
+            "role": "QA Lead",
+            "email": "bladeroot@hiqdev.com",
+            "homepage": "https://hiqdev.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "hiqdev\\php\\merchant\\": "src"
+        }
+    }
+}
