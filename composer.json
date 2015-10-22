@@ -1,7 +1,7 @@
 {
     "name": "hiqdev/php-merchant",
     "type": "library",
-    "description": "PHP merchant",
+    "description": "PHP merchant library",
     "keywords": [
         "php",
         "merchant",

@@ -1,5 +1,5 @@
-PHP merchant
-------------
+PHP merchant library
+--------------------
 
 Payment merchants library for PHP
 

@@ -1,7 +1,7 @@
 package:
     name:           php-merchant
     namespace:      hiqdev\php\merchant
-    title:          PHP merchant
+    title:          PHP merchant library
     type:           library
     keywords:       php, merchant, paypal, webmoney, ecoin, paxum, okpay, qiwi, yandex.money
     description:    Payment merchants library for PHP
