@@ -3,26 +3,47 @@
 namespace hiqdev\php\merchant;
 
 use Closure;
+use ReflectionClass;
 
 abstract class Merchant
 {
     protected $_secret;
     protected $_secret2;
     protected $_config;
-    protected $_defaults = [
+    protected static $_defaults = [
         'basePage'  => '/merchant/pay/',
         'proto'     => 'https',
         'fee'       => 0,
         'method'    => 'POST',
+        'currency'  => 'usd',
+        'client'    => '',
     ];
 
     public function __construct($config = [])
     {
-        $config = array_merge((array)$this->_defaults, (array)$config);
-        $this->_$secret  = $config['secret'];
-        $this->_$secret2 = $config['secret'];
+        $config = array_merge((array)self::$_defaults, (array)static::$_defaults, (array)$config);
+        $this->_secret  = $config['secret'];
+        $this->_secret2 = $config['secret2'];
         unset($config['secret'], $config['secret2']);
         $this->_config = $config;
+    }
+
+    public static function create($config)
+    {
+        $reflection = new ReflectionClass(static::guessClass($config));
+        return $reflection->newInstanceArgs([$config]);
+    }
+
+    public static function guessClass($config)
+    {
+        if ($config['class']) {
+            return $config['class'];
+        }
+        $name = $config['name'] ?: $config['id'];
+        if (!$name) {
+            throw new SystemException('No merchant class given!');
+        }
+        return "hiqdev\\php\\merchant\\$name\\Merchant";
     }
 
     abstract public function getInputs();
@@ -31,7 +52,7 @@ abstract class Merchant
 
     public function get($name, $default = null)
     {
-        $res = $this->_config[$name]
+        $res = $this->_config[$name];
         $res = is_null($res) ? $default : $res;
         return $res instanceof Closure ? call_user_func($res, $this) : $res;
     }
@@ -46,6 +67,7 @@ abstract class Merchant
         if (array_key_exists($name, $this->_config)) {
             return $this->get($name);
         }
+        $getter = 'get' . $name;
         if (!method_exists($this, $getter)) {
             throw new SystemException('Getting unknown property: ' . get_class($this) . '::' . $name);
         }
@@ -62,29 +84,35 @@ abstract class Merchant
         }
     }
 
+    public function mset($values)
+    {
+        foreach ($values as $k => $v) {
+            $this->set($k, $v);
+        }
+    }
     public function getInfopath()
     {
-        return '/' . join('/', [$this->system, $this->currency, $this->client]);
+        return '/' . join('/', [$this->name, $this->currency, $this->client]);
     }
 
     public function getConfirmUrl()
     {
-        return $this->getActionUrl('confirm');
+        return $this->getReturnUrl('confirm');
     }
 
     public function getSuccessUrl()
     {
-        return $this->getActionUrl('success');
+        return $this->getReturnUrl('success');
     }
 
     public function getFailureUrl()
     {
-        return $this->getActionUrl('failure');
+        return $this->getReturnUrl('failure');
     }
 
-    public function getActionUrl($action)
+    public function getReturnUrl($return)
     {
-        return $this->siteUrl . $this->getActionPage($action) . $this->infopath;
+        return $this->siteUrl . $this->getReturnPage($return) . $this->infopath;
     }
 
     public function getSite()
@@ -97,9 +125,9 @@ abstract class Merchant
         return $this->proto . '://' . $this->site;
     }
 
-    public function getActionPage($action)
+    public function getReturnPage($return)
     {
-        return $this->get($action.'Page', $this->basePage . $action);
+        return $this->get($return.'Page', $this->basePage . $return);
     }
 
     public function getDescription()
@@ -117,9 +145,14 @@ abstract class Merchant
         return $this->client . '_' . $this->formatCents($this->sum);
     }
 
+    public function getFormId()
+    {
+        return implode('_', ['merchant', $this->name, $this->currency]);
+    }
+
     public function formatMoney($sum)
     {
-        return number_format($sum, 2, '.', '')
+        return number_format($sum, 2, '.', '');
     }
 
     public function formatCents($sum)
@@ -131,5 +164,38 @@ abstract class Merchant
     {
         /// XXX add
         return $sum;
+    }
+    public function renderForm()
+    {
+        $inputs = '';
+        foreach ($this->getInputs() as $name => $value)
+        {
+            $inputs .= static::renderTag('input', null, [
+                'type'  => 'hidden',
+                'name'  => $name,
+                'value' => $value,
+            ]);
+        }
+        return static::renderTag('form', $inputs, [
+            'id'     => $this->formId,
+            'action' => $this->actionUrl,
+            'method' => $this->method,
+        ]);
+    }
+
+    static public function renderTag($name, $content=null, $attributes = [])
+    {
+        $res = "<$name" . static::renderTagAttributes($attributes) . '>';
+        return is_null($content) ? $res : $res . $content . "</$name>";
+    }
+
+    static public function renderTagAttributes($attributes)
+    {
+        $res = '';
+        foreach ($attributes as $k => $v)
+        {
+            $res .= " $k=\"$v\"";
+        }
+        return $res;
     }
 }
