@@ -7,16 +7,20 @@ use ReflectionClass;
 
 abstract class Merchant
 {
+    protected $_error;
     protected $_secret;
     protected $_secret2;
     protected $_config;
     protected static $_defaults = [
-        'basePage'  => '/merchant/pay/',
-        'proto'     => 'https',
-        'fee'       => 0,
-        'method'    => 'POST',
-        'currency'  => 'usd',
-        'client'    => '',
+        'basePage'    => '/merchant/pay/',
+        'proto'       => 'https',
+        'fee'         => 0,
+        'quantity'    => 1,
+        'method'      => 'POST',
+        'currency'    => 'usd',
+        'username'    => '',
+        'isCart'      => true,
+        'confirmText' => 'OK',
     ];
 
     public function __construct($config = [])
@@ -90,9 +94,20 @@ abstract class Merchant
             $this->set($k, $v);
         }
     }
+    public function error($name)
+    {
+        $this->_error = $name;
+        return false;
+    }
+
+    public function getError()
+    {
+        return $this->_error;
+    }
+
     public function getInfopath()
     {
-        return '/' . join('/', [$this->name, $this->currency, $this->client]);
+        return '/' . join('/', [$this->name, $this->currency, $this->username]);
     }
 
     public function getConfirmUrl()
@@ -132,7 +147,7 @@ abstract class Merchant
 
     public function getDescription()
     {
-        return $this->site . ': deposit ' . $this->client;
+        return $this->site . ': deposit ' . $this->username;
     }
 
     public function getTotal()
@@ -140,14 +155,44 @@ abstract class Merchant
         return $this->formatMoney($this->convertTo($this->sum + $this->fee));
     }
 
-    public function getInvoiceNo()
+    public function getCents()
     {
-        return $this->client . '_' . $this->formatCents($this->sum);
+        return $this->formatCents($this->total);
+    }
+
+    public function getInvoiceId()
+    {
+        return implode('_', [$this->uniqId, $this->username, $this->cents]);
     }
 
     public function getFormId()
     {
         return implode('_', ['merchant', $this->name, $this->currency]);
+    }
+
+    protected $_time;
+
+    public function getTime()
+    {
+        if ($this->_time === null) {
+            $this->_time = date('c');
+        }
+        return $this->_time;
+    }
+
+    protected $_uniqId;
+
+    public function getUniqId()
+    {
+        if ($this->_uniqId === null) {
+            $this->_uniqId = uniqid();
+        }
+        return $this->_uniqId;
+    }
+
+    public function checkMoney($sum)
+    {
+        return preg_match('/^\d+(\.\d{1,2)?$/', $sum) ? $this->formatMoney($sum) : null;
     }
 
     public function formatMoney($sum)
@@ -158,6 +203,11 @@ abstract class Merchant
     public function formatCents($sum)
     {
         return floor($sum*100);
+    }
+
+    public function formatDatetime($str = null)
+    {
+        return date('c', strtotime($str));
     }
 
     public function convertTo($sum)
@@ -197,5 +247,21 @@ abstract class Merchant
             $res .= " $k=\"$v\"";
         }
         return $res;
+    }
+
+    static public function curl($url, $data)
+    {
+        $ch = curl_init($this->actionUrl);
+        curl_setopt_array($ch, array(
+            CURLOPT_USERAGENT       => 'curl/0.00 (php 5.x; U; en)',
+            CURLOPT_RETURNTRANSFER  => 1,
+            CURLOPT_SSL_VERIFYPEER  => FALSE,
+            CURLOPT_SSL_VERIFYHOST  => 0, /// XXX this is the problem with PayPal
+        /// CURLOPT_SSLVERSION      => 3, /// XXX this is the problem with PayPal
+        /// CURLOPT_TLSV1           => 1, /// ??? recomendation from PayPal
+            CURLOPT_POST            => 1,
+            CURLOPT_POSTFIELDS      => is_array($data) ? http_build_query($data) : $data,
+        ));
+        $result = curl_exec($ch);
     }
 }
