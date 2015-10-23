@@ -20,14 +20,14 @@
         "source": "https://github.com/hiqdev/php-merchant",
         "issues": "https://github.com/hiqdev/php-merchant/issues",
         "wiki": "https://github.com/hiqdev/php-merchant/wiki",
-        "forum": "https://forum.hiqdev.com/"
+        "forum": "http://forum.hiqdev.com/"
     },
     "authors": [
         {
             "name": "Andrii Vasyliev",
             "role": "Project lead",
             "email": "sol@hiqdev.com",
-            "homepage": "https://hipanel.com/"
+            "homepage": "http://hipanel.com/"
         },
         {
             "name": "Dmitry Naumenko",
@@ -39,13 +39,13 @@
             "name": "Andrey Klochok",
             "role": "Lead frontend developer",
             "email": "tafid@hiqdev.com",
-            "homepage": "https://hiqdev.com/"
+            "homepage": "http://hiqdev.com/"
         },
         {
             "name": "Yuriy Myronchuk",
             "role": "QA Lead",
             "email": "bladeroot@hiqdev.com",
-            "homepage": "https://hiqdev.com/"
+            "homepage": "http://hiqdev.com/"
         }
     ],
     "autoload": {
