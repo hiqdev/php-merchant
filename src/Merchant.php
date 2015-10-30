@@ -13,7 +13,7 @@ abstract class Merchant
     protected $_config;
     protected static $_defaults = [
         'basePage'    => '/merchant/pay/',
-        'proto'       => 'https',
+        'scheme'      => 'https',
         'fee'         => 0,
         'quantity'    => 1,
         'method'      => 'POST',
@@ -137,7 +137,7 @@ abstract class Merchant
 
     public function getSiteUrl()
     {
-        return $this->proto . '://' . $this->site;
+        return $this->scheme . '://' . $this->site;
     }
 
     public function getReturnPage($return)
