@@ -43,11 +43,11 @@ abstract class Merchant
         if ($config['class']) {
             return $config['class'];
         }
-        $name = $config['name'] ?: $config['id'];
-        if (!$name) {
-            throw new SystemException('No merchant class given!');
+        $system = $config['system'] ?: $config['name'];
+        if (!$system) {
+            throw new SystemException('No merchant class or system given!');
         }
-        return "hiqdev\\php\\merchant\\$name\\Merchant";
+        return "hiqdev\\php\\merchant\\$system\\Merchant";
     }
 
     abstract public function getInputs();
@@ -107,7 +107,7 @@ abstract class Merchant
 
     public function getInfopath()
     {
-        return '/' . join('/', [$this->name, $this->currency, $this->username]);
+        return '/' . join('/', [$this->system, $this->currency, $this->username]);
     }
 
     public function getConfirmUrl()
@@ -167,7 +167,7 @@ abstract class Merchant
 
     public function getFormId()
     {
-        return implode('_', ['merchant', $this->name, $this->currency]);
+        return implode('_', ['merchant', $this->system, $this->currency]);
     }
 
     protected $_time;
