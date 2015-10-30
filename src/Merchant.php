@@ -190,9 +190,9 @@ abstract class Merchant
         return $this->_uniqId;
     }
 
-    public function checkMoney($sum)
+    public function validateMoney($sum)
     {
-        return preg_match('/^\d+(\.\d{1,2)?$/', $sum) ? $this->formatMoney($sum) : null;
+        return preg_match('/^\d+(\.\d{1,2})?$/', $sum) ? $this->formatMoney($sum) : null;
     }
 
     public function formatMoney($sum)
