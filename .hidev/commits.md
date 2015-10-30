@@ -4,6 +4,8 @@ hiqdev/php-merchant commits history
 ## Under development
 
 - Added basics
+    - acc77aa 2015-10-30 redone validateMoney <- checkMoney (sol@hiqdev.com)
+    - d8de4f9 2015-10-30 renamed 'scheme' <- 'proto' (sol@hiqdev.com)
     - 7e12a55 2015-10-30 changed: redone to use system <- name (sol@hiqdev.com)
     - ed71fa4 2015-10-23 + getCents/Time/UniqId, + formatDatetime, + checkMoney, + curl (sol@hiqdev.com)
     - e7330e2 2015-10-22 removed PayPalMerchant to hiqdev\php-merchant-paypal (sol@hiqdev.com)
