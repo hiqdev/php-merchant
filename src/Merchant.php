@@ -26,6 +26,9 @@ abstract class Merchant
     public function __construct($config = [])
     {
         $config = array_merge((array)self::$_defaults, (array)static::$_defaults, (array)$config);
+        if (!$config['id']) {
+            throw new SystemException('No merchant ID given!');
+        }
         $this->_secret  = $config['secret'];
         $this->_secret2 = $config['secret2'];
         unset($config['secret'], $config['secret2']);
@@ -88,12 +91,21 @@ abstract class Merchant
         }
     }
 
+    public function mget($names)
+    {
+        foreach ((array)$names as $name) {
+            $res[$name] = $this->{$name};
+        }
+        return $res;
+    }
+
     public function mset($values)
     {
         foreach ($values as $k => $v) {
             $this->set($k, $v);
         }
     }
+
     public function error($name)
     {
         $this->_error = $name;
@@ -127,7 +139,17 @@ abstract class Merchant
 
     public function getReturnUrl($return)
     {
-        return $this->siteUrl . $this->getReturnPage($return) . $this->infopath;
+        return $this->siteUrl . $this->getReturnPage($return) . '?' . http_build_query([
+            'merchant' => $this->id,
+            'system'   => $this->system,
+            'currency' => $this->currency,
+            'username' => $this->username,
+        ]);
+    }
+
+    public function getReturnPage($return)
+    {
+        return $this->get($return.'Page', $this->basePage . $return);
     }
 
     public function getSite()
@@ -138,11 +160,6 @@ abstract class Merchant
     public function getSiteUrl()
     {
         return $this->scheme . '://' . $this->site;
-    }
-
-    public function getReturnPage($return)
-    {
-        return $this->get($return.'Page', $this->basePage . $return);
     }
 
     public function getDescription()
@@ -167,7 +184,7 @@ abstract class Merchant
 
     public function getFormId()
     {
-        return implode('_', ['merchant', $this->system, $this->currency]);
+        return implode('_', ['merchant', $this->id]);
     }
 
     protected $_time;
