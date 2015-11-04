@@ -15,6 +15,83 @@ use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
 
+/**
+ * Merchant abstract class.
+ *
+ * Merchant for payment system:
+ * ```
+ * class SystemMerchant extends Merchant
+ * {
+ *     public function getInputs()
+ *     {
+ *         return [
+ *             'system_sum_field'                 => $this->total,
+ *             'system_payment_description_field' => $this->paymentDescription,
+ *             ...
+ *         ];
+ *     }
+ *
+ *     public function validateConfirmation($data)
+ *     {
+ *         if (!validateData($data)) {
+ *             return 'Wrong data';
+ *         }
+ *         if (check_sum($data) === $data['check_sum']) {
+ *             return 'Wrong check sum';
+ *         }
+ *         return;
+ *     }
+ * }
+ * ```
+ *
+ * Merchant configuration:
+ * ```
+ * $merchantConfig = [
+ *     'system'     => 'paysystem',
+ *     'purse'      => 'XYZ-123456',
+ *     'secret'     => 'bigSecret',
+ * ];
+ * ```
+ *
+ * Payment page:
+ * ```
+ * use hiqdev\php\merchant\Merchant
+ * $merchant = Merchant::create($merchantConfig);
+ * $request = $merchant->setRequest([
+ *     'sum'         => $sumToPay,
+ *     'id'          => $myInvoiceId,
+ *     'description' => $myInvoiceDescription,
+ * ]);
+ * print $request->renderForm();
+ * ```
+ *
+ * Confirm page:
+ * ```
+ * use hiqdev\php\merchant\Merchant
+ * $merchant = Merchant::create($merchantConfig);
+ * $payment = $merchant->getPayment($_REQUEST);
+ * if ($payment->error) {
+ *     die($payment->error);
+ * } else {
+ *     $payment = $merchant->payment;
+ *     $mydb->exec('
+ *          INSERT INTO payment (sum, fee, from, transaction_id, ...)
+ *          VALUES (:sum, :from, :transaction_id, ...)
+ *     ', [
+ *         'sum'            => $payment->sum,
+ *         'from'           => $payment->from,
+ *         'transaction_id' => $payment->id,
+ *     ]);
+ *     die($payment->confirmText);
+ * }
+ * ```
+ *
+ * Success page (fail page is similar):
+ * ```
+ * flash("Payment was successfull!");
+ * redirect($otherPage);
+ * ```
+ */
 abstract class Merchant
 {
     protected $_error;
@@ -182,9 +259,19 @@ abstract class Merchant
         return $this->scheme . '://' . $this->site;
     }
 
-    public function getPaymentDescription()
+    public function getInvoiceDescription()
     {
         return $this->site . ': deposit ' . $this->username;
+    }
+
+    public function getPaymentFee()
+    {
+        return $this->paymentTotal - $this->paymentFee;
+    }
+
+    public function getPaymentSum()
+    {
+        return $this->paymentTotal - $this->paymentFee;
     }
 
     public function getPaymentLabel()
