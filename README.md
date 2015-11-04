@@ -3,6 +3,9 @@ PHP merchant library
 
 Payment merchants library for PHP
 
+[![Latest Stable Version](https://poser.pugx.org/hiqdev/php-merchant/v/stable)](//packagist.org/packages/hiqdev/php-merchant)
+[![Total Downloads](https://poser.pugx.org/hiqdev/php-merchant/downloads)](//packagist.org/packages/hiqdev/php-merchant)
+
 ## Installation
 
 The preferred way to install this library is through [composer](http://getcomposer.org/download/).

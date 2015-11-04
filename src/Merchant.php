@@ -58,6 +58,10 @@ abstract class Merchant
 
     abstract public function validateConfirmation($data);
 
+    public function getConfig()
+    {
+        return $this->_config;
+    }
     public function get($name, $default = null)
     {
         $res = $this->_config[$name];
