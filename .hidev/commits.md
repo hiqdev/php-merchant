@@ -4,6 +4,8 @@ hiqdev/php-merchant commits history
 ## Under development
 
 - Added basics
+    - f86effd 2015-11-04 php-cs-fixed (sol@hiqdev.com)
+    - 889dabe 2015-11-04 + getConfig() (sol@hiqdev.com)
     - 13c6a7f 2015-11-04 redone description/label -> paymentDescription/Label (sol@hiqdev.com)
     - 58fedba 2015-11-04 removed home-made exceptions (sol@hiqdev.com)
     - 746e713 2015-10-31 changed returnUrl to get parameters; + mget() (sol@hiqdev.com)
