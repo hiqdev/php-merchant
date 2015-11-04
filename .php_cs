@@ -1,12 +1,12 @@
 <?php
 
 $header = <<<EOF
-PHP merchant
+PHP merchant library
 
 @link      https://github.com/hiqdev/php-merchant
 @package   php-merchant
 @license   BSD-3-Clause
-@copyright Copyright (c) 2015, HiQDev (https://hiqdev.com/)
+@copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
 EOF;
 
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);

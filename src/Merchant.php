@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * PHP merchant library
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\php\merchant;
 
 use Closure;
-use ReflectionClass;
 use InvalidArgumentException;
+use ReflectionClass;
 
 abstract class Merchant
 {
@@ -26,7 +35,7 @@ abstract class Merchant
 
     public function __construct($config = [])
     {
-        $config = array_merge((array)self::$_defaults, (array)static::$_defaults, (array)$config);
+        $config = array_merge((array) self::$_defaults, (array) static::$_defaults, (array) $config);
         if (!$config['id']) {
             throw new InvalidArgumentException('No merchant ID given');
         }
@@ -39,6 +48,7 @@ abstract class Merchant
     public static function create($config)
     {
         $reflection = new ReflectionClass(static::guessClass($config));
+
         return $reflection->newInstanceArgs([$config]);
     }
 
@@ -51,6 +61,7 @@ abstract class Merchant
         if (!$system) {
             throw new InvalidArgumentException('No merchant class or system given');
         }
+
         return "hiqdev\\php\\merchant\\$system\\Merchant";
     }
 
@@ -66,6 +77,7 @@ abstract class Merchant
     {
         $res = $this->_config[$name];
         $res = is_null($res) ? $default : $res;
+
         return $res instanceof Closure ? call_user_func($res, $this) : $res;
     }
 
@@ -83,6 +95,7 @@ abstract class Merchant
         if (!method_exists($this, $getter)) {
             throw new InvalidArgumentException('Getting unknown property: ' . get_class($this) . '::' . $name);
         }
+
         return $this->$getter();
     }
 
@@ -98,9 +111,10 @@ abstract class Merchant
 
     public function mget($names)
     {
-        foreach ((array)$names as $rename => $name) {
+        foreach ((array) $names as $rename => $name) {
             $res[is_int($rename) ? $name : $rename] = $this->{$name};
         }
+
         return $res;
     }
 
@@ -114,6 +128,7 @@ abstract class Merchant
     public function error($name)
     {
         $this->_error = $name;
+
         return false;
     }
 
@@ -124,7 +139,7 @@ abstract class Merchant
 
     public function getInfopath()
     {
-        return '/' . join('/', [$this->system, $this->currency, $this->username]);
+        return '/' . implode('/', [$this->system, $this->currency, $this->username]);
     }
 
     public function getConfirmUrl()
@@ -154,7 +169,7 @@ abstract class Merchant
 
     public function getReturnPage($return)
     {
-        return $this->get($return.'Page', $this->basePage . $return);
+        return $this->get($return . 'Page', $this->basePage . $return);
     }
 
     public function getSite()
@@ -204,6 +219,7 @@ abstract class Merchant
         if ($this->_time === null) {
             $this->_time = date('c');
         }
+
         return $this->_time;
     }
 
@@ -214,6 +230,7 @@ abstract class Merchant
         if ($this->_uniqId === null) {
             $this->_uniqId = uniqid();
         }
+
         return $this->_uniqId;
     }
 
@@ -229,7 +246,7 @@ abstract class Merchant
 
     public function formatCents($sum)
     {
-        return floor($sum*100);
+        return floor($sum * 100);
     }
 
     public function formatDatetime($str = null)
@@ -245,14 +262,14 @@ abstract class Merchant
     public function renderForm()
     {
         $inputs = '';
-        foreach ($this->getInputs() as $name => $value)
-        {
+        foreach ($this->getInputs() as $name => $value) {
             $inputs .= static::renderTag('input', null, [
                 'type'  => 'hidden',
                 'name'  => $name,
                 'value' => $value,
             ]);
         }
+
         return static::renderTag('form', $inputs, [
             'id'     => $this->formId,
             'action' => $this->actionUrl,
@@ -260,35 +277,36 @@ abstract class Merchant
         ]);
     }
 
-    static public function renderTag($name, $content=null, $attributes = [])
+    public static function renderTag($name, $content = null, $attributes = [])
     {
         $res = "<$name" . static::renderTagAttributes($attributes) . '>';
+
         return is_null($content) ? $res : $res . $content . "</$name>";
     }
 
-    static public function renderTagAttributes($attributes)
+    public static function renderTagAttributes($attributes)
     {
         $res = '';
-        foreach ($attributes as $k => $v)
-        {
+        foreach ($attributes as $k => $v) {
             $res .= " $k=\"$v\"";
         }
+
         return $res;
     }
 
-    static public function curl($url, $data)
+    public static function curl($url, $data)
     {
         $ch = curl_init($this->actionUrl);
-        curl_setopt_array($ch, array(
-            CURLOPT_USERAGENT       => 'curl/0.00 (php 5.x; U; en)',
-            CURLOPT_RETURNTRANSFER  => 1,
-            CURLOPT_SSL_VERIFYPEER  => FALSE,
-            CURLOPT_SSL_VERIFYHOST  => 0, /// XXX this is the problem with PayPal
+        curl_setopt_array($ch, [
+            CURLOPT_USERAGENT      => 'curl/0.00 (php 5.x; U; en)',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0, /// XXX this is the problem with PayPal
         /// CURLOPT_SSLVERSION      => 3, /// XXX this is the problem with PayPal
         /// CURLOPT_TLSV1           => 1, /// ??? recomendation from PayPal
-            CURLOPT_POST            => 1,
-            CURLOPT_POSTFIELDS      => is_array($data) ? http_build_query($data) : $data,
-        ));
+            CURLOPT_POST       => 1,
+            CURLOPT_POSTFIELDS => is_array($data) ? http_build_query($data) : $data,
+        ]);
         $result = curl_exec($ch);
     }
 }
