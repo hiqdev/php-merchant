@@ -4,6 +4,7 @@ namespace hiqdev\php\merchant;
 
 use Closure;
 use ReflectionClass;
+use InvalidArgumentException;
 
 abstract class Merchant
 {
@@ -27,7 +28,7 @@ abstract class Merchant
     {
         $config = array_merge((array)self::$_defaults, (array)static::$_defaults, (array)$config);
         if (!$config['id']) {
-            throw new SystemException('No merchant ID given!');
+            throw new InvalidArgumentException('No merchant ID given');
         }
         $this->_secret  = $config['secret'];
         $this->_secret2 = $config['secret2'];
@@ -48,7 +49,7 @@ abstract class Merchant
         }
         $system = $config['system'] ?: $config['name'];
         if (!$system) {
-            throw new SystemException('No merchant class or system given!');
+            throw new InvalidArgumentException('No merchant class or system given');
         }
         return "hiqdev\\php\\merchant\\$system\\Merchant";
     }
@@ -76,7 +77,7 @@ abstract class Merchant
         }
         $getter = 'get' . $name;
         if (!method_exists($this, $getter)) {
-            throw new SystemException('Getting unknown property: ' . get_class($this) . '::' . $name);
+            throw new InvalidArgumentException('Getting unknown property: ' . get_class($this) . '::' . $name);
         }
         return $this->$getter();
     }
@@ -93,8 +94,8 @@ abstract class Merchant
 
     public function mget($names)
     {
-        foreach ((array)$names as $name) {
-            $res[$name] = $this->{$name};
+        foreach ((array)$names as $rename => $name) {
+            $res[is_int($rename) ? $name : $rename] = $this->{$name};
         }
         return $res;
     }
@@ -162,9 +163,14 @@ abstract class Merchant
         return $this->scheme . '://' . $this->site;
     }
 
-    public function getDescription()
+    public function getPaymentDescription()
     {
         return $this->site . ': deposit ' . $this->username;
+    }
+
+    public function getPaymentLabel()
+    {
+        return 'From: ' . $this->from;
     }
 
     public function getTotal()
