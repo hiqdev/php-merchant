@@ -7,8 +7,9 @@ PHP merchant library
 [![Total Downloads](https://poser.pugx.org/hiqdev/php-merchant/downloads)](https://packagist.org/packages/hiqdev/php-merchant)
 [![Build Status](https://img.shields.io/travis/hiqdev/php-merchant.svg)](https://travis-ci.org/hiqdev/php-merchant)
 
-[Omnipay] is a framework agnostic, multi-gateway payment processing library for PHP 5.3+.
-[Payum] is payment processing framework for PHP 5.5+.
+[Omnipay](http://omnipay.thephpleague.com/) is a framework agnostic, multi-gateway payment processing library for PHP 5.3+.
+
+[Payum](http://payum.org/) is payment processing framework for PHP 5.5+.
 
 This package provides generalized interface for Omnipay and Payum:
 
