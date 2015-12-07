@@ -3,6 +3,7 @@ hiqdev/php-merchant commits history
 
 ## Under development
 
+    - ce7f761 2015-11-04 NOT FINISHED redoing to omnipay (sol@hiqdev.com)
 - Added basics
     - f86effd 2015-11-04 php-cs-fixed (sol@hiqdev.com)
     - 889dabe 2015-11-04 + getConfig() (sol@hiqdev.com)

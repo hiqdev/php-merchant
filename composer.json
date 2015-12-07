@@ -1,17 +1,14 @@
 {
     "name": "hiqdev/php-merchant",
     "type": "library",
-    "description": "PHP merchant library",
+    "description": "Generalization over Omnipay and Payum",
     "keywords": [
         "php",
+        "payment",
+        "gateway",
         "merchant",
-        "paypal",
-        "webmoney",
-        "ecoin",
-        "paxum",
-        "okpay",
-        "qiwi",
-        "yandex.money"
+        "omnipay",
+        "payum"
     ],
     "homepage": "https://github.com/hiqdev/php-merchant",
     "license": "BSD-3-Clause",
