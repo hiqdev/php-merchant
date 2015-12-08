@@ -13,7 +13,7 @@ namespace hiqdev\php\merchant;
 
 use Yii;
 
-abstract class AbstractMerchant extends \yii\base\Object implements MerchantInterface
+abstract class AbstractMerchant implements MerchantInterface
 {
     public $module;
 
@@ -41,7 +41,7 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
 
     public function request($type, $data)
     {
-        return Yii::createObject([
+        return MerchantManager::createObject([
             'class'     => $this->requestClass,
             'merchant'  => $this,
             'type'      => $type,
@@ -51,15 +51,10 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
 
     public function response(RequestInterface $request)
     {
-        return Yii::createObject([
+        return MerchantManager::createObject([
             'class'     => $this->responseClass,
             'merchant'  => $this,
             'request'   => $request,
         ]);
-    }
-
-    public function buildUrl($dest)
-    {
-        return $this->module->buildUrl($dest, $this->id);
     }
 }

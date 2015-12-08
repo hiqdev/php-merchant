@@ -11,12 +11,10 @@
 
 namespace hiqdev\php\merchant;
 
-use yii\helpers\Inflector;
-
 /**
  * AbstractRequest class.
  */
-class AbstractRequest extends \yii\base\Object implements RequestInterface
+class AbstractRequest implements RequestInterface
 {
     public $merchant;
 
@@ -54,15 +52,27 @@ class AbstractRequest extends \yii\base\Object implements RequestInterface
      */
     public function getType()
     {
-        return Inflector::id2camel($this->type);
+        return static::id2camel($this->type);
+    }
+
+    /**
+     * Converts an ID into a CamelCase name.
+     * Words in the ID separated by `$separator` (defaults to '-') will be concatenated into a CamelCase name.
+     * For example, 'post-tag' is converted to 'PostTag'.
+     * Taken from Yii 2 Inflector.
+     *
+     * @param string $id        the ID to be converted
+     * @param string $separator the character used to separate the words in the ID
+     *
+     * @return string the resulting CamelCase name
+     */
+    public static function id2camel($id, $separator = '-')
+    {
+        return str_replace(' ', '', ucwords(implode(' ', explode($separator, $id))));
     }
 
     public function getData()
     {
-        return array_merge([
-            'notifyUrl' => $this->merchant->buildUrl('notify'),
-            'returnUrl' => $this->merchant->buildUrl('return'),
-            'cancelUrl' => $this->merchant->buildUrl('cancel'),
-        ], (array) $this->data);
+        return $this->data;
     }
 }

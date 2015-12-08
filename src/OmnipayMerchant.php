@@ -18,8 +18,7 @@ use Omnipay\Omnipay;
  */
 class OmnipayMerchant extends AbstractMerchant
 {
-    public $requestClass = 'hiqdev\php\merchant\OmnipayRequest';
-
+    public $requestClass  = 'hiqdev\php\merchant\OmnipayRequest';
     public $responseClass = 'hiqdev\php\merchant\OmnipayResponse';
 
     /**
