@@ -12,7 +12,6 @@
 namespace hiqdev\php\merchant;
 
 use Omnipay\Omnipay;
-use Omnipay\Common\Helper;
 
 /**
  * OmnipayMerchant class.
@@ -48,7 +47,7 @@ class OmnipayMerchant extends AbstractMerchant
     public function normalizeGateway($gateway)
     {
         foreach (static::$_gateways as $norm) {
-            if ($this->simplifyGateway($norm) == $this->simplifyGateway($gateway)) {
+            if ($this->simplifyGateway($norm) === $this->simplifyGateway($gateway)) {
                 return $norm;
             }
         }
@@ -58,7 +57,7 @@ class OmnipayMerchant extends AbstractMerchant
 
     public function simplifyGateway($gateway)
     {
-        return preg_replace('/[^a-z0-9]+/','', strtolower($gateway));
+        return preg_replace('/[^a-z0-9]+/', '', strtolower($gateway));
     }
 
     public static $_gateways = [

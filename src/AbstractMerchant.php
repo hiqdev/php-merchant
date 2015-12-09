@@ -11,8 +11,6 @@
 
 namespace hiqdev\php\merchant;
 
-use Yii;
-
 abstract class AbstractMerchant implements MerchantInterface
 {
     /**

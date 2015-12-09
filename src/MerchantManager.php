@@ -44,5 +44,4 @@ class MerchantManager
             'class' => 'hiqdev\php\merchant\\' . ($config['library'] ?: 'Omnipay') . 'Merchant',
         ], $config));
     }
-
 }
