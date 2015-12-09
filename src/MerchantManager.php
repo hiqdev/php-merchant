@@ -39,12 +39,10 @@ class MerchantManager
 
     public static function create(array $config)
     {
-        $class = $config['class'];
-        if (!$config['class']) {
-            $config['class'] = 'hiqdev\php\merchant\\' . $config['library'] . 'Merchant';
-        }
-
-        return static::createObject($config);
+        return static::createObject(array_merge([
+            'data'  => $config,
+            'class' => 'hiqdev\php\merchant\\' . ($config['library'] ?: 'Omnipay') . 'Merchant',
+        ], $config));
     }
 
 }

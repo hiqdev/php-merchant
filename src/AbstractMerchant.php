@@ -15,8 +15,6 @@ use Yii;
 
 abstract class AbstractMerchant implements MerchantInterface
 {
-    public $module;
-
     /**
      * Unique merchant identificator. E.g. paypal, webmoney_usd, webmoney_rub.
      */
