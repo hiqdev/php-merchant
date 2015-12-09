@@ -3,6 +3,9 @@ hiqdev/php-merchant commits history
 
 ## Under development
 
+- Changed: redone to be generalization over Omnipay and Payum
+    - c664dcc 2015-12-09 fixed merchant and gateway creation (sol@hiqdev.com)
+    - a7a39b5 2015-12-08 redoning with MerchantManager (sol@hiqdev.com)
     - 7bb6e51 2015-12-07 redoing to omnipay/payum (sol@hiqdev.com)
     - ce7f761 2015-11-04 NOT FINISHED redoing to omnipay (sol@hiqdev.com)
 - Added basics
