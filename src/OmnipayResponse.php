@@ -41,4 +41,28 @@ class OmnipayResponse extends AbstractResponse
     {
         return $this->getWorker()->isSuccessful();
     }
+
+    public function __call($name, $args)
+    {
+        if (method_exists($this->getWorker(), $name)) {
+            return call_user_func_array([$this->getWorker(), $name], $args);
+        }
+
+        return null;
+    }
+
+    public function getSum()
+    {
+        return $this->getWorker()->getAmount();
+    }
+
+    public function getTime()
+    {
+        return date('c');
+    }
+
+    public function getVar($name)
+    {
+        return $this->getWorker()->getData()[$name];
+    }
 }

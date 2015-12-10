@@ -18,6 +18,8 @@ abstract class AbstractMerchant implements MerchantInterface
      */
     public $id;
 
+    public $library;
+
     /**
      * Gateway name, corresponding to Omnipay namespace. E.g. PayPal, WebMoney, YandexMoney.
      */
@@ -37,8 +39,8 @@ abstract class AbstractMerchant implements MerchantInterface
 
     public function request($type, $data)
     {
-        return MerchantManager::createObject([
-            'class'     => $this->requestClass,
+        return Helper::createObject([
+            'class'     => $this->getRequestClass(),
             'merchant'  => $this,
             'type'      => $type,
             'data'      => array_merge((array) $this->data, (array) $data),
@@ -47,10 +49,20 @@ abstract class AbstractMerchant implements MerchantInterface
 
     public function response(RequestInterface $request)
     {
-        return MerchantManager::createObject([
-            'class'     => $this->responseClass,
+        return Helper::createObject([
+            'class'     => $this->getResponseClass(),
             'merchant'  => $this,
             'request'   => $request,
         ]);
+    }
+
+    public function getRequestClass()
+    {
+        return $this->requestClass ?: Helper::findClass($this->gateway, $this->library, 'Request');
+    }
+
+    public function getResponseClass()
+    {
+        return $this->responseClass ?: Helper::findClass($this->gateway, $this->library, 'Response');
     }
 }

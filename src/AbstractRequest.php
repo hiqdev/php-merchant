@@ -52,23 +52,7 @@ class AbstractRequest implements RequestInterface
      */
     public function getType()
     {
-        return static::id2camel($this->type);
-    }
-
-    /**
-     * Converts an ID into a CamelCase name.
-     * Words in the ID separated by `$separator` (defaults to '-') will be concatenated into a CamelCase name.
-     * For example, 'post-tag' is converted to 'PostTag'.
-     * Taken from Yii 2 Inflector.
-     *
-     * @param string $id        the ID to be converted
-     * @param string $separator the character used to separate the words in the ID
-     *
-     * @return string the resulting CamelCase name
-     */
-    public static function id2camel($id, $separator = '-')
-    {
-        return str_replace(' ', '', ucwords(implode(' ', explode($separator, $id))));
+        return Helper::id2camel($this->type);
     }
 
     public function getData()

@@ -18,8 +18,7 @@ use Omnipay\Omnipay;
  */
 class OmnipayMerchant extends AbstractMerchant
 {
-    public $requestClass  = 'hiqdev\php\merchant\OmnipayRequest';
-    public $responseClass = 'hiqdev\php\merchant\OmnipayResponse';
+    public $library = 'Omnipay';
 
     /**
      * Omnipay Gateway object.
@@ -47,17 +46,12 @@ class OmnipayMerchant extends AbstractMerchant
     public function normalizeGateway($gateway)
     {
         foreach (static::$_gateways as $norm) {
-            if ($this->simplifyGateway($norm) === $this->simplifyGateway($gateway)) {
+            if (Helper::simplify($norm) === Helper::simplify($gateway)) {
                 return $norm;
             }
         }
 
         return $gateway;
-    }
-
-    public function simplifyGateway($gateway)
-    {
-        return preg_replace('/[^a-z0-9]+/', '', strtolower($gateway));
     }
 
     public static $_gateways = [
@@ -70,21 +64,13 @@ class OmnipayMerchant extends AbstractMerchant
         static::$_gateways = array_merge(static::$_gateways, $gateways);
     }
 
-    protected $_prepareTable = [
-        'WebMoney' => [
-            'purse'  => 'merchantPurse',
-            'secret' => 'secretKey',
-        ],
-    ];
-
+    /**
+     * No prepare by default.
+     * To be redefined in specific gateway merchants.
+     */
     public function prepareData(array $data)
     {
-        if (isset($this->_prepareTable[$this->getGateway()])) {
-            foreach ($this->_prepareTable[$this->getGateway()] as $name => $rename) {
-                $data[$rename] = $data[$name];
-            }
-        }
-
         return $data;
     }
+
 }

@@ -17,7 +17,5 @@ namespace hiqdev\php\merchant;
  */
 class PayumMerchant extends AbstractMerchant
 {
-    public $requestClass = 'hiqdev\php\merchant\PayumRequest';
-
-    public $responseClass = 'hiqdev\php\merchant\PayumResponse';
+    public $library = 'Payum';
 }
