@@ -3,7 +3,10 @@ hiqdev/php-merchant commits history
 
 ## Under development
 
+- Added gateway specifics facility
+    - da622fc 2015-12-10 + added gateway specific ability, and WebMoney specific merchant and response (sol@hiqdev.com)
 - Changed: redone to be generalization over Omnipay and Payum
+    - d9ea017 2015-12-10 fixed AbstractResponse: - yii dependency (sol@hiqdev.com)
     - c664dcc 2015-12-09 fixed merchant and gateway creation (sol@hiqdev.com)
     - a7a39b5 2015-12-08 redoning with MerchantManager (sol@hiqdev.com)
     - 7bb6e51 2015-12-07 redoing to omnipay/payum (sol@hiqdev.com)

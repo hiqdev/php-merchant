@@ -3,6 +3,7 @@ hiqdev/php-merchant changelog
 
 ## Under development
 
+- Added gateway specifics facility
 - Changed: redone to be generalization over Omnipay and Payum
 - Added basics
 
