@@ -14,7 +14,7 @@ namespace hiqdev\php\merchant;
 /**
  * Abstract Response class.
  */
-abstract class AbstractResponse extends \yii\base\Object implements ResponseInterface
+abstract class AbstractResponse implements ResponseInterface
 {
     public $merchant;
 
