@@ -18,6 +18,14 @@ class OmnipayRequest extends AbstractRequest
      */
     protected $_worker;
 
+    /**
+     * @var OmnipayMerchant
+     */
+    public $merchant;
+
+    /**
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
     public function getWorker()
     {
         if ($this->_worker === null) {

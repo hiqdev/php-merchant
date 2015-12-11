@@ -34,26 +34,47 @@ abstract class AbstractRequest implements RequestInterface
      */
     public $data = [];
 
+    /**
+     * The instance of payment processing library
+     * @return \Omnipay\Common\Message\AbstractRequest|\Payum\Core\Model\Payment
+     */
+    public abstract function getWorker();
+
+    /**
+     * @inheritdoc
+     */
     public function getCurrency()
     {
         return $this->getWorker()->getCurrency();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAmount()
     {
         return $this->getWorker()->getAmount();
     }
 
+    /**
+     * @return string
+     */
     public function getFee()
     {
-        return $this->data['fee'] ?: 0;
+        return $this->data['fee'] ?: '0';
     }
 
+    /**
+     * @return string
+     */
     public function getSum()
     {
         return $this->data['sum'] ?: $this->getAmount() - $this->getFee();
     }
 
+    /**
+     * @return AbstractResponse
+     */
     public function send()
     {
         return $this->merchant->response($this);
@@ -61,17 +82,29 @@ abstract class AbstractRequest implements RequestInterface
 
     /**
      * Concrete requests can build type in other way.
+     *
+     * @return string
      */
     public function getType()
     {
         return Helper::id2camel($this->type);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * When worker has a method called $name, call it instead.
+     *
+     * @param $name
+     * @param $args
+     * @return mixed|null
+     */
     public function __call($name, $args)
     {
         if (method_exists($this->getWorker(), $name)) {
@@ -80,5 +113,4 @@ abstract class AbstractRequest implements RequestInterface
 
         return null;
     }
-
 }

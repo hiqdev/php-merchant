@@ -21,6 +21,11 @@ class OmnipayResponse extends AbstractResponse
      */
     protected $_worker;
 
+    /**
+     * @var OmnipayRequest Omnipay Request object
+     */
+    public $request;
+
     public function getWorker()
     {
         if ($this->_worker === null) {

@@ -14,7 +14,7 @@ namespace hiqdev\php\merchant;
 abstract class AbstractMerchant implements MerchantInterface
 {
     /**
-     * Unique merchant identificator. E.g. paypal, webmoney_usd, webmoney_rub.
+     * @var string Unique merchant identification. E.g. paypal, webmoney_usd, webmoney_rub.
      */
     public $id;
 
@@ -47,6 +47,10 @@ abstract class AbstractMerchant implements MerchantInterface
         ]);
     }
 
+    /**
+     * @param RequestInterface $request
+     * @return AbstractResponse
+     */
     public function response(RequestInterface $request)
     {
         return Helper::createObject([
