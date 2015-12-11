@@ -15,6 +15,7 @@ namespace hiqdev\php\merchant;
  * RequestInterface declares basic interface all requests have to follow.
  *
  * All requests have to provide:
+ *
  * - payment data: amount, currency
  * - response creation with send()
  */

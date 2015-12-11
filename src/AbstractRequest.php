@@ -22,9 +22,14 @@ class AbstractRequest implements RequestInterface
 
     public $data = [];
 
+    public function getCurrency()
+    {
+        return $this->getWorker()->getCurrency();
+    }
+
     public function getAmount()
     {
-        return $this->data['amount'];
+        return $this->getWorker()->getAmount();
     }
 
     public function getFee()
@@ -35,11 +40,6 @@ class AbstractRequest implements RequestInterface
     public function getSum()
     {
         return $this->data['sum'] ?: $this->getAmount() - $this->getFee();
-    }
-
-    public function getCurrency()
-    {
-        return $this->data['currency'];
     }
 
     public function send()
@@ -59,4 +59,14 @@ class AbstractRequest implements RequestInterface
     {
         return $this->data;
     }
+
+    public function __call($name, $args)
+    {
+        if (method_exists($this->getWorker(), $name)) {
+            return call_user_func_array([$this->getWorker(), $name], $args);
+        }
+
+        return null;
+    }
+
 }
