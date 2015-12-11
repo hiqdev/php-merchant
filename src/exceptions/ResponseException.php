@@ -7,4 +7,4 @@ namespace hiqdev\php\merchant\exceptions;
  *
  * @package hiqdev\php\merchant\exceptions
  */
-class ResponseMerchantException extends \Exception implements MerchantException {}
+class ResponseException extends \Exception implements MerchantException {}

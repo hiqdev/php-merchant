@@ -14,7 +14,7 @@ namespace hiqdev\php\merchant;
 class OmnipayRequest extends AbstractRequest
 {
     /**
-     * Omnipay Request object.
+     * @var \Omnipay\Common\Message\AbstractRequest Omnipay Request object
      */
     protected $_worker;
 

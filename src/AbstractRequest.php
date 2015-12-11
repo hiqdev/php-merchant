@@ -14,12 +14,24 @@ namespace hiqdev\php\merchant;
 /**
  * AbstractRequest class.
  */
-class AbstractRequest implements RequestInterface
+abstract class AbstractRequest implements RequestInterface
 {
+    /**
+     * @var AbstractMerchant
+     */
     public $merchant;
 
+    /**
+     * @var string The type of request. For example:
+     *  - `purchase`
+     *  - `completePurchase`
+     */
     public $type;
 
+    /**
+     * @var array the data that will be sent to the payment system.
+     * Might be additionally processed by the implementation of [[AbstractRequest]] class.
+     */
     public $data = [];
 
     public function getCurrency()

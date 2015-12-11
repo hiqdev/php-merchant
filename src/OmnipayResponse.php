@@ -16,6 +16,9 @@ namespace hiqdev\php\merchant;
  */
 class OmnipayResponse extends AbstractResponse
 {
+    /**
+     * @var \Omnipay\Common\Message\AbstractResponse|\Omnipay\Common\Message\RedirectResponseInterface
+     */
     protected $_worker;
 
     public function getWorker()

@@ -21,10 +21,13 @@ class OmnipayMerchant extends AbstractMerchant
     public $library = 'Omnipay';
 
     /**
-     * Omnipay Gateway object.
+     * @var \Omnipay\Common\GatewayInterface Omnipay Gateway object.
      */
     protected $_worker;
 
+    /**
+     * @return \Omnipay\Common\GatewayInterface
+     */
     public function getWorker()
     {
         if ($this->_worker === null) {
@@ -34,24 +37,37 @@ class OmnipayMerchant extends AbstractMerchant
         return $this->_worker;
     }
 
-    public function getGateway($gateway = null)
+    /**
+     * Returns the normalized gateway $name
+     *
+     * @see normalizeGateway
+     * @param string $name The gateway name. Defaults to `$this->gateway`
+     * @return string
+     */
+    public function getGateway($name = null)
     {
-        if (!isset($gateway)) {
-            $gateway = $this->gateway;
+        if (!isset($name)) {
+            $name = $this->gateway;
         }
 
-        return $this->normalizeGateway($gateway);
+        return $this->normalizeGateway($name);
     }
 
-    public function normalizeGateway($gateway)
+    /**
+     * Normalizes gateway $name
+     *
+     * @param $name
+     * @return string
+     */
+    public function normalizeGateway($name)
     {
-        foreach (static::$_gateways as $norm) {
-            if (Helper::simplify($norm) === Helper::simplify($gateway)) {
-                return $norm;
+        foreach (static::$_gateways as $gateway) {
+            if (Helper::simplify($gateway) === Helper::simplify($name)) {
+                return $gateway;
             }
         }
 
-        return $gateway;
+        return $name;
     }
 
     public static $_gateways = [

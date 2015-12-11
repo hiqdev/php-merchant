@@ -16,8 +16,14 @@ namespace hiqdev\php\merchant;
  */
 abstract class AbstractResponse implements ResponseInterface
 {
+    /**
+     * @var ResponseInterface
+     */
     public $merchant;
 
+    /**
+     * @var RequestInterface
+     */
     public $request;
 
     abstract public function redirect();

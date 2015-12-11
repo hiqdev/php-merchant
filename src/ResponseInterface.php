@@ -20,9 +20,24 @@ namespace hiqdev\php\merchant;
  */
 interface ResponseInterface
 {
+    /**
+     * Checks whether the response requires redirect
+     *
+     * @return boolean
+     */
     public function isRedirect();
 
+    /**
+     * Checks whether the response is successful
+     *
+     * @return boolean
+     */
     public function isSuccessful();
 
+    /**
+     * Perform the required redirect
+     *
+     * @void
+     */
     public function redirect();
 }
