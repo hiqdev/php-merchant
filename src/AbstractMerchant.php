@@ -27,11 +27,19 @@ abstract class AbstractMerchant implements MerchantInterface
 
     public $data = [];
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return $this->gateway;
     }
 
+    /**
+     * Returns simplified name
+     *
+     * @return string
+     */
     public function getSimpleName()
     {
         return preg_replace('/[^a-z0-9]+/', '', strtolower($this->gateway));
