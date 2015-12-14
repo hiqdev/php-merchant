@@ -25,6 +25,10 @@ abstract class AbstractMerchant implements MerchantInterface
      */
     public $gateway;
 
+    /**
+     * @var array Data that will be passed to Request
+     * @see request
+     */
     public $data = [];
 
     /**
@@ -45,7 +49,11 @@ abstract class AbstractMerchant implements MerchantInterface
         return preg_replace('/[^a-z0-9]+/', '', strtolower($this->gateway));
     }
 
-    public function request($type, $data)
+    /**
+     * {@inheritdoc}
+     * @return AbstractRequest
+     */
+    public function request($type, array $data)
     {
         return Helper::createObject([
             'class'     => $this->getRequestClass(),
@@ -68,11 +76,17 @@ abstract class AbstractMerchant implements MerchantInterface
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getRequestClass()
     {
         return $this->requestClass ?: Helper::findClass($this->gateway, $this->library, 'Request');
     }
 
+    /**
+     * @return string
+     */
     public function getResponseClass()
     {
         return $this->responseClass ?: Helper::findClass($this->gateway, $this->library, 'Response');

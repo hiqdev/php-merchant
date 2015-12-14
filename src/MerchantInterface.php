@@ -20,7 +20,17 @@ namespace hiqdev\php\merchant;
  */
 interface MerchantInterface
 {
+    /**
+     * @return string
+     */
     public function getLabel();
 
-    public function request($type, $data);
+    /**
+     * Creates the request object
+     *
+     * @param string $type of request
+     * @param array $data the data for request
+     * @return RequestInterface
+     */
+    public function request($type, array $data);
 }

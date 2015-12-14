@@ -26,6 +26,9 @@ class OmnipayResponse extends AbstractResponse
      */
     public $request;
 
+    /**
+     * @return \Omnipay\Common\Message\AbstractResponse|\Omnipay\Common\Message\RedirectResponseInterface|\Omnipay\Common\Message\ResponseInterface
+     */
     public function getWorker()
     {
         if ($this->_worker === null) {
@@ -35,16 +38,25 @@ class OmnipayResponse extends AbstractResponse
         return $this->_worker;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function redirect()
     {
-        return $this->getWorker()->redirect();
+        $this->getWorker()->redirect();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isRedirect()
     {
         return $this->getWorker()->isRedirect();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSuccessful()
     {
         return $this->getWorker()->isSuccessful();
@@ -59,6 +71,9 @@ class OmnipayResponse extends AbstractResponse
         return null;
     }
 
+    /**
+     * @return mixed
+     */
     public function getSum()
     {
         return $this->getWorker()->getAmount();

@@ -26,9 +26,18 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public $request;
 
+    /**
+     * {@inheritdoc}
+     */
     abstract public function redirect();
 
+    /**
+     * {@inheritdoc}
+     */
     abstract public function isRedirect();
 
+    /**
+     * {@inheritdoc}
+     */
     abstract public function isSuccessful();
 }
