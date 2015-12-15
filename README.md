@@ -13,7 +13,8 @@ PHP merchant library
 
 This package provides generalized interface for Omnipay and Payum:
 
-- generalized `purse` and `secret`
+- generalized `purse` and `secret` for gateways
+- generalized `time` and `payer` for responses
 - else?
 
 ## Installation
