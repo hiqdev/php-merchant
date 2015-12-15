@@ -57,7 +57,7 @@ class Helper
     }
 
     /**
-     * Builds class name: hiqdev\php\merchant\gateway\LibraryWhat
+     * Builds class name: hiqdev\php\merchant\gateway\LibraryWhat.
      */
     public static function buildClass($gateway, $library, $what)
     {

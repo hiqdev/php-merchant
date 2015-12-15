@@ -35,13 +35,13 @@ abstract class AbstractRequest implements RequestInterface
     public $data = [];
 
     /**
-     * The instance of payment processing library
+     * The instance of payment processing library.
      * @return \Omnipay\Common\Message\AbstractRequest|\Payum\Core\Model\Payment
      */
-    public abstract function getWorker();
+    abstract public function getWorker();
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrency()
     {
@@ -49,7 +49,7 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAmount()
     {

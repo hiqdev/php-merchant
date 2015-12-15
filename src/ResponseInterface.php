@@ -21,21 +21,21 @@ namespace hiqdev\php\merchant;
 interface ResponseInterface
 {
     /**
-     * Checks whether the response requires redirect
+     * Checks whether the response requires redirect.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRedirect();
 
     /**
-     * Checks whether the response is successful
+     * Checks whether the response is successful.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSuccessful();
 
     /**
-     * Perform the required redirect
+     * Perform the required redirect.
      *
      * @void
      */

@@ -1,10 +1,10 @@
 <?php
 
 /*
- * Cart module for Yii2
+ * Generalization over Omnipay and Payum
  *
- * @link      https://github.com/hiqdev/yii2-cart
- * @package   yii2-cart
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
  * @license   BSD-3-Clause
  * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
  */

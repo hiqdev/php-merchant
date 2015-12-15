@@ -26,7 +26,7 @@ interface MerchantInterface
     public function getLabel();
 
     /**
-     * Creates the request object
+     * Creates the request object.
      *
      * @param string $type of request
      * @param array $data the data for request

@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\php\merchant\exceptions;
 
 /**
- * Class RequestMerchantException
- *
- * @package hiqdev\php\merchant\exceptions
+ * Class RequestException.
  */
-class RequestMerchantException extends \Exception implements MerchantException {}
+class RequestException extends \Exception implements MerchantException
+{
+}

@@ -32,14 +32,14 @@ interface RequestInterface
     public function getAmount();
 
     /**
-     * Returns the currency
+     * Returns the currency.
      *
      * @return string
      */
     public function getCurrency();
 
     /**
-     * Send the request
+     * Send the request.
      *
      * @return ResponseInterface
      */

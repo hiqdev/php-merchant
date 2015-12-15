@@ -40,7 +40,7 @@ abstract class AbstractMerchant implements MerchantInterface
     }
 
     /**
-     * Returns simplified name
+     * Returns simplified name.
      *
      * @return string
      */

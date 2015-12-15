@@ -38,7 +38,7 @@ class OmnipayMerchant extends AbstractMerchant
     }
 
     /**
-     * Returns the normalized gateway $name
+     * Returns the normalized gateway $name.
      *
      * @see normalizeGateway
      * @param string $name The gateway name. Defaults to `$this->gateway`
@@ -54,7 +54,7 @@ class OmnipayMerchant extends AbstractMerchant
     }
 
     /**
-     * Normalizes gateway $name
+     * Normalizes gateway $name.
      *
      * @param $name
      * @return string
@@ -88,5 +88,4 @@ class OmnipayMerchant extends AbstractMerchant
     {
         return $data;
     }
-
 }
