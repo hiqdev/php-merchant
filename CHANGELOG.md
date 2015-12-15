@@ -6,6 +6,7 @@ hiqdev/php-merchant changelog
 
 ## 0.0.1 2015-12-15
 
+- Added tests
 - Added exception classes and phpdocs
 - Added gateway specifics facility
 - Changed: redone to be generalization over Omnipay and Payum

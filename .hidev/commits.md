@@ -6,6 +6,9 @@ hiqdev/php-merchant commits history
 
 ## 0.0.1 2015-12-15
 
+- Added tests
+    - 30d38b1 2015-12-15 + tests (sol@hiqdev.com)
+    - 2c8733f 2015-12-15 fixed travis (sol@hiqdev.com)
 - Added exception classes and phpdocs
     - 069d612 2015-12-14 PHPDocs updated (d.naumenko.a@gmail.com)
     - 3e10511 2015-12-11 PHPDocs improved (d.naumenko.a@gmail.com)
