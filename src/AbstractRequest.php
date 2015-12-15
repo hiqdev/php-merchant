@@ -99,7 +99,7 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * When worker has a method called $name, call it instead.
+     * Use worker's method when possible.
      *
      * @param $name
      * @param $args

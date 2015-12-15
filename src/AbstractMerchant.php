@@ -32,6 +32,16 @@ abstract class AbstractMerchant implements MerchantInterface
     public $data = [];
 
     /**
+     * @var string request class name.
+     */
+    public $requestClass;
+
+    /**
+     * @var string response class name.
+     */
+    public $responseClass;
+
+    /**
      * @return string
      */
     public function getLabel()
