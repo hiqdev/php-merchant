@@ -3,6 +3,13 @@ hiqdev/php-merchant commits history
 
 ## Under development
 
+
+## 0.0.1 2015-12-15
+
+- Added exception classes and phpdocs
+    - 069d612 2015-12-14 PHPDocs updated (d.naumenko.a@gmail.com)
+    - 3e10511 2015-12-11 PHPDocs improved (d.naumenko.a@gmail.com)
+    - 02c352d 2015-12-11 Added exception classes (d.naumenko.a@gmail.com)
 - Added gateway specifics facility
     - da622fc 2015-12-10 + added gateway specific ability, and WebMoney specific merchant and response (sol@hiqdev.com)
 - Changed: redone to be generalization over Omnipay and Payum
