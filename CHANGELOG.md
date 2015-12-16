@@ -3,6 +3,7 @@ hiqdev/php-merchant changelog
 
 ## Under development
 
+- Fixed minor issues
 
 ## 0.0.1 2015-12-15
 
