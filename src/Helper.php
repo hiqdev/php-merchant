@@ -88,6 +88,10 @@ class Helper
     {
         return preg_replace('/[^a-z0-9]+/', '', strtolower($name));
     }
+
+    /**
+     * Converts time to ISO 8601 format.
+     */
     public static function isotime($time)
     {
         return date('c', strtotime($time));

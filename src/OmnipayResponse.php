@@ -17,7 +17,7 @@ namespace hiqdev\php\merchant;
 class OmnipayResponse extends AbstractResponse
 {
     /**
-     * @var \Omnipay\Common\Message\AbstractResponse|\Omnipay\Common\Message\RedirectResponseInterface
+     * @var \Omnipay\Common\Message\ResponseInterface
      */
     protected $_worker;
 
@@ -27,7 +27,7 @@ class OmnipayResponse extends AbstractResponse
     public $request;
 
     /**
-     * @return \Omnipay\Common\Message\AbstractResponse|\Omnipay\Common\Message\RedirectResponseInterface|\Omnipay\Common\Message\ResponseInterface
+     * @return \Omnipay\Common\Message\ResponseInterface
      */
     public function getWorker()
     {
@@ -69,19 +69,6 @@ class OmnipayResponse extends AbstractResponse
         }
 
         return null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSum()
-    {
-        return $this->getWorker()->getAmount();
-    }
-
-    public function getTime()
-    {
-        return date('c');
     }
 
     public function getVar($name)

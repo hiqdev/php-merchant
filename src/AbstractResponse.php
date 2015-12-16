@@ -40,4 +40,30 @@ abstract class AbstractResponse implements ResponseInterface
      * {@inheritdoc}
      */
     abstract public function isSuccessful();
+
+    /**
+     * The instance of payment processing library.
+     * @return \Omnipay\Common\Message\AbstractResponse|\Payum\Core\Model\Response
+     */
+    abstract public function getWorker();
+
+    public function __call($name, $args)
+    {
+        if (method_exists($this->getWorker(), $name)) {
+            return call_user_func_array([$this->getWorker(), $name], $args);
+        }
+
+        return null;
+    }
+
+    public function getFee()
+    {
+        return 0;
+    }
+
+    public function getTime()
+    {
+        return date('c');
+    }
+
 }

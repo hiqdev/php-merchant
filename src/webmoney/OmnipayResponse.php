@@ -23,7 +23,7 @@ class OmnipayResponse extends \hiqdev\php\merchant\OmnipayResponse
         return Helper::isotime($this->getVar('LMI_SYS_TRANS_DATE') . ' Europe/Moscow');
     }
 
-    public function getFrom()
+    public function getPayer()
     {
         return $this->getVar('LMI_PAYER_PURSE') . '/' . $this->getVar('LMI_PAYER_WM');
     }
