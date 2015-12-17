@@ -17,5 +17,5 @@ package:
         - else?
 
 require:
-    hiqdev/hidev-hiqdev: "*"
+    hiqdev/hidev-vendor: "*"
     hiqdev/hidev-php:    "*"

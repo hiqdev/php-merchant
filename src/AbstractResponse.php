@@ -65,5 +65,4 @@ abstract class AbstractResponse implements ResponseInterface
     {
         return date('c');
     }
-
 }
