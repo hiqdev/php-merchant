@@ -4,6 +4,7 @@ hiqdev/php-merchant commits history
 ## Under development
 
 - Fixed minor issues
+    - 56504e6 2015-12-17 fixed build (sol@hiqdev.com)
     - 48299aa 2015-12-16 small improvements around response (sol@hiqdev.com)
 
 ## 0.0.1 2015-12-15
