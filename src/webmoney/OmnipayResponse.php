@@ -18,11 +18,19 @@ use hiqdev\php\merchant\Helper;
  */
 class OmnipayResponse extends \hiqdev\php\merchant\OmnipayResponse
 {
+    /**
+     * Get payment time.
+     * @return string
+     */
     public function getTime()
     {
         return Helper::isotime($this->getVar('LMI_SYS_TRANS_DATE') . ' Europe/Moscow');
     }
 
+    /**
+     * Get payer info.
+     * @return string
+     */
     public function getPayer()
     {
         return $this->getVar('LMI_PAYER_PURSE') . '/' . $this->getVar('LMI_PAYER_WM');
