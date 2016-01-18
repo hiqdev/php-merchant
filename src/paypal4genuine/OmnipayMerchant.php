@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/php-merchant
  * @package   php-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\merchant\paypal;
@@ -27,7 +27,7 @@ class OmnipayMerchant extends \hiqdev\php\merchant\OmnipayMerchant
     {
         $result = parent::getGateway($name);
 
-        return $result == 'PayPal' ? 'PayPal_Express' : $result;
+        return $result === 'PayPal' ? 'PayPal_Express' : $result;
     }
 
     public function prepareData(array $data)
