@@ -4,6 +4,7 @@ hiqdev/php-merchant commits history
 ## Under development
 
 - Fixed minor issues
+    - 854744c 2016-01-24 added more tests (sol@hiqdev.com)
     - 8448ee6 2016-01-18 rehideved (sol@hiqdev.com)
     - acbca3c 2016-01-18 phpcsfixed (sol@hiqdev.com)
     - 6da1b24 2016-01-11 temporary added paypal4genuine (sol@hiqdev.com)
