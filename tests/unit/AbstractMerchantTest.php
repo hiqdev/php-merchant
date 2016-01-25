@@ -45,4 +45,12 @@ class AbstractMerchantTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(strtolower($this->gateway), $this->object->getSimpleName());
     }
+
+    public function testResponse()
+    {
+        $request = $this->object->request('', []);
+        $this->assertInstanceOf('hiqdev\php\merchant\OmnipayRequest', $request);
+        $response = $this->object->response($request);
+        $this->assertInstanceOf('hiqdev\php\merchant\webmoney\OmnipayResponse', $response);
+    }
 }
