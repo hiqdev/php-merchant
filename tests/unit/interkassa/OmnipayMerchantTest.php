@@ -24,7 +24,6 @@ class OmnipayMerchantTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     protected $data = [
-        'purse'  => 'ThePurse',
         'secret' => 'TheSecret',
     ];
 
