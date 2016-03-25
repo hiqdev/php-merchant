@@ -47,22 +47,35 @@ abstract class AbstractResponse implements ResponseInterface
      */
     abstract public function getWorker();
 
-    public function __call($name, $args)
+    public function call($name, $args, $default = null)
     {
         if (method_exists($this->getWorker(), $name)) {
             return call_user_func_array([$this->getWorker(), $name], $args);
         }
 
-        return null;
+        return $default;
+    }
+
+    public function __call($name, $args)
+    {
+        return $this->call($name, $args);
+    }
+
+    /**
+     * Sum = Amount - Fee
+     */
+    public function getSum()
+    {
+        return $this->call('getSum', [], (float)$this->getAmount() - (float)$this->getFee());
     }
 
     public function getFee()
     {
-        return 0;
+        return $this->call('getFee', [], 0);
     }
 
     public function getTime()
     {
-        return date('c');
+        return $this->call('getTime', [], date('c'));
     }
 }
