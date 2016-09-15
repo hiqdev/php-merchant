@@ -1,13 +1,15 @@
 hiqdev/php-merchant
 -------------------
 
-## [Under development]
+## [0.0.2] - 2016-09-15
 
-- Added WebmoneyMerchant class
+- Fixed minor issues
+    - [7069672] 2016-09-15 redone bumping with `chkipper` [sol@hiqdev.com]
     - [2133c9c] 2016-09-15 skipped test [sol@hiqdev.com]
     - [6ae3236] 2016-09-15 rehideved [sol@hiqdev.com]
     - [f615990] 2016-03-25 + proper defaulting for getSum/Fee/Time [sol@hiqdev.com]
     - [c2307aa] 2016-03-23 try to fix [d.naumenko.a@gmail.com]
+- Added WebmoneyMerchant class
     - [6231d19] 2016-03-23 Added WebmoneyMerchant class [d.naumenko.a@gmail.com]
     - [efa7eae] 2016-01-25 added more tests [sol@hiqdev.com]
     - [854744c] 2016-01-24 added more tests [sol@hiqdev.com]
@@ -93,3 +95,4 @@ hiqdev/php-merchant
 [f615990]: https://github.com/hiqdev/php-merchant/commit/f615990
 [c2307aa]: https://github.com/hiqdev/php-merchant/commit/c2307aa
 [6231d19]: https://github.com/hiqdev/php-merchant/commit/6231d19
+[7069672]: https://github.com/hiqdev/php-merchant/commit/7069672

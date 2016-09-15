@@ -1,8 +1,9 @@
 hiqdev/php-merchant
 -------------------
 
-## [Under development]
+## [0.0.2] - 2016-09-15
 
+- Fixed minor issues
 - Added WebmoneyMerchant class
 
 ## [0.0.1] - 2015-12-15
