@@ -1,11 +1,11 @@
-hiqdev/php-merchant changelog
------------------------------
+hiqdev/php-merchant
+-------------------
 
-## Under development
+## [Under development]
 
-- Fixed minor issues
+- Added WebmoneyMerchant class
 
-## 0.0.1 2015-12-15
+## [0.0.1] - 2015-12-15
 
 - Added tests
 - Added exception classes and phpdocs
@@ -13,5 +13,4 @@ hiqdev/php-merchant changelog
 - Changed: redone to be generalization over Omnipay and Payum
 - Added basics
 
-## Development started 2015-10-21
-
+## [Development started] - 2015-10-21
