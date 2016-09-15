@@ -49,6 +49,9 @@
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
     },
+    "require-dev": {
+        "omnipay/stripe": "^2.0"
+    },
     "autoload": {
         "psr-4": {
             "hiqdev\\php\\merchant\\": "src"
