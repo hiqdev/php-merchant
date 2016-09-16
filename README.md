@@ -8,7 +8,6 @@ PHP merchant library
 [![Build Status](https://img.shields.io/travis/hiqdev/php-merchant.svg)](https://travis-ci.org/hiqdev/php-merchant)
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/php-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/php-merchant/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/php-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/php-merchant/)
-[![Dependency Status](https://www.versioneye.com/php/hiqdev:php-merchant/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:php-merchant/dev-master)
 
 [Omnipay](http://omnipay.thephpleague.com/) is a framework agnostic, multi-gateway payment processing library for PHP 5.3+.
 
