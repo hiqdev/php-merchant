@@ -1,6 +1,11 @@
 hiqdev/php-merchant
 -------------------
 
+## [0.0.3] - 2016-09-16
+
+- Fixed errored requirements
+    - [2a29191] 2016-09-16 fixed errored requirements [sol@hiqdev.com]
+
 ## [0.0.2] - 2016-09-15
 
 - Fixed minor issues
@@ -96,3 +101,4 @@ hiqdev/php-merchant
 [c2307aa]: https://github.com/hiqdev/php-merchant/commit/c2307aa
 [6231d19]: https://github.com/hiqdev/php-merchant/commit/6231d19
 [7069672]: https://github.com/hiqdev/php-merchant/commit/7069672
+[2a29191]: https://github.com/hiqdev/php-merchant/commit/2a29191
