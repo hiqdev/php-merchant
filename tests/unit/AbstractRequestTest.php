@@ -25,10 +25,11 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
 
     protected $type = 'Purchase';
     protected $data = [
-        'currency'  => 'USD',
-        'amount'    => '123.45',
-        'fee'       => '12.34',
-        'sum'       => '111.11',
+        'currency' => 'USD',
+        'amount' => '123.45',
+        'fee' => '12.34',
+        'sum' => '111.11',
+        'commission_fee' => '11.11',
     ];
 
     protected function setUp()

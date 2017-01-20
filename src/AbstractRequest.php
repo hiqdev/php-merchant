@@ -67,9 +67,25 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * @return string
      */
+    public function getCommissionFee()
+    {
+        return $this->data['commission_fee'] ?: '0';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalFee()
+    {
+        return $this->getFee() + $this->getCommissionFee();
+    }
+
+    /**
+     * @return string
+     */
     public function getSum()
     {
-        return $this->data['sum'] ?: $this->getAmount() - $this->getFee();
+        return $this->data['sum'] ?: $this->getAmount() - $this->getTotalFee();
     }
 
     /**
