@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Generalization over Omnipay and Payum
  *
  * @link      https://github.com/hiqdev/php-merchant
  * @package   php-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\merchant;
@@ -26,8 +25,8 @@ interface RequestInterface
     /**
      * Validates and returns the formatted amount.
      *
-     * @throws RequestMerchantException on any validation failure.
-     * @return string The amount formatted to the correct number of decimal places for the selected currency.
+     * @throws RequestMerchantException on any validation failure
+     * @return string the amount formatted to the correct number of decimal places for the selected currency
      */
     public function getAmount();
 

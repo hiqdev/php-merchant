@@ -1,12 +1,11 @@
 <?php
-
-/*
+/**
  * Generalization over Omnipay and Payum
  *
  * @link      https://github.com/hiqdev/php-merchant
  * @package   php-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\merchant;
@@ -21,7 +20,7 @@ class OmnipayMerchant extends AbstractMerchant
     public $library = 'Omnipay';
 
     /**
-     * @var \Omnipay\Common\GatewayInterface Omnipay Gateway object.
+     * @var \Omnipay\Common\GatewayInterface omnipay Gateway object
      */
     protected $_worker;
 
