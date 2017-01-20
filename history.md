@@ -1,66 +1,80 @@
 hiqdev/php-merchant
 -------------------
 
+## [Under development]
+
+- Added `commission_fee` related things to the AbstractRequest
+    - [5c419c8] 2017-01-20 csfixed [@SilverFire]
+    - [abc99fe] 2017-01-20 Added `commission_fee` to the AbstractRequest [@SilverFire]
+
 ## [0.0.3] - 2016-09-16
 
 - Fixed errored requirements
-    - [2a29191] 2016-09-16 fixed errored requirements [sol@hiqdev.com]
+    - [2a29191] 2016-09-16 fixed errored requirements [@hiqsol]
 
 ## [0.0.2] - 2016-09-15
 
 - Fixed minor issues
-    - [7069672] 2016-09-15 redone bumping with `chkipper` [sol@hiqdev.com]
-    - [2133c9c] 2016-09-15 skipped test [sol@hiqdev.com]
-    - [6ae3236] 2016-09-15 rehideved [sol@hiqdev.com]
-    - [f615990] 2016-03-25 + proper defaulting for getSum/Fee/Time [sol@hiqdev.com]
-    - [c2307aa] 2016-03-23 try to fix [d.naumenko.a@gmail.com]
+    - [7069672] 2016-09-15 redone bumping with `chkipper` [@hiqsol]
+    - [2133c9c] 2016-09-15 skipped test [@hiqsol]
+    - [6ae3236] 2016-09-15 rehideved [@hiqsol]
+    - [f615990] 2016-03-25 + proper defaulting for getSum/Fee/Time [@hiqsol]
+    - [c2307aa] 2016-03-23 try to fix [@SilverFire]
 - Added WebmoneyMerchant class
-    - [6231d19] 2016-03-23 Added WebmoneyMerchant class [d.naumenko.a@gmail.com]
-    - [efa7eae] 2016-01-25 added more tests [sol@hiqdev.com]
-    - [854744c] 2016-01-24 added more tests [sol@hiqdev.com]
-    - [8448ee6] 2016-01-18 rehideved [sol@hiqdev.com]
-    - [acbca3c] 2016-01-18 phpcsfixed [sol@hiqdev.com]
-    - [6da1b24] 2016-01-11 temporary added paypal4genuine [sol@hiqdev.com]
-    - [803b68e] 2015-12-24 fixed build [sol@hiqdev.com]
-    - [56504e6] 2015-12-17 fixed build [sol@hiqdev.com]
-    - [48299aa] 2015-12-16 small improvements around response [sol@hiqdev.com]
+    - [6231d19] 2016-03-23 Added WebmoneyMerchant class [@SilverFire]
+    - [efa7eae] 2016-01-25 added more tests [@hiqsol]
+    - [854744c] 2016-01-24 added more tests [@hiqsol]
+    - [8448ee6] 2016-01-18 rehideved [@hiqsol]
+    - [acbca3c] 2016-01-18 phpcsfixed [@hiqsol]
+    - [6da1b24] 2016-01-11 temporary added paypal4genuine [@hiqsol]
+    - [803b68e] 2015-12-24 fixed build [@hiqsol]
+    - [56504e6] 2015-12-17 fixed build [@hiqsol]
+    - [48299aa] 2015-12-16 small improvements around response [@hiqsol]
 
 ## [0.0.1] - 2015-12-15
 
 - Added tests
-    - [04120b9] 2015-12-15 php-cs-fixed [sol@hiqdev.com]
-    - [30d38b1] 2015-12-15 + tests [sol@hiqdev.com]
-    - [2c8733f] 2015-12-15 fixed travis [sol@hiqdev.com]
+    - [04120b9] 2015-12-15 php-cs-fixed [@hiqsol]
+    - [30d38b1] 2015-12-15 + tests [@hiqsol]
+    - [2c8733f] 2015-12-15 fixed travis [@hiqsol]
 - Added exception classes and phpdocs
-    - [069d612] 2015-12-14 PHPDocs updated [d.naumenko.a@gmail.com]
-    - [3e10511] 2015-12-11 PHPDocs improved [d.naumenko.a@gmail.com]
-    - [02c352d] 2015-12-11 Added exception classes [d.naumenko.a@gmail.com]
+    - [069d612] 2015-12-14 PHPDocs updated [@SilverFire]
+    - [3e10511] 2015-12-11 PHPDocs improved [@SilverFire]
+    - [02c352d] 2015-12-11 Added exception classes [@SilverFire]
 - Added gateway specifics facility
-    - [da622fc] 2015-12-10 + added gateway specific ability, and WebMoney specific merchant and response [sol@hiqdev.com]
+    - [da622fc] 2015-12-10 + added gateway specific ability, and WebMoney specific merchant and response [@hiqsol]
 - Changed: redone to be generalization over Omnipay and Payum
-    - [d9ea017] 2015-12-10 fixed AbstractResponse: - yii dependency [sol@hiqdev.com]
-    - [c664dcc] 2015-12-09 fixed merchant and gateway creation [sol@hiqdev.com]
-    - [a7a39b5] 2015-12-08 redoning with MerchantManager [sol@hiqdev.com]
-    - [7bb6e51] 2015-12-07 redoing to omnipay/payum [sol@hiqdev.com]
-    - [ce7f761] 2015-11-04 NOT FINISHED redoing to omnipay [sol@hiqdev.com]
+    - [d9ea017] 2015-12-10 fixed AbstractResponse: - yii dependency [@hiqsol]
+    - [c664dcc] 2015-12-09 fixed merchant and gateway creation [@hiqsol]
+    - [a7a39b5] 2015-12-08 redoning with MerchantManager [@hiqsol]
+    - [7bb6e51] 2015-12-07 redoing to omnipay/payum [@hiqsol]
+    - [ce7f761] 2015-11-04 NOT FINISHED redoing to omnipay [@hiqsol]
 - Added basics
-    - [f86effd] 2015-11-04 php-cs-fixed [sol@hiqdev.com]
-    - [889dabe] 2015-11-04 + getConfig() [sol@hiqdev.com]
-    - [13c6a7f] 2015-11-04 redone description/label -> paymentDescription/Label [sol@hiqdev.com]
-    - [58fedba] 2015-11-04 removed home-made exceptions [sol@hiqdev.com]
-    - [746e713] 2015-10-31 changed returnUrl to get parameters; + mget() [sol@hiqdev.com]
-    - [acc77aa] 2015-10-30 redone validateMoney <- checkMoney [sol@hiqdev.com]
-    - [d8de4f9] 2015-10-30 renamed 'scheme' <- 'proto' [sol@hiqdev.com]
-    - [7e12a55] 2015-10-30 changed: redone to use system <- name [sol@hiqdev.com]
-    - [ed71fa4] 2015-10-23 + getCents/Time/UniqId, + formatDatetime, + checkMoney, + curl [sol@hiqdev.com]
-    - [e7330e2] 2015-10-22 removed PayPalMerchant to hiqdev\php-merchant-paypal [sol@hiqdev.com]
-    - [d3cdf7a] 2015-10-22 + rendering form, + guessClass [sol@hiqdev.com]
-    - [e4440a8] 2015-10-21 php-cs-fixed [sol@hiqdev.com]
-    - [94c692a] 2015-10-21 hideved [sol@hiqdev.com]
-    - [ae6db66] 2015-10-21 inited [sol@hiqdev.com]
+    - [f86effd] 2015-11-04 php-cs-fixed [@hiqsol]
+    - [889dabe] 2015-11-04 + getConfig() [@hiqsol]
+    - [13c6a7f] 2015-11-04 redone description/label -> paymentDescription/Label [@hiqsol]
+    - [58fedba] 2015-11-04 removed home-made exceptions [@hiqsol]
+    - [746e713] 2015-10-31 changed returnUrl to get parameters; + mget() [@hiqsol]
+    - [acc77aa] 2015-10-30 redone validateMoney <- checkMoney [@hiqsol]
+    - [d8de4f9] 2015-10-30 renamed 'scheme' <- 'proto' [@hiqsol]
+    - [7e12a55] 2015-10-30 changed: redone to use system <- name [@hiqsol]
+    - [ed71fa4] 2015-10-23 + getCents/Time/UniqId, + formatDatetime, + checkMoney, + curl [@hiqsol]
+    - [e7330e2] 2015-10-22 removed PayPalMerchant to hiqdev\php-merchant-paypal [@hiqsol]
+    - [d3cdf7a] 2015-10-22 + rendering form, + guessClass [@hiqsol]
+    - [e4440a8] 2015-10-21 php-cs-fixed [@hiqsol]
+    - [94c692a] 2015-10-21 hideved [@hiqsol]
+    - [ae6db66] 2015-10-21 inited [@hiqsol]
 
 ## [Development started] - 2015-10-21
 
+[@hiqsol]: https://github.com/hiqsol
+[sol@hiqdev.com]: https://github.com/hiqsol
+[@SilverFire]: https://github.com/SilverFire
+[d.naumenko.a@gmail.com]: https://github.com/SilverFire
+[@tafid]: https://github.com/tafid
+[andreyklochok@gmail.com]: https://github.com/tafid
+[@BladeRoot]: https://github.com/BladeRoot
+[bladeroot@gmail.com]: https://github.com/BladeRoot
 [efa7eae]: https://github.com/hiqdev/php-merchant/commit/efa7eae
 [854744c]: https://github.com/hiqdev/php-merchant/commit/854744c
 [8448ee6]: https://github.com/hiqdev/php-merchant/commit/8448ee6
@@ -102,3 +116,9 @@ hiqdev/php-merchant
 [6231d19]: https://github.com/hiqdev/php-merchant/commit/6231d19
 [7069672]: https://github.com/hiqdev/php-merchant/commit/7069672
 [2a29191]: https://github.com/hiqdev/php-merchant/commit/2a29191
+[5c419c8]: https://github.com/hiqdev/php-merchant/commit/5c419c8
+[abc99fe]: https://github.com/hiqdev/php-merchant/commit/abc99fe
+[Under development]: https://github.com/hiqdev/php-merchant/compare/0.0.3...HEAD
+[0.0.3]: https://github.com/hiqdev/php-merchant/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/hiqdev/php-merchant/compare/0.0.1...0.0.2
+[0.0.1]: https://github.com/hiqdev/php-merchant/releases/tag/0.0.1
