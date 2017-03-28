@@ -20,7 +20,7 @@ abstract class AbstractMerchant implements MerchantInterface
     public $library;
 
     /**
-     * Gateway name, corresponding to Omnipay namespace. E.g. PayPal, WebMoney, YandexMoney.
+     * @var string gateway name, corresponding to namespace, e.g.: paypal, webmoney
      */
     public $gateway;
 
@@ -29,6 +29,11 @@ abstract class AbstractMerchant implements MerchantInterface
      * @see request
      */
     public $data = [];
+
+    /**
+     * @var string gateway label that should be used to display the merchant, e.g.: PayPal, WebMoney
+     */
+    public $label;
 
     /**
      * @var string request class name
@@ -45,18 +50,21 @@ abstract class AbstractMerchant implements MerchantInterface
      */
     public function getLabel()
     {
+        return $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGateway()
+    {
         return $this->gateway;
     }
 
     /**
-     * Returns simplified name.
-     *
      * @return string
      */
-    public function getSimpleName()
-    {
-        return preg_replace('/[^a-z0-9]+/', '', strtolower($this->gateway));
-    }
+    abstract public function getGatewayNamespacePart();
 
     /**
      * {@inheritdoc}

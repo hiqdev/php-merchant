@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\merchant\yandexmoney;
+namespace hiqdev\php\merchant\yandex;
 
 use hiqdev\php\merchant\Helper;
 

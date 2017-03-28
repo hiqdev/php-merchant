@@ -35,16 +35,6 @@ class AbstractMerchantTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-    public function testGetLabel()
-    {
-        $this->assertSame($this->gateway, $this->object->getLabel());
-    }
-
-    public function testGetSimpleName()
-    {
-        $this->assertSame(strtolower($this->gateway), $this->object->getSimpleName());
-    }
-
     public function testResponse()
     {
         $request = $this->object->request('', []);

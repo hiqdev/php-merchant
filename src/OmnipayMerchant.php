@@ -30,20 +30,20 @@ class OmnipayMerchant extends AbstractMerchant
     public function getWorker()
     {
         if ($this->_worker === null) {
-            $this->_worker = Omnipay::create($this->getGateway())->initialize($this->prepareData($this->data));
+            $this->_worker = Omnipay::create($this->getGatewayNamespacePart())->initialize($this->prepareData($this->data));
         }
 
         return $this->_worker;
     }
 
     /**
-     * Returns the normalized gateway $name.
+     * Returns the normalized gateway name that should be used to create a worker.
      *
-     * @see normalizeGateway
-     * @param string $name The gateway name. Defaults to `$this->gateway`
+     * @param string $name
      * @return string
+     * @see normalizeGateway
      */
-    public function getGateway($name = null)
+    public function getGatewayNamespacePart($name = null)
     {
         if (!isset($name)) {
             $name = $this->gateway;
