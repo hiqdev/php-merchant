@@ -15,24 +15,9 @@ namespace hiqdev\php\merchant\yandex;
  */
 class OmnipayRequest extends \hiqdev\php\merchant\OmnipayRequest
 {
-    /**
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function getWorker()
-    {
-        if ($this->_worker === null) {
-            $this->_worker = $this->merchant->getWorker()->{$this->getType()}($this->getData());
-        }
-
-        return $this->_worker;
-    }
-
     public function getData()
     {
         return array_merge(parent::getData(), [
-            'account' => $this->data['purse'],
-            'form_comment' => $this->data['description'],
-            'orderId' => $this->data['transactionId'],
             'method' => 'PC', // https://money.yandex.ru/doc.xml?id=526991
         ]);
     }
