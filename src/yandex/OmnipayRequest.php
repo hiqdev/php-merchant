@@ -33,6 +33,7 @@ class OmnipayRequest extends \hiqdev\php\merchant\OmnipayRequest
             'account' => $this->data['purse'],
             'form_comment' => $this->data['description'],
             'orderId' => $this->data['transactionId'],
+            'method' => 'PC', // https://money.yandex.ru/doc.xml?id=526991
         ]);
     }
 }

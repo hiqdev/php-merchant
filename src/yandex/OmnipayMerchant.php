@@ -20,7 +20,7 @@ class OmnipayMerchant extends \hiqdev\php\merchant\OmnipayMerchant
     public function getWorker()
     {
         if ($this->_worker === null) {
-            $this->_worker = (new \yandexmoney\YandexMoney\GatewayIndividual())
+            $this->_worker = (new \Omnipay\YandexMoney\P2pGateway())
                 ->initialize($this->prepareData($this->data));
         }
 
