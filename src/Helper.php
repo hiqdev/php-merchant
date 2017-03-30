@@ -95,4 +95,9 @@ class Helper
     {
         return date('c', strtotime($time));
     }
+
+    public static function formatMoney($sum, $decimals = 2)
+    {
+        return number_format($sum, $decimals, '.', '');
+    }
 }

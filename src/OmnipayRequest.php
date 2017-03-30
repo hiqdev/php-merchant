@@ -33,4 +33,12 @@ class OmnipayRequest extends AbstractRequest
 
         return $this->_worker;
     }
+
+    public function getData()
+    {
+        $this->data['sum'] = Helper::formatMoney($this->data['sum']);
+        $this->data['amount'] = Helper::formatMoney($this->data['amount']);
+
+        return $this->data;
+    }
 }
