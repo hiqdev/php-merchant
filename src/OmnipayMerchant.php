@@ -72,6 +72,7 @@ class OmnipayMerchant extends AbstractMerchant
     public static $_gateways = [
         'eCoin', 'ePayments', 'ePayService', 'InterKassa', 'OKPAY', 'Qiwi',
         'Paxum', 'PayPal', 'RoboKassa', 'FreeKassa', 'WebMoney', 'YandexMoney',
+        'BitPay'
     ];
 
     public static function setGateways($gateways)
