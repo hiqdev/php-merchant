@@ -1,5 +1,4 @@
-PHP merchant library
-====================
+# PHP merchant library
 
 **Generalization over Omnipay and Payum**
 
@@ -9,15 +8,18 @@ PHP merchant library
 [![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/php-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/php-merchant/)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/php-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/php-merchant/)
 
-[Omnipay](http://omnipay.thephpleague.com/) is a framework agnostic, multi-gateway payment processing library for PHP 5.3+.
-
-[Payum](http://payum.org/) is payment processing framework for PHP 5.5+.
-
-This package provides generalized interface for Omnipay and Payum:
+This package provides generalized interface for [Omnipay] and [Payum]:
 
 - generalized `purse` and `secret` for gateways
 - generalized `time` and `payer` for responses
 - else?
+
+[Omnipay] is a framework agnostic, multi-gateway payment processing library for PHP 5.3+.
+
+[Payum] is payment processing framework for PHP 5.5+.
+
+[Omnipay]:  http://omnipay.thephpleague.com/
+[Payum]:    http://payum.org/
 
 ## Installation
 
