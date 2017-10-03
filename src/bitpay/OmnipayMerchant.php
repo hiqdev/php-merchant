@@ -12,14 +12,36 @@ namespace hiqdev\php\merchant\bitpay;
 
 use hiqdev\php\merchant\Helper;
 use hiqdev\php\merchant\RequestInterface;
-use Omnipay\BitPay\Message\PurchaseRequest;
-use Omnipay\BitPay\Message\PurchaseResponse;
+use Omnipay\BitPay\Gateway;
+use Omnipay\Common\GatewayInterface;
 
 /**
  * BitPay Omnipay Merchant class.
  */
 class OmnipayMerchant extends \hiqdev\php\merchant\OmnipayMerchant
 {
+    /**
+     * @return Gateway|GatewayInterface
+     */
+    public function getWorker()
+    {
+        return parent::getWorker();
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function prepareData(array $data)
+    {
+        return array_merge([
+            'token' => $data['purse'],
+            'privateKey' => $data['secret'],
+            'publicKey' => $data['secret2'],
+            'testMode' => false
+        ], $data);
+    }
+
     public function request($type, array $data)
     {
         if (!empty($data['inputs'])) {
