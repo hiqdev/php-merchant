@@ -1,13 +1,12 @@
 <?php
 
 namespace hiqdev\php\merchant\exceptions;
-
 /**
- * Class MerchantException
+ * Class VerificationFailedException
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class MerchantException extends \Exception
+class VerificationFailedException extends MerchantException
 {
 
 }
