@@ -11,9 +11,10 @@ class CompletePurchaseResponse
     protected $time;
     protected $transactionReference;
     protected $transactionId;
+    protected $payer;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTransactionId()
     {
@@ -21,7 +22,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $transactionId
+     * @param string $transactionId
      * @return CompletePurchaseResponse
      */
     public function setTransactionId($transactionId)
@@ -30,9 +31,9 @@ class CompletePurchaseResponse
 
         return $this;
     }
-    protected $payer;
+
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrency()
     {
@@ -40,7 +41,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $currency
+     * @param string $currency
      * @return CompletePurchaseResponse
      */
     public function setCurrency($currency)
@@ -51,7 +52,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAmount()
     {
@@ -59,7 +60,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $amount
+     * @param string $amount
      * @return CompletePurchaseResponse
      */
     public function setAmount($amount)
@@ -70,7 +71,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFee()
     {
@@ -78,7 +79,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $fee
+     * @param string $fee
      * @return CompletePurchaseResponse
      */
     public function setFee($fee)
@@ -108,7 +109,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getTransactionReference()
     {
@@ -116,7 +117,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $transactionReference
+     * @param string $transactionReference
      * @return CompletePurchaseResponse
      */
     public function setTransactionReference($transactionReference)
@@ -127,7 +128,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPayer()
     {
@@ -135,7 +136,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $payer
+     * @param string $payer
      * @return CompletePurchaseResponse
      */
     public function setPayer($payer)
@@ -146,7 +147,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param mixed $isSuccessful
+     * @param string $isSuccessful
      * @return CompletePurchaseResponse
      */
     public function setIsSuccessful($isSuccessful)
@@ -157,7 +158,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getIsSuccessful()
     {

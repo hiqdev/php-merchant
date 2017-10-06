@@ -52,7 +52,7 @@ final class GenericMerchant implements MerchantInterface
          * @var \Omnipay\BitPay\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
-            'transactionReference' => $invoice->getId(),
+            'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
             'amount' => $invoice->getAmount(),
             'currency' => $invoice->getCurrency()->getCode(),

@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\php\merchant\merchants\bitpay;
+namespace hiqdev\php\merchant\merchants\paypal;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
@@ -9,19 +9,11 @@ use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
-use Omnipay\BitPay\Gateway;
-use Omnipay\Common\GatewayInterface;
-use Omnipay\Common\Message\ResponseInterface;
 
-/**
- * Class BitPayAdapter
- *
- * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
- */
-class BitPayMerchant implements MerchantInterface
+class PayPalExpressMerchant implements MerchantInterface
 {
     /**
-     * @var GatewayInterface|Gateway
+     * @var \Omnipay\Common\GatewayInterface
      */
     protected $gateway;
     /**
@@ -37,13 +29,12 @@ class BitPayMerchant implements MerchantInterface
     {
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
-        $this->gateway = $this->gatewayFactory->build('BitPay', [
-            'token' => $this->credentials->getKey1(),
-            'privateKey'  => $this->credentials->getKey2(),
-            'publicKey' => $this->credentials->getKey3(),
-            'testMode' => true // todo XXX
+        $this->gateway = $this->gatewayFactory->build('PayPal', [
+            'username' => $this->credentials->getPurse(),
+            'password'  => $this->credentials->getKey1(),
         ]);
     }
+
 
     /**
      * @param InvoiceInterface $invoice
@@ -55,7 +46,7 @@ class BitPayMerchant implements MerchantInterface
          * @var \Omnipay\BitPay\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
-            'transactionReference' => $invoice->getId(),
+            'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
             'amount' => $invoice->getAmount(),
             'currency' => $invoice->getCurrency()->getCode(),
@@ -73,10 +64,8 @@ class BitPayMerchant implements MerchantInterface
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\BitPay\Message\CompletePurchaseResponse $response */
+        /** @var \Omnipay\PayPal\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
-
-        $this->verifyCompetePurchaseResponse($response);
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
@@ -90,13 +79,8 @@ class BitPayMerchant implements MerchantInterface
     }
 
     /**
-     * @param ResponseInterface $response
+     * @return CredentialsInterface
      */
-    protected function verifyCompetePurchaseResponse(ResponseInterface $response)
-    {
-        (new CompletePurchaseResponseVerifier($this, $response))->verify();
-    }
-
     public function getCredentials(): CredentialsInterface
     {
         return $this->credentials;

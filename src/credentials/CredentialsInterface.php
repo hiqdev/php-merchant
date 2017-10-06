@@ -49,7 +49,7 @@ interface CredentialsInterface
 
     /**
      * @param string $key3
-     * @return self
+     * @return $this
      */
     public function setKey3($key3);
 }

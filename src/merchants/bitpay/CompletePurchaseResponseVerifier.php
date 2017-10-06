@@ -3,7 +3,7 @@
 
 namespace hiqdev\php\merchant\merchants\bitpay;
 
-use ahnames\php\oldapi\lib\merchant\exceptions\VerificationFailedException;
+use hiqdev\php\merchant\exceptions\VerificationFailedException;
 use Omnipay\BitPay\Message\CompletePurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
 
