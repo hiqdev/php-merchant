@@ -2,15 +2,47 @@
 
 namespace hiqdev\php\merchant\response;
 
+use Money\Currency;
+use Money\Money;
+
+/**
+ * Class CompletePurchaseResponse
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class CompletePurchaseResponse
 {
+    /**
+     * @var bool
+     */
     protected $isSuccessful;
+    /**
+     * @var Currency
+     */
     protected $currency;
+    /**
+     * @var Money
+     */
     protected $amount;
+    /**
+     * @var Money
+     */
     protected $fee;
+    /**
+     * @var \DateTime
+     */
     protected $time;
+    /**
+     * @var string
+     */
     protected $transactionReference;
+    /**
+     * @var string
+     */
     protected $transactionId;
+    /**
+     * @var string
+     */
     protected $payer;
 
     /**
@@ -33,7 +65,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return string
+     * @return Currency
      */
     public function getCurrency()
     {
@@ -41,29 +73,18 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param string $currency
-     * @return CompletePurchaseResponse
+     * @return Money
      */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAmount()
+    public function getAmount(): Money
     {
         return $this->amount;
     }
 
     /**
-     * @param string $amount
+     * @param Money $amount
      * @return CompletePurchaseResponse
      */
-    public function setAmount($amount)
+    public function setAmount(Money $amount)
     {
         $this->amount = $amount;
 
@@ -71,15 +92,19 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return string
+     * @return Money
      */
     public function getFee()
     {
-        return $this->fee;
+        if ($this->fee !== null) {
+            return $this->fee;
+        }
+
+        return new Money(0, $this->getCurrency());
     }
 
     /**
-     * @param string $fee
+     * @param Money $fee
      * @return CompletePurchaseResponse
      */
     public function setFee($fee)

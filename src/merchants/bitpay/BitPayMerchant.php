@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\merchant\merchants\bitpay;
 
+use ahnames\php\oldapi\lib\money\MoneyFormatter;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
@@ -9,6 +10,7 @@ use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
+use Money\Money;
 use Omnipay\BitPay\Gateway;
 use Omnipay\Common\GatewayInterface;
 use Omnipay\Common\Message\ResponseInterface;
@@ -32,11 +34,16 @@ class BitPayMerchant implements MerchantInterface
      * @var GatewayFactoryInterface
      */
     private $gatewayFactory;
+    /**
+     * @var MoneyFormatter
+     */
+    private $moneyFormatter;
 
-    public function __construct(CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory)
+    public function __construct(CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory, MoneyFormatter $moneyFormatter)
     {
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
+        $this->moneyFormatter = $moneyFormatter;
         $this->gateway = $this->gatewayFactory->build('BitPay', [
             'token' => $this->credentials->getKey1(),
             'privateKey'  => $this->credentials->getKey2(),
@@ -57,7 +64,7 @@ class BitPayMerchant implements MerchantInterface
         $response = $this->gateway->purchase([
             'transactionReference' => $invoice->getId(),
             'description' => $invoice->getDescription(),
-            'amount' => $invoice->getAmount(),
+            'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
@@ -80,9 +87,8 @@ class BitPayMerchant implements MerchantInterface
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setCurrency(new Currency($response->getCurrency()))
-            ->setAmount($response->getAmount())
-            ->setFee($response->getFee())
+            ->setAmount(new Money($response->getAmount()*100, new Currency($response->getCurrency())))
+            ->setFee(new Money($response->getFee()*100, new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())

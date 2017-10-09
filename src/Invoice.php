@@ -3,6 +3,7 @@
 namespace hiqdev\php\merchant;
 
 use Money\Currency;
+use Money\Money;
 
 /**
  * Class Invoice
@@ -51,14 +52,15 @@ final class Invoice implements InvoiceInterface
         return $this;
     }
 
-    public function getAmount()
+    public function getAmount(): Money
     {
         return $this->amount;
     }
 
-    public function setAmount($amount)
+    public function setAmount(Money $amount)
     {
         $this->amount = $amount;
+        $this->currency = $amount->getCurrency();
 
         return $this;
     }
@@ -117,16 +119,5 @@ final class Invoice implements InvoiceInterface
     public function getCurrency(): Currency
     {
         return $this->currency;
-    }
-
-    /**
-     * @param Currency $currency
-     * @return Invoice
-     */
-    public function setCurrency(Currency $currency)
-    {
-        $this->currency = $currency;
-
-        return $this;
     }
 }

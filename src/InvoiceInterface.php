@@ -3,6 +3,7 @@
 namespace hiqdev\php\merchant;
 
 use Money\Currency;
+use Money\Money;
 
 /**
  * Interface InvoiceInterface
@@ -23,15 +24,15 @@ interface InvoiceInterface
     public function setClient($client);
 
     /**
-     * @return string
+     * @return Money
      */
-    public function getAmount();
+    public function getAmount(): Money;
 
     /**
-     * @param string $sum
+     * @param Money $sum
      * @return InvoiceInterface
      */
-    public function setAmount($sum);
+    public function setAmount(Money $sum);
 
     /**
      * @return string
@@ -77,17 +78,10 @@ interface InvoiceInterface
      */
     public function setCancelUrl($cancelUrl);
 
-
     /**
      * @return Currency
      */
     public function getCurrency(): Currency;
-
-    /**
-     * @param Currency $currency
-     * @return InvoiceInterface
-     */
-    public function setCurrency(Currency $currency);
 
     /**
      * @return string

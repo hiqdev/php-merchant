@@ -9,6 +9,8 @@ use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
+use Money\Money;
+use Money\MoneyFormatter;
 
 class PayPalExpressMerchant implements MerchantInterface
 {
@@ -24,11 +26,16 @@ class PayPalExpressMerchant implements MerchantInterface
      * @var GatewayFactoryInterface
      */
     private $gatewayFactory;
+    /**
+     * @var MoneyFormatter
+     */
+    private $moneyFormatter;
 
-    public function __construct(CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory)
+    public function __construct(CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory, MoneyFormatter $moneyFormatter)
     {
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
+        $this->moneyFormatter = $moneyFormatter;
         $this->gateway = $this->gatewayFactory->build('PayPal', [
             'username' => $this->credentials->getPurse(),
             'password'  => $this->credentials->getKey1(),
@@ -48,7 +55,7 @@ class PayPalExpressMerchant implements MerchantInterface
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
-            'amount' => $invoice->getAmount(),
+            'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
@@ -69,9 +76,8 @@ class PayPalExpressMerchant implements MerchantInterface
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setCurrency(new Currency($response->getCurrency()))
-            ->setAmount($response->getAmount())
-            ->setFee($response->getFee())
+            ->setAmount(new Money($response->getAmount(), new Currency($response->getCurrency())))
+            ->setFee(new Money($response->getFee(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())

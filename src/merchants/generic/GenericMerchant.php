@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\merchant\merchants\generic;
 
+use Guzzle\Parser\Message\MessageParser;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
@@ -9,6 +10,8 @@ use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
+use Money\Money;
+use Money\MoneyFormatter;
 
 final class GenericMerchant implements MerchantInterface
 {
@@ -28,12 +31,17 @@ final class GenericMerchant implements MerchantInterface
      * @var GatewayFactoryInterface
      */
     private $gatewayFactory;
+    /**
+     * @var MoneyFormatter
+     */
+    private $moneyFormatter;
 
-    public function __construct($gatewayName, CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory)
+    public function __construct($gatewayName, CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory, MoneyFormatter $moneyFormatter)
     {
         $this->credentials = $credentials;
         $this->gatewayName = $gatewayName;
         $this->gatewayFactory = $gatewayFactory;
+        $this->moneyFormatter = $moneyFormatter;
         $this->gateway = $this->gatewayFactory->build($gatewayName, [
             'purse' => $this->credentials->getPurse(),
             'secret'  => $this->credentials->getKey1(),
@@ -54,7 +62,7 @@ final class GenericMerchant implements MerchantInterface
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
-            'amount' => $invoice->getAmount(),
+            'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
@@ -75,9 +83,8 @@ final class GenericMerchant implements MerchantInterface
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setCurrency(new Currency($response->getCurrency()))
-            ->setAmount($response->getAmount())
-            ->setFee($response->getFee())
+            ->setAmount(new Money($response->getAmount()*100, new Currency($response->getCurrency())))
+            ->setFee(new Money($response->getFee()*100, new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())

@@ -3,6 +3,7 @@
 
 namespace hiqdev\php\merchant\merchants\bitpay;
 
+use Bitpay\Bitpay;
 use hiqdev\php\merchant\exceptions\VerificationFailedException;
 use Omnipay\BitPay\Message\CompletePurchaseResponse;
 use Omnipay\Common\Message\ResponseInterface;
@@ -23,7 +24,7 @@ class CompletePurchaseResponseVerifier
      */
     private $posData;
     /**
-     * @var InterkassaMerchant
+     * @var Bitpay
      */
     private $adapter;
     /**
