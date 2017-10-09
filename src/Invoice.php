@@ -6,7 +6,9 @@ use Money\Currency;
 use Money\Money;
 
 /**
- * Class Invoice
+ * Class Invoice.
+ *
+ * Many methods depend on [[amount]], so make sure to set as early as possible.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -19,6 +21,9 @@ final class Invoice implements InvoiceInterface
     protected $returnUrl;
     protected $notifyUrl;
     protected $cancelUrl;
+    protected $returnMethod;
+    protected $notifyMethod;
+    protected $cancelMethod;
     protected $currency;
 
     /**
@@ -119,5 +124,62 @@ final class Invoice implements InvoiceInterface
     public function getCurrency(): Currency
     {
         return $this->currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnMethod()
+    {
+        return $this->returnMethod;
+    }
+
+    /**
+     * @param string $returnMethod
+     * @return InvoiceInterface
+     */
+    public function setReturnMethod($returnMethod)
+    {
+        $this->returnMethod = $returnMethod;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifyMethod()
+    {
+        return $this->notifyMethod;
+    }
+
+    /**
+     * @param string $notifyMethod
+     * @return InvoiceInterface
+     */
+    public function setNotifyMethod($notifyMethod)
+    {
+        $this->notifyMethod = $notifyMethod;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCancelMethod()
+    {
+        return $this->cancelMethod;
+    }
+
+    /**
+     * @param string $cancelMethod
+     * @return InvoiceInterface
+     */
+    public function setCancelMethod($cancelMethod)
+    {
+        $this->cancelMethod = $cancelMethod;
+
+        return $this;
     }
 }

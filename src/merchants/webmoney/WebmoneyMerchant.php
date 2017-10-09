@@ -11,11 +11,17 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Omnipay\WebMoney\Gateway;
 
+/**
+ * Class WebmoneyMerchant
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 final class WebmoneyMerchant implements MerchantInterface
 {
     /**
-     * @var \Omnipay\Common\GatewayInterface
+     * @var Gateway
      */
     protected $gateway;
     /**
@@ -49,7 +55,7 @@ final class WebmoneyMerchant implements MerchantInterface
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\WebMoney\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -57,8 +63,11 @@ final class WebmoneyMerchant implements MerchantInterface
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
+            'returnMethod' => $invoice->getReturnMethod(),
             'notifyUrl' => $invoice->getNotifyUrl(),
+            'notifyMethod' => $invoice->getNotifyMethod(),
             'cancelUrl' => $invoice->getCancelUrl(),
+            'cancelMethod' => $invoice->getCancelMethod(),
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());

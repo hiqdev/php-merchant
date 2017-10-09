@@ -4,6 +4,11 @@ namespace hiqdev\php\merchant\factories;
 
 use Omnipay\Common\GatewayInterface;
 
+/**
+ * Interface GatewayFactoryInterface
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 interface GatewayFactoryInterface
 {
     /**

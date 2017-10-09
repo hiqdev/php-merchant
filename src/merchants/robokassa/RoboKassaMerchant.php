@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\php\merchant\merchants\paypal;
+namespace hiqdev\php\merchant\merchants\robokassa;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
@@ -11,16 +11,17 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Omnipay\RoboKassa\Gateway;
 
 /**
- * Class PayPalExpressMerchant
+ * Class RoboKassaMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PayPalExpressMerchant implements MerchantInterface
+class RoboKassaMerchant implements MerchantInterface
 {
     /**
-     * @var \Omnipay\Common\GatewayInterface
+     * @var Gateway
      */
     protected $gateway;
     /**
@@ -41,10 +42,9 @@ class PayPalExpressMerchant implements MerchantInterface
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
         $this->moneyFormatter = $moneyFormatter;
-        $this->gateway = $this->gatewayFactory->build('PayPal', [
+        $this->gateway = $this->gatewayFactory->build('RoboKassa', [
             'purse' => $this->credentials->getPurse(),
-            'username' => $this->credentials->getPurse(),
-            'password'  => $this->credentials->getKey1(),
+            'secretKey' => $this->credentials->getKey1(),
         ]);
     }
 
@@ -55,16 +55,18 @@ class PayPalExpressMerchant implements MerchantInterface
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\RoboKassa\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
-            'transactionId' => $invoice->getId(),
+            'inv_id' => $invoice->getId(),
+            'client' => $invoice->getClient(),
             'description' => $invoice->getDescription(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
+            'time' => date('c')
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -76,17 +78,19 @@ class PayPalExpressMerchant implements MerchantInterface
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\PayPal\Message\CompletePurchaseResponse $response */
+        /** @var \Omnipay\RoboKassa\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount(new Money($response->getAmount(), new Currency($response->getCurrency())))
-            ->setFee(new Money($response->getFee(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getPayer())
-            ->setTime(new \DateTime($response->getTime()));
+            ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')
+            ->setTime(
+                (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
+                    ->setTimezone(new \DateTimeZone('UTC'))
+            );
     }
 
     /**

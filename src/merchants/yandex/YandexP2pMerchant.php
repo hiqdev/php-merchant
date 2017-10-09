@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\php\merchant\merchants\paypal;
+namespace hiqdev\php\merchant\merchants\yandex;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
@@ -11,16 +11,17 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Omnipay\YandexMoney\P2pGateway;
 
 /**
- * Class PayPalExpressMerchant
+ * Class YandexP2pMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PayPalExpressMerchant implements MerchantInterface
+class YandexP2pMerchant implements MerchantInterface
 {
     /**
-     * @var \Omnipay\Common\GatewayInterface
+     * @var P2pGateway
      */
     protected $gateway;
     /**
@@ -41,10 +42,9 @@ class PayPalExpressMerchant implements MerchantInterface
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
         $this->moneyFormatter = $moneyFormatter;
-        $this->gateway = $this->gatewayFactory->build('PayPal', [
-            'purse' => $this->credentials->getPurse(),
-            'username' => $this->credentials->getPurse(),
-            'password'  => $this->credentials->getKey1(),
+        $this->gateway = $this->gatewayFactory->build('YandexMoney_P2p', [
+            'account' => $this->credentials->getPurse(),
+            'password' => $this->credentials->getKey1(),
         ]);
     }
 
@@ -55,7 +55,7 @@ class PayPalExpressMerchant implements MerchantInterface
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -65,6 +65,7 @@ class PayPalExpressMerchant implements MerchantInterface
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
+            'method' => 'PC', // https://money.yandex.ru/doc.xml?id=526991
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -76,17 +77,19 @@ class PayPalExpressMerchant implements MerchantInterface
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\PayPal\Message\CompletePurchaseResponse $response */
+        /** @var \Omnipay\YandexMoney\Message\p2p\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount(new Money($response->getAmount(), new Currency($response->getCurrency())))
-            ->setFee(new Money($response->getFee(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getPayer())
-            ->setTime(new \DateTime($response->getTime()));
+            ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')
+            ->setTime(
+                (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
+                    ->setTimezone(new \DateTimeZone('UTC'))
+            );
     }
 
     /**

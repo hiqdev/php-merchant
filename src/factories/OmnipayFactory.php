@@ -5,6 +5,11 @@ namespace hiqdev\php\merchant\factories;
 use Omnipay\Common\GatewayInterface;
 use Omnipay\Common\Helper;
 
+/**
+ * Class OmnipayFactory
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class OmnipayFactory implements GatewayFactoryInterface
 {
     public function build(string $type, $parameters): GatewayInterface

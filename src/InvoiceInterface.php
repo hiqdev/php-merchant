@@ -59,6 +59,17 @@ interface InvoiceInterface
     /**
      * @return string
      */
+    public function getReturnMethod();
+
+    /**
+     * @param string $returnMethod
+     * @return InvoiceInterface
+     */
+    public function setReturnMethod($returnMethod);
+
+    /**
+     * @return string
+     */
     public function getNotifyUrl();
 
     /**
@@ -70,6 +81,17 @@ interface InvoiceInterface
     /**
      * @return string
      */
+    public function getNotifyMethod();
+
+    /**
+     * @param string $notifyMethod
+     * @return InvoiceInterface
+     */
+    public function setNotifyMethod($notifyMethod);
+
+    /**
+     * @return string
+     */
     public function getCancelUrl();
 
     /**
@@ -77,6 +99,17 @@ interface InvoiceInterface
      * @return InvoiceInterface
      */
     public function setCancelUrl($cancelUrl);
+
+    /**
+     * @return string
+     */
+    public function getCancelMethod();
+
+    /**
+     * @param string $cancelMethod
+     * @return InvoiceInterface
+     */
+    public function setCancelMethod($cancelMethod);
 
     /**
      * @return Currency

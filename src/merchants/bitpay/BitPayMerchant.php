@@ -13,7 +13,6 @@ use Money\Currency;
 use Money\Money;
 use Omnipay\BitPay\Gateway;
 use Omnipay\Common\GatewayInterface;
-use Omnipay\Common\Message\ResponseInterface;
 
 /**
  * Class BitPayAdapter
@@ -83,8 +82,6 @@ class BitPayMerchant implements MerchantInterface
         /** @var \Omnipay\BitPay\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
-        $this->verifyCompetePurchaseResponse($response);
-
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount(new Money($response->getAmount()*100, new Currency($response->getCurrency())))
@@ -93,14 +90,6 @@ class BitPayMerchant implements MerchantInterface
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
             ->setTime(new \DateTime($response->getTime()));
-    }
-
-    /**
-     * @param ResponseInterface $response
-     */
-    protected function verifyCompetePurchaseResponse(ResponseInterface $response)
-    {
-        (new CompletePurchaseResponseVerifier($this, $response))->verify();
     }
 
     public function getCredentials(): CredentialsInterface

@@ -2,7 +2,6 @@
 
 namespace hiqdev\php\merchant\merchants\generic;
 
-use Guzzle\Parser\Message\MessageParser;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
@@ -13,6 +12,11 @@ use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
 
+/**
+ * Class GenericMerchant
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 final class GenericMerchant implements MerchantInterface
 {
     /**

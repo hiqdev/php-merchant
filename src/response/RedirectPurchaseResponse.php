@@ -2,6 +2,11 @@
 
 namespace hiqdev\php\merchant\response;
 
+/**
+ * Class RedirectPurchaseResponse
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
 class RedirectPurchaseResponse
 {
     /**

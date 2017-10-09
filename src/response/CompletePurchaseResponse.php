@@ -115,7 +115,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime of purchase in UTC
      */
     public function getTime()
     {
@@ -123,7 +123,7 @@ class CompletePurchaseResponse
     }
 
     /**
-     * @param \DateTime $time
+     * @param \DateTime $time In UTC
      * @return CompletePurchaseResponse
      */
     public function setTime(\DateTime $time)
