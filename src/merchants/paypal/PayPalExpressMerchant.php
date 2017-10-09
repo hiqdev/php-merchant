@@ -11,6 +11,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Omnipay\PayPal\Gateway;
 
 /**
  * Class PayPalExpressMerchant
@@ -20,7 +21,7 @@ use Money\MoneyFormatter;
 class PayPalExpressMerchant implements MerchantInterface
 {
     /**
-     * @var \Omnipay\Common\GatewayInterface
+     * @var Gateway
      */
     protected $gateway;
     /**

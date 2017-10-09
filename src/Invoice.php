@@ -40,7 +40,7 @@ final class Invoice implements InvoiceInterface
      */
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (string)$id;
 
         return $this;
     }
@@ -52,7 +52,7 @@ final class Invoice implements InvoiceInterface
 
     public function setClient($client)
     {
-        $this->client = $client;
+        $this->client = (string)$client;
 
         return $this;
     }
@@ -77,7 +77,7 @@ final class Invoice implements InvoiceInterface
 
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = (string)$description;
 
         return $this;
     }

@@ -46,9 +46,10 @@
         }
     ],
     "require-dev": {
-        "omnipay/stripe": "^2.0",
+        "hiqdev/omnipay-paypal": "<2.0 || dev-master",
         "hiqdev/hidev-php": "<2.0 || dev-master",
-        "hiqdev/hidev-hiqdev": "<2.0 || dev-master"
+        "hiqdev/hidev-hiqdev": "<2.0 || dev-master",
+        "phpunit/phpunit": "^6.2"
     },
     "autoload": {
         "psr-4": {
