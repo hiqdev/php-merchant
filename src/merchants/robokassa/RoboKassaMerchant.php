@@ -11,6 +11,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Money\MoneyFormatter;
+use Money\MoneyParser;
 use Omnipay\RoboKassa\Gateway;
 
 /**
@@ -36,12 +37,21 @@ class RoboKassaMerchant implements MerchantInterface
      * @var MoneyFormatter
      */
     private $moneyFormatter;
+    /**
+     * @var MoneyParser
+     */
+    private $moneyParser;
 
-    public function __construct(CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory, MoneyFormatter $moneyFormatter)
-    {
+    public function __construct(
+        CredentialsInterface $credentials,
+        GatewayFactoryInterface $gatewayFactory,
+        MoneyFormatter $moneyFormatter,
+        MoneyParser $moneyParser
+    ) {
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
         $this->moneyFormatter = $moneyFormatter;
+        $this->moneyParser = $moneyParser;
         $this->gateway = $this->gatewayFactory->build('RoboKassa', [
             'purse' => $this->credentials->getPurse(),
             'secretKey' => $this->credentials->getKey1(),
@@ -66,7 +76,7 @@ class RoboKassaMerchant implements MerchantInterface
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
-            'time' => date('c')
+            'time' => date('c'),
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -83,7 +93,7 @@ class RoboKassaMerchant implements MerchantInterface
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount(new Money($response->getAmount(), new Currency($response->getCurrency())))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')

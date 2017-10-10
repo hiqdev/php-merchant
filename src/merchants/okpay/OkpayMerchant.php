@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\php\merchant\merchants\yandex;
+namespace hiqdev\php\merchant\merchants\okpay;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
@@ -8,21 +8,18 @@ use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use Money\Currency;
-use Money\Money;
 use Money\MoneyFormatter;
 use Money\MoneyParser;
-use Omnipay\YandexMoney\P2pGateway;
 
 /**
- * Class YandexP2pMerchant
+ * Class OkpayMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class YandexP2pMerchant implements MerchantInterface
+class OkpayMerchant implements MerchantInterface
 {
     /**
-     * @var P2pGateway
+     * @var \Omnipay\Common\GatewayInterface
      */
     protected $gateway;
     /**
@@ -47,15 +44,15 @@ class YandexP2pMerchant implements MerchantInterface
         GatewayFactoryInterface $gatewayFactory,
         MoneyFormatter $moneyFormatter,
         MoneyParser $moneyParser
-    )
-    {
+    ) {
         $this->credentials = $credentials;
         $this->gatewayFactory = $gatewayFactory;
         $this->moneyFormatter = $moneyFormatter;
         $this->moneyParser = $moneyParser;
-        $this->gateway = $this->gatewayFactory->build('YandexMoney_P2p', [
-            'account' => $this->credentials->getPurse(),
-            'password' => $this->credentials->getKey1(),
+        $this->gateway = $this->gatewayFactory->build('OKPAY', [
+            'purse' => $this->credentials->getPurse(),
+            'secret'  => $this->credentials->getKey1(),
+            'secret2' => $this->credentials->getKey2(),
         ]);
     }
 
@@ -66,7 +63,7 @@ class YandexP2pMerchant implements MerchantInterface
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse $response
+         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -76,7 +73,6 @@ class YandexP2pMerchant implements MerchantInterface
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
-            'method' => 'PC', // https://money.yandex.ru/doc.xml?id=526991
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -88,19 +84,17 @@ class YandexP2pMerchant implements MerchantInterface
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\YandexMoney\Message\p2p\CompletePurchaseResponse $response */
+        /** @var \Omnipay\OKPAY\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
+            ->setFee($this->moneyParser->parse($response->getFee(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')
-            ->setTime(
-                (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
-                    ->setTimezone(new \DateTimeZone('UTC'))
-            );
+            ->setPayer($response->getPayer())
+            ->setTime($response->getTime());
     }
 
     /**

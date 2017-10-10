@@ -87,6 +87,7 @@ class CompletePurchaseResponse
     public function setAmount(Money $amount)
     {
         $this->amount = $amount;
+        $this->currency = $amount->getCurrency();
 
         return $this;
     }

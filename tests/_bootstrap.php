@@ -11,3 +11,5 @@
 error_reporting(E_ALL & ~E_NOTICE);
 
 require_once __DIR__ . '/../vendor/autoload.php';
+
+require __DIR__ . '/phpunit/PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope.php';

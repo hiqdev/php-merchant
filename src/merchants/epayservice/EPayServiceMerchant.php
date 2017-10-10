@@ -1,6 +1,6 @@
 <?php
 
-namespace hiqdev\php\merchant\merchants\generic;
+namespace hiqdev\php\merchant\merchants\epayservice;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
@@ -8,29 +8,24 @@ use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use Money\Currency;
-use Money\Money;
 use Money\MoneyFormatter;
+use Money\MoneyParser;
 
 /**
- * Class GenericMerchant
+ * Class EPayServiceMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-final class GenericMerchant implements MerchantInterface
+class EPayServiceMerchant implements MerchantInterface
 {
     /**
-     * @var \Omnipay\Common\GatewayInterface
+     * @var \Omnipay\ePayService\Gateway
      */
     protected $gateway;
     /**
      * @var CredentialsInterface
      */
     private $credentials;
-    /**
-     * @var string
-     */
-    private $gatewayName;
     /**
      * @var GatewayFactoryInterface
      */
@@ -39,20 +34,28 @@ final class GenericMerchant implements MerchantInterface
      * @var MoneyFormatter
      */
     private $moneyFormatter;
+    /**
+     * @var MoneyParser
+     */
+    private $moneyParser;
 
-    public function __construct($gatewayName, CredentialsInterface $credentials, GatewayFactoryInterface $gatewayFactory, MoneyFormatter $moneyFormatter)
+    public function __construct(
+        CredentialsInterface $credentials,
+        GatewayFactoryInterface $gatewayFactory,
+        MoneyFormatter $moneyFormatter,
+        MoneyParser $moneyParser
+    )
     {
         $this->credentials = $credentials;
-        $this->gatewayName = $gatewayName;
         $this->gatewayFactory = $gatewayFactory;
         $this->moneyFormatter = $moneyFormatter;
-        $this->gateway = $this->gatewayFactory->build($gatewayName, [
+        $this->moneyParser = $moneyParser;
+        $this->gateway = $this->gatewayFactory->build('ePayService', [
             'purse' => $this->credentials->getPurse(),
             'secret'  => $this->credentials->getKey1(),
-            'secret2' => $this->credentials->getKey2(),
+            'signAlgorithm' => 'sha256'
         ]);
     }
-
 
     /**
      * @param InvoiceInterface $invoice
@@ -61,7 +64,7 @@ final class GenericMerchant implements MerchantInterface
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\Paxum\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -82,17 +85,16 @@ final class GenericMerchant implements MerchantInterface
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\WebMoney\Message\CompletePurchaseResponse $response */
+        /** @var \Omnipay\ePayService\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount(new Money($response->getAmount()*100, new Currency($response->getCurrency())))
-            ->setFee(new Money($response->getFee()*100, new Currency($response->getCurrency())))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getPayer())
-            ->setTime(new \DateTime($response->getTime()));
+            ->setPayer($response->getData()['EPS_ACCNUM'])
+            ->setTime((new \DateTime())->setTimezone(new \DateTimeZone('UTC')));
     }
 
     /**
