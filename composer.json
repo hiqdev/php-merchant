@@ -54,6 +54,7 @@
         "hiqdev/omnipay-interkassa": "<2.0 || dev-master",
         "hiqdev/omnipay-okpay": "<2.0 || dev-master",
         "hiqdev/omnipay-epayservice": "<2.0 || dev-master",
+        "hiqdev/omnipay-bitpay": "<2.0 || dev-master",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master",
         "phpunit/phpunit": "^6.2"

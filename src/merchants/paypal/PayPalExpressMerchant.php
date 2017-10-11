@@ -5,6 +5,7 @@ namespace hiqdev\php\merchant\merchants\paypal;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -19,40 +20,16 @@ use Omnipay\PayPal\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PayPalExpressMerchant implements MerchantInterface
+class PayPalExpressMerchant extends AbstractMerchant
 {
     /**
      * @var Gateway
      */
     protected $gateway;
-    /**
-     * @var CredentialsInterface
-     */
-    private $credentials;
-    /**
-     * @var GatewayFactoryInterface
-     */
-    private $gatewayFactory;
-    /**
-     * @var MoneyFormatter
-     */
-    private $moneyFormatter;
-    /**
-     * @var MoneyParser
-     */
-    private $moneyParser;
 
-    public function __construct(
-        CredentialsInterface $credentials,
-        GatewayFactoryInterface $gatewayFactory,
-        MoneyFormatter $moneyFormatter,
-        MoneyParser $moneyParser
-    ) {
-        $this->credentials = $credentials;
-        $this->gatewayFactory = $gatewayFactory;
-        $this->moneyFormatter = $moneyFormatter;
-        $this->moneyParser = $moneyParser;
-        $this->gateway = $this->gatewayFactory->build('PayPal', [
+    protected function createGateway()
+    {
+        return $this->gatewayFactory->build('PayPal', [
             'purse' => $this->credentials->getPurse(),
             'secret' => $this->credentials->getKey1(),
         ]);
@@ -97,13 +74,5 @@ class PayPalExpressMerchant implements MerchantInterface
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
             ->setTime(new \DateTime($response->getTime()));
-    }
-
-    /**
-     * @return CredentialsInterface
-     */
-    public function getCredentials(): CredentialsInterface
-    {
-        return $this->credentials;
     }
 }

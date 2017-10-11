@@ -24,7 +24,7 @@ class BitPayMerchant extends AbstractMerchant
             'token' => $this->credentials->getKey1(),
             'privateKey'  => $this->credentials->getKey2(),
             'publicKey' => $this->credentials->getKey3(),
-            'testMode' => false
+            'testMode' => $this->getCredentials()->isTestMode()
         ]);
     }
 

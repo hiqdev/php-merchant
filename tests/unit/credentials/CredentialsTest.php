@@ -30,5 +30,7 @@ class CredentialsTest extends TestCase
         $this->assertSame('key2', $credentials->getKey2());
         $credentials->setKey3('key3');
         $this->assertSame('key3', $credentials->getKey3());
+        $credentials->setTestMode('1');
+        $this->assertSame(true, $credentials->isTestMode());
     }
 }

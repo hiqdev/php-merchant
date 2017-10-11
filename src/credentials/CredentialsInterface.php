@@ -16,7 +16,7 @@ interface CredentialsInterface
 
     /**
      * @param string $purse
-     * @return self
+     * @return $this
      */
     public function setPurse($purse);
 
@@ -27,7 +27,7 @@ interface CredentialsInterface
 
     /**
      * @param string $key1
-     * @return self
+     * @return $this
      */
     public function setKey1($key1);
 
@@ -38,7 +38,7 @@ interface CredentialsInterface
 
     /**
      * @param string $key2
-     * @return self
+     * @return $this
      */
     public function setKey2($key2);
 
@@ -52,4 +52,15 @@ interface CredentialsInterface
      * @return $this
      */
     public function setKey3($key3);
+
+    /**
+     * @return bool
+     */
+    public function isTestMode(): bool;
+
+    /**
+     * @param boolean $value
+     * @return $this
+     */
+    public function setTestMode($value);
 }

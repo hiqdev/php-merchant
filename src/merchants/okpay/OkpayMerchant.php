@@ -5,6 +5,7 @@ namespace hiqdev\php\merchant\merchants\okpay;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -16,40 +17,16 @@ use Money\MoneyParser;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class OkpayMerchant implements MerchantInterface
+class OkpayMerchant extends AbstractMerchant
 {
     /**
      * @var \Omnipay\Common\GatewayInterface
      */
     protected $gateway;
-    /**
-     * @var CredentialsInterface
-     */
-    private $credentials;
-    /**
-     * @var GatewayFactoryInterface
-     */
-    private $gatewayFactory;
-    /**
-     * @var MoneyFormatter
-     */
-    private $moneyFormatter;
-    /**
-     * @var MoneyParser
-     */
-    private $moneyParser;
 
-    public function __construct(
-        CredentialsInterface $credentials,
-        GatewayFactoryInterface $gatewayFactory,
-        MoneyFormatter $moneyFormatter,
-        MoneyParser $moneyParser
-    ) {
-        $this->credentials = $credentials;
-        $this->gatewayFactory = $gatewayFactory;
-        $this->moneyFormatter = $moneyFormatter;
-        $this->moneyParser = $moneyParser;
-        $this->gateway = $this->gatewayFactory->build('OKPAY', [
+    protected function createGateway()
+    {
+        return $this->gatewayFactory->build('OKPAY', [
             'purse' => $this->credentials->getPurse(),
             'secret'  => $this->credentials->getKey1(),
             'secret2' => $this->credentials->getKey2(),
@@ -95,13 +72,5 @@ class OkpayMerchant implements MerchantInterface
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
             ->setTime($response->getTime());
-    }
-
-    /**
-     * @return CredentialsInterface
-     */
-    public function getCredentials(): CredentialsInterface
-    {
-        return $this->credentials;
     }
 }

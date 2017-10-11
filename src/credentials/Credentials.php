@@ -26,6 +26,11 @@ final class Credentials implements CredentialsInterface
      */
     protected $key3;
 
+    /**
+     * @var bool
+     */
+    protected $isTestMode = false;
+
     public function getPurse()
     {
         return $this->purse;
@@ -70,6 +75,25 @@ final class Credentials implements CredentialsInterface
     public function setKey3($key3): self
     {
         $this->key3 = $key3;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTestMode(): bool
+    {
+        return $this->isTestMode;
+    }
+
+    /**
+     * @param boolean $value
+     * @return $this
+     */
+    public function setTestMode($value)
+    {
+        $this->isTestMode = (bool)$value;
 
         return $this;
     }

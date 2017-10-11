@@ -47,7 +47,8 @@ abstract class AbstractMerchantTest extends TestCase
             ->setPurse('purse')
             ->setKey1('key1')
             ->setKey2('key2')
-            ->setKey3('key3');
+            ->setKey3('key3')
+            ->setTestMode(true);
     }
 
     /**

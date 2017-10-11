@@ -5,6 +5,7 @@ namespace hiqdev\php\merchant\merchants\yandex;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -19,43 +20,19 @@ use Omnipay\YandexMoney\P2pGateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class YandexP2pMerchant implements MerchantInterface
+class YandexP2pMerchant extends AbstractMerchant
 {
     /**
      * @var P2pGateway
      */
     protected $gateway;
-    /**
-     * @var CredentialsInterface
-     */
-    private $credentials;
-    /**
-     * @var GatewayFactoryInterface
-     */
-    private $gatewayFactory;
-    /**
-     * @var MoneyFormatter
-     */
-    private $moneyFormatter;
-    /**
-     * @var MoneyParser
-     */
-    private $moneyParser;
 
-    public function __construct(
-        CredentialsInterface $credentials,
-        GatewayFactoryInterface $gatewayFactory,
-        MoneyFormatter $moneyFormatter,
-        MoneyParser $moneyParser
-    )
+    protected function createGateway()
     {
-        $this->credentials = $credentials;
-        $this->gatewayFactory = $gatewayFactory;
-        $this->moneyFormatter = $moneyFormatter;
-        $this->moneyParser = $moneyParser;
-        $this->gateway = $this->gatewayFactory->build('YandexMoney_P2p', [
+        return $this->gatewayFactory->build('YandexMoney_P2p', [
             'account' => $this->credentials->getPurse(),
             'password' => $this->credentials->getKey1(),
+            'testMode' => $this->credentials->isTestMode()
         ]);
     }
 
@@ -96,18 +73,10 @@ class YandexP2pMerchant implements MerchantInterface
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')
+            ->setPayer($response->getData()['sender'] ?? $response->getData()['email'] ?? '')
             ->setTime(
                 (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
                     ->setTimezone(new \DateTimeZone('UTC'))
             );
-    }
-
-    /**
-     * @return CredentialsInterface
-     */
-    public function getCredentials(): CredentialsInterface
-    {
-        return $this->credentials;
     }
 }

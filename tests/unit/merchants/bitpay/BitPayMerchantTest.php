@@ -6,6 +6,7 @@ use Bitpay\Buyer;
 use Bitpay\Client\Client;
 use Bitpay\Invoice;
 use Bitpay\InvoiceInterface;
+use Bitpay\Item;
 use hiqdev\php\merchant\merchants\bitpay\BitPayMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
@@ -14,9 +15,7 @@ use Money\Currency;
 use Money\Money;
 use Omnipay\BitPay\Gateway;
 use Omnipay\BitPay\Message\CompletePurchaseRequest;
-use Omnipay\BitPay\Message\CompletePurchaseResponse;
 use Omnipay\BitPay\Message\PurchaseRequest;
-use Omnipay\BitPay\Message\PurchaseResponse;
 use Omnipay\Common\Helper;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -111,16 +110,16 @@ class BitPayMerchantTest extends AbstractMerchantTest
         $gatewayPropertyReflection->setAccessible(true);
         $gateway = $gatewayPropertyReflection->getValue($this->merchant);
 
-        // Mock gateway purchase() method
+        // Mock gateway completePurchase() method
         $gatewayMock = $this->getMockBuilder(Gateway::class)->setMethods(['completePurchase'])->getMock();
 
         $httpClient = $this->buildHttpClient();
         $gatewayMock->method('completePurchase')->will(
             new PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope(
+                // Mock CompletePurchaseRequest::getClient() with client mock, that will provide stub invoice on `getInvoice()`
                 function ($parameters) use ($httpClient) {
                     $request = new class($httpClient, HttpRequest::createFromGlobals()) extends CompletePurchaseRequest
                     {
-                        // Mock client to prevent any network calls
                         public function getClient()
                         {
                             return new class extends Client
@@ -129,12 +128,12 @@ class BitPayMerchantTest extends AbstractMerchantTest
                                 {
                                     return (new Invoice())
                                         ->setId($invoiceId)
-                                        ->setPosData($this->buildPosData())
+                                        ->setPosData('{"hash": "d1.GjB3z7ejcw", "posData":{"u":"some_transaction_id"}}')
                                         ->setStatus(InvoiceInterface::STATUS_CONFIRMED)
                                         ->setOrderId('123123')
-                                        ->setInvoiceTime(new \DateTime())
-                                        ->setPrice('10.36')
-                                        ->setCurrency('USD')
+                                        ->setInvoiceTime(new \DateTime('2017-10-12 01:03:05'))
+                                        ->setItem((new Item())->setPrice('10.36')->setDescription('test'))
+                                        ->setCurrency(new \Bitpay\Currency('USD'))
                                         ->setBuyer((new Buyer())->setFirstName('First')->setLastName('Last')->setEmail('example.com'));
                                 }
                             };
@@ -154,11 +153,11 @@ class BitPayMerchantTest extends AbstractMerchantTest
 
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
-        $this->assertSame('123456', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('123456789', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(1099, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertSame('some_transaction_id', $completePurchaseResponse->getTransactionId());
+        $this->assertSame('123123', $completePurchaseResponse->getTransactionReference());
+        $this->assertTrue((new Money(1036, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
-        $this->assertEquals(new \DateTime($_POST['ok_txn_datetime']), $completePurchaseResponse->getTime());
+        $this->assertEquals(new \DateTime('2017-10-12 01:03:05'), $completePurchaseResponse->getTime());
     }
 }

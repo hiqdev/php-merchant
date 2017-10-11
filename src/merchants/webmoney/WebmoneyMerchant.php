@@ -5,6 +5,7 @@ namespace hiqdev\php\merchant\merchants\webmoney;
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -19,43 +20,19 @@ use Omnipay\WebMoney\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-final class WebmoneyMerchant implements MerchantInterface
+class WebmoneyMerchant extends AbstractMerchant
 {
     /**
      * @var Gateway
      */
     protected $gateway;
-    /**
-     * @var CredentialsInterface
-     */
-    private $credentials;
-    /**
-     * @var GatewayFactoryInterface
-     */
-    private $gatewayFactory;
-    /**
-     * @var MoneyFormatter
-     */
-    private $moneyFormatter;
-    /**
-     * @var MoneyParser
-     */
-    private $moneyParser;
 
-    public function __construct(
-        CredentialsInterface $credentials,
-        GatewayFactoryInterface $gatewayFactory,
-        MoneyFormatter $moneyFormatter,
-        MoneyParser $moneyParser
-    )
+    protected function createGateway()
     {
-        $this->credentials = $credentials;
-        $this->gatewayFactory = $gatewayFactory;
-        $this->moneyFormatter = $moneyFormatter;
-        $this->moneyParser = $moneyParser;
-        $this->gateway = $this->gatewayFactory->build('WebMoney', [
+        return $this->gatewayFactory->build('WebMoney', [
             'merchantPurse' => $this->credentials->getPurse(),
             'secretKey'  => $this->credentials->getKey1(),
+            'testMode' => $this->credentials->isTestMode()
         ]);
     }
 
@@ -96,18 +73,10 @@ final class WebmoneyMerchant implements MerchantInterface
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
-            ->setFee($this->moneyParser->parse($response->getFee(), $response->getCurrency()))
+            ->setFee(new Money(0, new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getPayer())
-            ->setTime(new \DateTime($response->getTime()));
-    }
-
-    /**
-     * @return CredentialsInterface
-     */
-    public function getCredentials(): CredentialsInterface
-    {
-        return $this->credentials;
+            ->setPayer($response->getData()['LMI_PAYER_PURSE'])
+            ->setTime(new \DateTime($response->getData()['LMI_SYS_TRANS_DATE']));
     }
 }
