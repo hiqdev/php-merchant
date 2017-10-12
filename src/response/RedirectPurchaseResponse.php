@@ -40,7 +40,9 @@ class RedirectPurchaseResponse
 
     public function setMethod($method)
     {
-        return $this->method = $method;
+        $this->method = $method;
+
+        return $this;
     }
 
     public function getMethod()
