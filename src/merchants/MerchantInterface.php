@@ -4,6 +4,7 @@ namespace hiqdev\php\merchant\merchants;
 
 use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 
 
@@ -27,7 +28,7 @@ interface MerchantInterface
 
     /**
      * @param array $data
-     * @return RedirectPurchaseResponse
+     * @return CompletePurchaseResponse
      */
     public function completePurchase($data);
 }
