@@ -47,7 +47,10 @@ class BitPayMerchant extends AbstractMerchant
             'cancelUrl' => $invoice->getCancelUrl(),
         ])->send();
 
-        return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        $response = new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        $response->setMethod('GET');
+
+        return $response;
     }
 
     /**
