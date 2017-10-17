@@ -33,7 +33,7 @@ class InterKassaMerchantTest extends AbstractMerchantTest
 
         $this->assertSame($this->getCredentials()->getPurse(), $gateway->getCheckoutId());
         $this->assertSame($this->getCredentials()->getKey1(), $gateway->getSignKey());
-        $this->assertSame('sha256', $gateway->getSignAlgorithm());
+        $this->assertSame('md5', $gateway->getSignAlgorithm());
     }
 
     public function testRequestPurchase()
@@ -75,7 +75,7 @@ class InterKassaMerchantTest extends AbstractMerchantTest
             'ik_am'      => '1465.01',
             'ik_cur'     => 'USD',
             'ik_inv_prc' => '2015-12-22 11:07:12',
-            'ik_sign'    => 'nd2UdBJScwKlEFPo0Ka1ESX3qmV941d4gvUclxYc8Ow=',
+            'ik_sign'    => 'tl5gP7V8YljF8O6J2YNOHw==',
             'ik_inv_st'  => 'success',
         ];
 
