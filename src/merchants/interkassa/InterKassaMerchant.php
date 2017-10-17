@@ -33,7 +33,7 @@ class InterKassaMerchant extends AbstractMerchant
         return $this->gatewayFactory->build('InterKassa', [
             'checkoutId' => $this->credentials->getPurse(),
             'signKey'  => $this->credentials->getKey1(),
-            'signAlgorithm' => 'sha256'
+            'signAlgorithm' => 'md5'
         ]);
     }
 
