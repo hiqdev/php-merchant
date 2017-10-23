@@ -101,11 +101,15 @@ abstract class AbstractMerchantTest extends TestCase
         return new Client();
     }
 
+    /**
+     * @return \hiqdev\php\merchant\InvoiceInterface
+     */
     protected function buildInvoice()
     {
         return (new Invoice())
             ->setId(uniqid())
             ->setDescription('Test purchase')
+            ->setClient('silverfire')
             ->setAmount(new Money(1099, new Currency('USD')))
             ->setReturnUrl('https://example.com/return')
             ->setNotifyUrl('https://example.com/notify')

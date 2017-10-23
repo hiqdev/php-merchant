@@ -44,23 +44,45 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://merchant.roboxchange.com/Index.aspx', $purchaseResponse->getRedirectUrl());
 
-        $this->markTestIncomplete('Not implemented yet. TODO: implement');
         $this->assertArraySubset([
-            'Desc' => $invoice->getDescription(),
             'MrchLogin' => $this->getCredentials()->getPurse(),
             'OutSum' => $this->getMoneyFormatter()->format($invoice->getAmount()),
+            'Desc' => $invoice->getDescription(),
             'IncCurrLabel' => $invoice->getCurrency()->getCode(),
-            'InvId' => $invoice->getId(),
-            'Culture' => NULL,
-            'ShpCart' => NULL,
-            'ShpClient' => NULL,
-            'ShpTime' => '2017-10-10T13:53:24+00:00',
-            'SignatureValue' => NULL,
+            'Shp_Client' => $invoice->getClient(),
+            'Shp_Currency' => $invoice->getCurrency()->getCode(),
+            'Shp_TransactionId' => $invoice->getId()
         ], $purchaseResponse->getRedirectData());
     }
 
     public function testCompletePurchase()
     {
-        $this->markTestIncomplete('Not implemented yet. TODO: implement');
+        $_POST = [
+            'out_summ' => '139.530000',
+            'OutSum' => '139.530000',
+            'inv_id' => '1010566870',
+            'InvId' => '1010566870',
+            'crc' => 'F11D3405C6217E003E7DFB5B162990EA',
+            'SignatureValue' => 'F11D3405C6217E003E7DFB5B162990EA',
+            'PaymentMethod' => 'BankCard',
+            'IncSum' => '139.530000',
+            'IncCurrLabel' => 'QCardR',
+            'Shp_Client' => 'silverfire',
+            'Shp_TransactionId' => '123',
+            'Shp_Currency' => 'RUB',
+        ];
+
+        $this->merchant = $this->buildMerchant();
+
+        $completePurchaseResponse = $this->merchant->completePurchase([]);
+
+        $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
+        $this->assertTrue($completePurchaseResponse->getIsSuccessful());
+        $this->assertSame('123', $completePurchaseResponse->getTransactionId());
+        $this->assertSame('', $completePurchaseResponse->getTransactionReference());
+        $this->assertTrue((new Money(13953, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
+        $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
+        $this->assertInstanceOf(\DateTime::class, $completePurchaseResponse->getTime());
     }
 }

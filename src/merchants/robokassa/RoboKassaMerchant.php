@@ -45,15 +45,11 @@ class RoboKassaMerchant extends AbstractMerchant
          * @var \Omnipay\RoboKassa\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
-            'inv_id' => $invoice->getId(),
-            'client' => $invoice->getClient(),
-            'description' => $invoice->getDescription(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
+            'transaction_id' => $invoice->getId(),
+            'description' => $invoice->getDescription(),
             'currency' => $invoice->getCurrency()->getCode(),
-            'returnUrl' => $invoice->getReturnUrl(),
-            'notifyUrl' => $invoice->getNotifyUrl(),
-            'cancelUrl' => $invoice->getCancelUrl(),
-            'time' => date('c'),
+            'client' => $invoice->getClient(),
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -71,12 +67,9 @@ class RoboKassaMerchant extends AbstractMerchant
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
-            ->setTransactionReference($response->getTransactionReference())
+            ->setTransactionReference('')
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData['sender'] ?? $response->getData['email'] ?? '')
-            ->setTime(
-                (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
-                    ->setTimezone(new \DateTimeZone('UTC'))
-            );
+            ->setPayer($response->getPayer())
+            ->setTime((new \DateTime())->setTimezone(new \DateTimeZone('UTC')));
     }
 }
