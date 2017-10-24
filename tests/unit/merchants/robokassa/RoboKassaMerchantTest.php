@@ -63,8 +63,8 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
             'OutSum' => '139.530000',
             'inv_id' => '1010566870',
             'InvId' => '1010566870',
-            'crc' => '318F51FE557110F39C755CF36B94BBE2',
-            'SignatureValue' => '318F51FE557110F39C755CF36B94BBE2',
+            'crc' => '364AF43DA9AF4AFF18D96775E07586F6',
+            'SignatureValue' => '364AF43DA9AF4AFF18D96775E07586F6',
             'PaymentMethod' => 'BankCard',
             'IncSum' => '139.530000',
             'IncCurrLabel' => 'QCardR',
@@ -80,10 +80,11 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('123', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('', $completePurchaseResponse->getTransactionReference());
+        $this->assertSame('1010566870', $completePurchaseResponse->getTransactionReference());
         $this->assertTrue((new Money(13953, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
+        $this->assertSame('BankCard', $completePurchaseResponse->getPayer());
         $this->assertInstanceOf(\DateTime::class, $completePurchaseResponse->getTime());
     }
 }
