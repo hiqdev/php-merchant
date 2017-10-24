@@ -32,6 +32,7 @@ class RoboKassaMerchant extends AbstractMerchant
         return $this->gatewayFactory->build('RoboKassa', [
             'purse' => $this->credentials->getPurse(),
             'secretKey' => $this->credentials->getKey1(),
+            'secretKey2' => $this->credentials->getKey2(),
         ]);
     }
 

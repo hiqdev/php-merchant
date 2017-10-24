@@ -34,6 +34,7 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
 
         $this->assertSame($this->getCredentials()->getPurse(), $gateway->getPurse());
         $this->assertSame($this->getCredentials()->getKey1(), $gateway->getSecretKey());
+        $this->assertSame($this->getCredentials()->getKey2(), $gateway->getSecretKey2());
     }
 
     public function testRequestPurchase()
@@ -62,8 +63,8 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
             'OutSum' => '139.530000',
             'inv_id' => '1010566870',
             'InvId' => '1010566870',
-            'crc' => 'F11D3405C6217E003E7DFB5B162990EA',
-            'SignatureValue' => 'F11D3405C6217E003E7DFB5B162990EA',
+            'crc' => '318F51FE557110F39C755CF36B94BBE2',
+            'SignatureValue' => '318F51FE557110F39C755CF36B94BBE2',
             'PaymentMethod' => 'BankCard',
             'IncSum' => '139.530000',
             'IncCurrLabel' => 'QCardR',
