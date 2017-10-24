@@ -68,7 +68,7 @@ class RoboKassaMerchant extends AbstractMerchant
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
-            ->setTransactionReference('')
+            ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
             ->setTime((new \DateTime())->setTimezone(new \DateTimeZone('UTC')));
