@@ -3,7 +3,7 @@
 namespace hiqdev\php\merchant\tests\unit\merchants\robokassa;
 
 use hiqdev\php\merchant\merchants\okpay\OkpayMerchant;
-use hiqdev\php\merchant\merchants\robokassa\RoboKassaMerchant;
+use hiqdev\php\merchant\merchants\robokassa\FreeKassaMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
@@ -13,12 +13,12 @@ use Omnipay\OKPAY\Message\CompletePurchaseRequest;
 
 class RoboKassaMerchantTest extends AbstractMerchantTest
 {
-    /** @var RoboKassaMerchant */
+    /** @var FreeKassaMerchant */
     protected $merchant;
 
     protected function buildMerchant()
     {
-        return new RoboKassaMerchant(
+        return new FreeKassaMerchant(
             $this->getCredentials(),
             $this->getGatewayFactory(),
             $this->getMoneyFormatter(),

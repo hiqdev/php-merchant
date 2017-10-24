@@ -2,17 +2,10 @@
 
 namespace hiqdev\php\merchant\merchants\robokassa;
 
-use hiqdev\php\merchant\credentials\CredentialsInterface;
-use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
-use hiqdev\php\merchant\merchants\MerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use Money\Currency;
-use Money\Money;
-use Money\MoneyFormatter;
-use Money\MoneyParser;
 use Omnipay\RoboKassa\Gateway;
 
 /**
