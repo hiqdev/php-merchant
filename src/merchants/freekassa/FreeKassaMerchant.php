@@ -1,0 +1,69 @@
+<?php
+
+namespace hiqdev\php\merchant\merchants\freekassa;
+
+use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\response\CompletePurchaseResponse;
+use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Omnipay\FreeKassa\Gateway;
+
+/**
+ * Class FreeKassaMerchant
+ *
+ * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ */
+class FreeKassaMerchant extends AbstractMerchant
+{
+    /**
+     * @var Gateway
+     */
+    protected $gateway;
+
+    protected function createGateway()
+    {
+        return $this->gatewayFactory->build('FreeKassa', [
+            'purse' => $this->credentials->getPurse(),
+            'secretKey' => $this->credentials->getKey1(),
+            'secretKey2' => $this->credentials->getKey2(),
+        ]);
+    }
+
+    /**
+     * @param InvoiceInterface $invoice
+     * @return RedirectPurchaseResponse
+     */
+    public function requestPurchase(InvoiceInterface $invoice)
+    {
+        /**
+         * @var \Omnipay\FreeKassa\Message\PurchaseResponse $response
+         */
+        $response = $this->gateway->purchase([
+            'transaction_id' => $invoice->getId(),
+            'currency' => $invoice->getCurrency()->getCode(),
+            'amount' => $this->moneyFormatter->format($invoice->getAmount()),
+            'client' => $invoice->getClient(),
+        ])->send();
+
+        return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+    }
+
+    /**
+     * @param array $data
+     * @return CompletePurchaseResponse
+     */
+    public function completePurchase($data)
+    {
+        /** @var \Omnipay\FreeKassa\Message\CompletePurchaseResponse $response */
+        $response = $this->gateway->completePurchase($data)->send();
+
+        return (new CompletePurchaseResponse())
+            ->setIsSuccessful($response->isSuccessful())
+            // TODO: !(>_<)! FreeKassa does not indicate currency.
+            ->setAmount($this->moneyParser->parse($response->getAmount(), 'RUB'))
+            ->setTransactionReference($response->getTransactionReference())
+            ->setTransactionId($response->getTransactionId())
+            ->setPayer($response->getPayer())
+            ->setTime((new \DateTime($response->getTime()))->setTimezone(new \DateTimeZone('UTC')));
+    }
+}

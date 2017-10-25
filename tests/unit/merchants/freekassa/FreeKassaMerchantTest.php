@@ -2,20 +2,20 @@
 
 namespace hiqdev\php\merchant\tests\unit\merchants\robokassa;
 
-use hiqdev\php\merchant\merchants\robokassa\RoboKassaMerchant;
+use hiqdev\php\merchant\merchants\freekassa\FreeKassaMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
 use Money\Money;
 
-class RoboKassaMerchantTest extends AbstractMerchantTest
+class FreeKassaMerchantTest extends AbstractMerchantTest
 {
-    /** @var RoboKassaMerchant */
+    /** @var FreeKassaMerchant */
     protected $merchant;
 
     protected function buildMerchant()
     {
-        return new RoboKassaMerchant(
+        return new FreeKassaMerchant(
             $this->getCredentials(),
             $this->getGatewayFactory(),
             $this->getMoneyFormatter(),
@@ -40,34 +40,34 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
 
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
-        $this->assertSame('https://merchant.roboxchange.com/Index.aspx', $purchaseResponse->getRedirectUrl());
+
+        $url = 'https://www.free-kassa.ru/merchant/cash.php';
+        $this->assertContains($url, $purchaseResponse->getRedirectUrl());
 
         $this->assertArraySubset([
-            'MrchLogin' => $this->getCredentials()->getPurse(),
-            'OutSum' => $this->getMoneyFormatter()->format($invoice->getAmount()),
-            'Desc' => $invoice->getDescription(),
-            'IncCurrLabel' => $invoice->getCurrency()->getCode(),
-            'Shp_Client' => $invoice->getClient(),
-            'Shp_Currency' => $invoice->getCurrency()->getCode(),
-            'Shp_TransactionId' => $invoice->getId()
+            'm' => $this->getCredentials()->getPurse(),
+            'oa' => $this->getMoneyFormatter()->format($invoice->getAmount()),
+            'o' => $invoice->getId(),
+            'i' => strtolower($invoice->getCurrency()->getCode()),
+            'us_client' => $invoice->getClient(),
+            'us_system' => 'freekassa'
         ], $purchaseResponse->getRedirectData());
     }
 
     public function testCompletePurchase()
     {
         $_POST = [
-            'out_summ' => '139.530000',
-            'OutSum' => '139.530000',
-            'inv_id' => '1010566870',
-            'InvId' => '1010566870',
-            'crc' => '364AF43DA9AF4AFF18D96775E07586F6',
-            'SignatureValue' => '364AF43DA9AF4AFF18D96775E07586F6',
-            'PaymentMethod' => 'BankCard',
-            'IncSum' => '139.530000',
-            'IncCurrLabel' => 'QCardR',
-            'Shp_Client' => 'silverfire',
-            'Shp_TransactionId' => '123',
-            'Shp_Currency' => 'RUB',
+            'MERCHANT_ORDER_ID' => '597ef770b5fcf',
+            'P_PHONE' => '',
+            'P_EMAIL' => 'silverfire@hiqdev.com',
+            'CUR_ID' => '116',
+            'AMOUNT' => '625.21',
+            'MERCHANT_ID' => '47215',
+            'SIGN' => 'a67916164b4167ebeabbdbf5d49e50ab',
+            'intid' => '22861661',
+            'us_time' => '1501493104',
+            'us_client' => 'silverfire',
+            'us_system' => 'freekassa',
         ];
 
         $this->merchant = $this->buildMerchant();
@@ -76,12 +76,12 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
 
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
-        $this->assertSame('123', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('1010566870', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(13953, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertSame('597ef770b5fcf', $completePurchaseResponse->getTransactionId());
+        $this->assertSame('22861661', $completePurchaseResponse->getTransactionReference());
+        $this->assertTrue((new Money(62521, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
-        $this->assertSame('BankCard', $completePurchaseResponse->getPayer());
+        $this->assertSame('silverfire@hiqdev.com / Bitcoin', $completePurchaseResponse->getPayer());
         $this->assertInstanceOf(\DateTime::class, $completePurchaseResponse->getTime());
     }
 }
