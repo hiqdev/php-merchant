@@ -46,15 +46,20 @@
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "moneyphp/money": "^3.0"
     },
     "require-dev": {
         "hiqdev/omnipay-paypal": "<2.0 || dev-master",
         "hiqdev/omnipay-paxum": "<2.0 || dev-master",
+        "hiqdev/omnipay-freekassa": "<2.0 || dev-master",
         "hiqdev/omnipay-interkassa": "<2.0 || dev-master",
+        "hiqdev/omnipay-robokassa": "<2.0 || dev-master",
         "hiqdev/omnipay-okpay": "<2.0 || dev-master",
         "hiqdev/omnipay-epayservice": "<2.0 || dev-master",
         "hiqdev/omnipay-bitpay": "<2.0 || dev-master",
+        "hiqdev/omnipay-yandexmoney": "<2.0 || dev-master",
+        "dercoder/omnipay-webmoney": "<2.0 || dev-master",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master",
         "phpunit/phpunit": "^6.2"
