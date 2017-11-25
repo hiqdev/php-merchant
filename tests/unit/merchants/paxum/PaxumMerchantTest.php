@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\tests\unit\merchants\paxum;
 
@@ -57,12 +65,11 @@ class PaxumMerchantTest extends AbstractMerchantTest
     }
 
     /**
-     * Used only for testCompletePurchase
+     * Used only for testCompletePurchase.
      */
     protected function buildHttpClient()
     {
-        return new class extends Client
-        {
+        return new class() extends Client {
             public function send($requests)
             {
                 return new Response(200, [], 'VERIFIED');
@@ -78,7 +85,7 @@ class PaxumMerchantTest extends AbstractMerchantTest
             'transaction_status' => 'done',
             'transaction_amount' => '10.99',
             'transaction_currency' => 'USD',
-            'transaction_date' => '2017-10-09T19:10:42'
+            'transaction_date' => '2017-10-09T19:10:42',
         ];
 
         $this->merchant = $this->buildMerchant();

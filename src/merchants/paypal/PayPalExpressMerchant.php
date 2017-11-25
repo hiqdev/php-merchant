@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\paypal;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\PayPal\Gateway;
 
 /**
- * Class PayPalExpressMerchant
+ * Class PayPalExpressMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -35,7 +43,7 @@ class PayPalExpressMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\BitPay\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),

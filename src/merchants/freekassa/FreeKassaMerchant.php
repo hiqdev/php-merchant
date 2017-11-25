@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\freekassa;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\FreeKassa\Gateway;
 
 /**
- * Class FreeKassaMerchant
+ * Class FreeKassaMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -36,7 +44,7 @@ class FreeKassaMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\FreeKassa\Message\PurchaseResponse $response
+         * @var \Omnipay\FreeKassa\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transaction_id' => $invoice->getId(),

@@ -31,7 +31,6 @@ class InvoiceTest extends TestCase
         $invoice->setId(null);
         $this->assertSame('', $invoice->getId());
 
-
         $invoice->setClient('username');
         $this->assertSame('username', $invoice->getClient());
         $invoice->setClient(123);

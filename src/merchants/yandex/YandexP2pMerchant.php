@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\yandex;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\YandexMoney\P2pGateway;
 
 /**
- * Class YandexP2pMerchant
+ * Class YandexP2pMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -25,7 +33,7 @@ class YandexP2pMerchant extends AbstractMerchant
         return $this->gatewayFactory->build('YandexMoney_P2p', [
             'account' => $this->credentials->getPurse(),
             'password' => $this->credentials->getKey1(),
-            'testMode' => $this->credentials->isTestMode()
+            'testMode' => $this->credentials->isTestMode(),
         ]);
     }
 
@@ -36,7 +44,7 @@ class YandexP2pMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse $response
+         * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),

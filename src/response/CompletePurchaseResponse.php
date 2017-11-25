@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\response;
 
@@ -6,7 +14,7 @@ use Money\Currency;
 use Money\Money;
 
 /**
- * Class CompletePurchaseResponse
+ * Class CompletePurchaseResponse.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

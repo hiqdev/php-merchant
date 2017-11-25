@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant;
 
@@ -14,17 +22,17 @@ use Money\Money;
  */
 final class Invoice implements InvoiceInterface
 {
-    protected $id;
-    protected $client;
-    protected $amount;
-    protected $description;
-    protected $returnUrl;
-    protected $notifyUrl;
-    protected $cancelUrl;
-    protected $returnMethod;
-    protected $notifyMethod;
-    protected $cancelMethod;
-    protected $currency;
+    private $id;
+    private $client;
+    private $amount;
+    private $description;
+    private $returnUrl;
+    private $notifyUrl;
+    private $cancelUrl;
+    private $returnMethod;
+    private $notifyMethod;
+    private $cancelMethod;
+    private $currency;
 
     /**
      * @return string
@@ -40,7 +48,7 @@ final class Invoice implements InvoiceInterface
      */
     public function setId($id)
     {
-        $this->id = (string)$id;
+        $this->id = (string) $id;
 
         return $this;
     }
@@ -52,7 +60,7 @@ final class Invoice implements InvoiceInterface
 
     public function setClient($client)
     {
-        $this->client = (string)$client;
+        $this->client = (string) $client;
 
         return $this;
     }
@@ -77,7 +85,7 @@ final class Invoice implements InvoiceInterface
 
     public function setDescription($description)
     {
-        $this->description = (string)$description;
+        $this->description = (string) $description;
 
         return $this;
     }

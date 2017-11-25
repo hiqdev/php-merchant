@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\webmoney;
 
@@ -11,7 +19,7 @@ use Money\Money;
 use Omnipay\WebMoney\Gateway;
 
 /**
- * Class WebmoneyMerchant
+ * Class WebmoneyMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -27,7 +35,7 @@ class WebmoneyMerchant extends AbstractMerchant
         return $this->gatewayFactory->build('WebMoney', [
             'merchantPurse' => $this->credentials->getPurse(),
             'secretKey'  => $this->credentials->getKey1(),
-            'testMode' => $this->credentials->isTestMode()
+            'testMode' => $this->credentials->isTestMode(),
         ]);
     }
 
@@ -38,7 +46,7 @@ class WebmoneyMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\WebMoney\Message\PurchaseResponse $response
+         * @var \Omnipay\WebMoney\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),

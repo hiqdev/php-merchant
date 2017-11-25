@@ -1,9 +1,17 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\credentials;
 
 /**
- * Class Credentials
+ * Class Credentials.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -12,24 +20,24 @@ final class Credentials implements CredentialsInterface
     /**
      * @var string
      */
-    protected $purse;
+    private $purse;
     /**
      * @var string
      */
-    protected $key1;
+    private $key1;
     /**
      * @var string
      */
-    protected $key2;
+    private $key2;
     /**
      * @var string
      */
-    protected $key3;
+    private $key3;
 
     /**
      * @var bool
      */
-    protected $isTestMode = false;
+    private $isTestMode = false;
 
     public function getPurse()
     {
@@ -93,7 +101,7 @@ final class Credentials implements CredentialsInterface
      */
     public function setTestMode($value)
     {
-        $this->isTestMode = (bool)$value;
+        $this->isTestMode = (bool) $value;
 
         return $this;
     }

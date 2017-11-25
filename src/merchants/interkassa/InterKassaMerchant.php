@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\interkassa;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\WebMoney\Gateway;
 
 /**
- * Class PaxumMerchant
+ * Class PaxumMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -25,7 +33,7 @@ class InterKassaMerchant extends AbstractMerchant
         return $this->gatewayFactory->build('InterKassa', [
             'checkoutId' => $this->credentials->getPurse(),
             'signKey'  => $this->credentials->getKey1(),
-            'signAlgorithm' => 'md5'
+            'signAlgorithm' => 'md5',
         ]);
     }
 
@@ -36,7 +44,7 @@ class InterKassaMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\Paxum\Message\PurchaseResponse $response
+         * @var \Omnipay\Paxum\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),

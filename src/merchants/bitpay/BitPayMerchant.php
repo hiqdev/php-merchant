@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\bitpay;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\BitPay\Gateway;
 
 /**
- * Class BitPayAdapter
+ * Class BitPayAdapter.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -24,7 +32,7 @@ class BitPayMerchant extends AbstractMerchant
             'token' => $this->credentials->getKey1(),
             'privateKey'  => $this->credentials->getKey2(),
             'publicKey' => $this->credentials->getKey3(),
-            'testMode' => $this->getCredentials()->isTestMode()
+            'testMode' => $this->getCredentials()->isTestMode(),
         ]);
     }
 
@@ -35,7 +43,7 @@ class BitPayMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\BitPay\Message\PurchaseResponse $response
+         * @var \Omnipay\BitPay\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -71,5 +79,4 @@ class BitPayMerchant extends AbstractMerchant
             ->setPayer($response->getPayer())
             ->setTime(new \DateTime($response->getTime()));
     }
-
 }

@@ -1,10 +1,17 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\tests\unit\merchants\paypal;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
-use hiqdev\php\merchant\Invoice;
 use hiqdev\php\merchant\merchants\paypal\PayPalExpressMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
@@ -44,26 +51,25 @@ class PayPalExpressMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://www.paypal.com/cgi-bin/webscr', $purchaseResponse->getRedirectUrl());
         $this->assertArraySubset([
-            "cmd" => "_xclick",
-            "bn" => "PP-BuyNowBF:btn_paynowCC_LG.gif:NonHostedGuest",
-            "item_name" => $invoice->getDescription(),
-            "amount" => "10.99",
-            "currency_code" => "USD",
-            "business" => $this->merchant->getCredentials()->getPurse(),
-            "notify_url" => $invoice->getNotifyUrl(),
-            "return" => $invoice->getReturnUrl(),
-            "cancel_return" => $invoice->getCancelUrl(),
-            "item_number" => $invoice->getId()
+            'cmd' => '_xclick',
+            'bn' => 'PP-BuyNowBF:btn_paynowCC_LG.gif:NonHostedGuest',
+            'item_name' => $invoice->getDescription(),
+            'amount' => '10.99',
+            'currency_code' => 'USD',
+            'business' => $this->merchant->getCredentials()->getPurse(),
+            'notify_url' => $invoice->getNotifyUrl(),
+            'return' => $invoice->getReturnUrl(),
+            'cancel_return' => $invoice->getCancelUrl(),
+            'item_number' => $invoice->getId(),
         ], $purchaseResponse->getRedirectData());
     }
 
     /**
-     * Used only for testCompletePurchase
+     * Used only for testCompletePurchase.
      */
     protected function buildHttpClient()
     {
-        return new class extends Client
-        {
+        return new class() extends Client {
             public function send($requests)
             {
                 return new Response(200, [], 'VERIFIED');
@@ -80,7 +86,7 @@ class PayPalExpressMerchantTest extends AbstractMerchantTest
             'payment_gross' => '10.99',
             'payment_fee' => '0.31',
             'mc_currency' => 'USD',
-            'payment_date' => '2017-10-10T00:10:42'
+            'payment_date' => '2017-10-10T00:10:42',
         ];
 
         $this->merchant = $this->buildMerchant();

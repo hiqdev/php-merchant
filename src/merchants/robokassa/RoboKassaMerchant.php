@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\merchants\robokassa;
 
@@ -9,7 +17,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\RoboKassa\Gateway;
 
 /**
- * Class RoboKassaMerchant
+ * Class RoboKassaMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -36,7 +44,7 @@ class RoboKassaMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\RoboKassa\Message\PurchaseResponse $response
+         * @var \Omnipay\RoboKassa\Message\PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),

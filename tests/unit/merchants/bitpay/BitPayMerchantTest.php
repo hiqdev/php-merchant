@@ -1,4 +1,12 @@
 <?php
+/**
+ * Generalization over Omnipay and Payum
+ *
+ * @link      https://github.com/hiqdev/php-merchant
+ * @package   php-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiqdev\php\merchant\tests\unit\merchants\bitpay;
 
@@ -9,8 +17,8 @@ use Bitpay\InvoiceInterface;
 use Bitpay\Item;
 use hiqdev\php\merchant\merchants\bitpay\BitPayMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use hiqdev\php\merchant\tests\phpunit\PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope;
+use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
 use Money\Money;
 use Omnipay\BitPay\Gateway;
@@ -72,13 +80,11 @@ class BitPayMerchantTest extends AbstractMerchantTest
         $gatewayMock->method('purchase')->will(
             new PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope(
                 function ($parameters) use ($httpClient) {
-                    $request = new class($httpClient, HttpRequest::createFromGlobals()) extends PurchaseRequest
-                    {
+                    $request = new class($httpClient, HttpRequest::createFromGlobals()) extends PurchaseRequest {
                         // Mock client to prevent any network calls
                         public function getClient()
                         {
-                            return new class extends Client
-                            {
+                            return new class() extends Client {
                                 public function createInvoice(InvoiceInterface $invoice)
                                 {
                                     return $invoice
@@ -118,12 +124,10 @@ class BitPayMerchantTest extends AbstractMerchantTest
             new PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope(
                 // Mock CompletePurchaseRequest::getClient() with client mock, that will provide stub invoice on `getInvoice()`
                 function ($parameters) use ($httpClient) {
-                    $request = new class($httpClient, HttpRequest::createFromGlobals()) extends CompletePurchaseRequest
-                    {
+                    $request = new class($httpClient, HttpRequest::createFromGlobals()) extends CompletePurchaseRequest {
                         public function getClient()
                         {
-                            return new class extends Client
-                            {
+                            return new class() extends Client {
                                 public function getInvoice($invoiceId)
                                 {
                                     return (new Invoice())
@@ -148,7 +152,7 @@ class BitPayMerchantTest extends AbstractMerchantTest
         $gatewayPropertyReflection->setValue($this->merchant, $gatewayMock);
 
         $completePurchaseResponse = $this->merchant->completePurchase([
-            'id' => 'a928MytEWMCVxD3yfPxUN2yvT'
+            'id' => 'a928MytEWMCVxD3yfPxUN2yvT',
         ]);
 
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
