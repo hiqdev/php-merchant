@@ -68,7 +68,7 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
             'EPS_AMOUNT' => '10.99',
             'EPS_CURRENCY' => 'USD',
             'EPS_RESULT' => 'done',
-            'check_key' => '9c144d711d3db2fc34b43d18e374f46d',
+            'check_key' => '37d7fab99547543d8897ac5004f4c4f1',
         ];
 
         $this->merchant = $this->buildMerchant();
