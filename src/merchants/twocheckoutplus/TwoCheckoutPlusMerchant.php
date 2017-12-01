@@ -32,7 +32,7 @@ class TwoCheckoutPlusMerchant extends AbstractMerchant
 
     protected function createGateway()
     {
-        return $this->gatewayFactory->build('TwoCheckoutPlusMerchant', [
+        return $this->gatewayFactory->build('TwoCheckoutPlus', [
             'account_number' => $this->credentials->getPurse(),
             'secret_word'  => $this->credentials->getKey1(),
             'testMode' => $this->credentials->isTestMode(),
