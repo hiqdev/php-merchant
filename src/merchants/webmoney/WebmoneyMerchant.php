@@ -80,6 +80,9 @@ class WebmoneyMerchant extends AbstractMerchant
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getData()['LMI_PAYER_PURSE'])
-            ->setTime(new \DateTime($response->getData()['LMI_SYS_TRANS_DATE']));
+            ->setTime(
+                (new \DateTime($response->getData()['LMI_SYS_TRANS_DATE'], new \DateTimeZone('Europe/Moscow')))
+                ->setTimezone(new \DateTimeZone('UTC'))
+            );
     }
 }
