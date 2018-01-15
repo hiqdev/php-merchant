@@ -50,7 +50,7 @@ class PaxumMerchantTest extends AbstractMerchantTest
 
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
-        $this->assertSame('https://paxum.com/payment/phrame.php?action=displayProcessPaymentLogin', $purchaseResponse->getRedirectUrl());
+        $this->assertSame('https://www.paxum.com/payment/phrame.php?action=displayProcessPaymentLogin', $purchaseResponse->getRedirectUrl());
         $this->assertArraySubset([
             'business_email' => 'purse',
             'amount' => $this->getMoneyFormatter()->format($invoice->getAmount()),
