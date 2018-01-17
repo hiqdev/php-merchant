@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\BitPay\Gateway;
+use hiqdev\php\merchant\exceptions\MerchantException;
 
 /**
  * Class BitPayAdapter.
@@ -54,6 +55,10 @@ class BitPayMerchant extends AbstractMerchant
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
         ])->send();
+
+        if ($response->getRedirectUrl() === null) {
+            throw new MerchantException('Failed to request purchase');
+        }
 
         $response = new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
         $response->setMethod('GET');
