@@ -5,17 +5,17 @@
  * @link      https://github.com/hiqdev/php-merchant
  * @package   php-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2018, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\php\merchant\merchants\bitpay;
 
+use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\BitPay\Gateway;
-use hiqdev\php\merchant\exceptions\MerchantException;
 
 /**
  * Class BitPayAdapter.
