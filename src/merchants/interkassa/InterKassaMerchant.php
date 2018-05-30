@@ -14,7 +14,7 @@ use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use Omnipay\WebMoney\Gateway;
+use Omnipay\InterKassa\Gateway;
 
 /**
  * Class PaxumMerchant.
