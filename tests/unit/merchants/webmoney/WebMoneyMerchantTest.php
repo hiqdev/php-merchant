@@ -119,7 +119,7 @@ class WebMoneyMerchantTest extends AbstractMerchantTest
         $this->assertTrue((new Money(2450, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
-        $this->assertEquals(new \DateTime('2017-10-11 10:40:17'), $completePurchaseResponse->getTime());
+        $this->assertEquals(new \DateTime('2017-10-11 07:40:17'), $completePurchaseResponse->getTime());
         $this->assertEquals('Z954135551122', $completePurchaseResponse->getPayer());
     }
 }

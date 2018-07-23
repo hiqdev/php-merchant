@@ -63,7 +63,7 @@
         "collizo4sky/omnipay-2checkout": "^1.6",
         "hiqdev/hidev-php": "<2.0 || dev-master",
         "hiqdev/hidev-hiqdev": "<2.0 || dev-master",
-        "phpunit/phpunit": "^6.2"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -72,7 +72,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "hiqdev\\php\\merchant\\tests\\unit\\": "src/tests/unit"
+            "hiqdev\\php\\merchant\\tests\\unit\\": "tests/unit",
+            "hiqdev\\php\\merchant\\tests\\phpunit\\": "tests/phpunit"
         }
     }
 }

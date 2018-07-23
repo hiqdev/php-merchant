@@ -17,7 +17,7 @@ use Bitpay\InvoiceInterface;
 use Bitpay\Item;
 use hiqdev\php\merchant\merchants\bitpay\BitPayMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use hiqdev\php\merchant\tests\phpunit\PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope;
+use hiqdev\php\merchant\tests\phpunit\ReturnCallbackWithInvocationScope;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
 use Money\Money;
@@ -78,7 +78,7 @@ class BitPayMerchantTest extends AbstractMerchantTest
 
         $httpClient = $this->buildHttpClient();
         $gatewayMock->method('purchase')->will(
-            new PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope(
+            new ReturnCallbackWithInvocationScope(
                 function ($parameters) use ($httpClient) {
                     $request = new class($httpClient, HttpRequest::createFromGlobals()) extends PurchaseRequest {
                         // Mock client to prevent any network calls
@@ -121,7 +121,7 @@ class BitPayMerchantTest extends AbstractMerchantTest
 
         $httpClient = $this->buildHttpClient();
         $gatewayMock->method('completePurchase')->will(
-            new PHPUnit_Framework_MockObject_Stub_ReturnCallbackWithInvocationScope(
+            new ReturnCallbackWithInvocationScope(
                 // Mock CompletePurchaseRequest::getClient() with client mock, that will provide stub invoice on `getInvoice()`
                 function ($parameters) use ($httpClient) {
                     $request = new class($httpClient, HttpRequest::createFromGlobals()) extends CompletePurchaseRequest {
@@ -158,7 +158,7 @@ class BitPayMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('some_transaction_id', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('123123', $completePurchaseResponse->getTransactionReference());
+        $this->assertSame('a928MytEWMCVxD3yfPxUN2yvT', $completePurchaseResponse->getTransactionReference());
         $this->assertTrue((new Money(1036, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());

@@ -77,7 +77,7 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('123', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('tax_num_id', $completePurchaseResponse->getTransactionReference());
+        $this->assertSame('123', $completePurchaseResponse->getTransactionReference());
         $this->assertTrue((new Money(1099, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
