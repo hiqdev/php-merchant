@@ -12,7 +12,6 @@ namespace hiqdev\php\merchant\tests\unit\merchants\paxum;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
-use hiqdev\php\merchant\merchants\paxum\InterKassaMerchant;
 use hiqdev\php\merchant\merchants\paxum\PaxumMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
@@ -21,7 +20,7 @@ use Money\Money;
 
 class PaxumMerchantTest extends AbstractMerchantTest
 {
-    /** @var InterKassaMerchant */
+    /** @var PaxumMerchant */
     protected $merchant;
 
     protected function buildMerchant()

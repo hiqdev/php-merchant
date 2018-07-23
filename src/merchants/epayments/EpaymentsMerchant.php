@@ -31,7 +31,7 @@ class EpaymentsMerchant extends AbstractMerchant
      */
     protected function createGateway()
     {
-        return $this->gatewayFactory->build('ePayService', [
+        return $this->gatewayFactory->build('ePayments', [
             'partnerId' => $this->credentials->getPurse(),
             'secret'  => $this->credentials->getKey1(),
         ]);
