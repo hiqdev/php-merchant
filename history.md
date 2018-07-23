@@ -3,9 +3,59 @@ hiqdev/php-merchant
 
 ## [Under development]
 
+- Added ePayments support
+    - [74552da] 2018-07-23 Added ePayments [@SilverFire]
+- Added 2checkout support
+    - [525b5a4] 2017-12-01 Inited TwoCheckoutPlusMerchant [@SilverFire]
+    - [e1aeba4] 2017-12-01 Added collizo4sky/omnipay-2checkout [@SilverFire]
+- Added Robokassa support
+    - [a360367] 2017-10-24 Fixed Robokassa tests [@SilverFire]
+    - [c46f53a] 2017-10-24 Updated RoboKassaMerchant to extract TransactionReference [@SilverFire]
+    - [a5e274d] 2017-10-24 Implemented second key support for Robokassa [@SilverFire]
+    - [ece05ec] 2017-10-23 Added Robokassa support [@SilverFire]
+- Completely rewritten to a better architecture style
+    - [148578a] 2017-10-17 Fixed tests [@SilverFire]
+    - [4dbce47] 2018-07-23 Updated to latest PHPUnit, fixed broken tests [@SilverFire]
+    - [eafb027] 2018-05-30 Fixed PHPDocs [@SilverFire]
+    - [e844c6b] 2018-03-05 csfixed [@hiqsol]
+    - [91b6be4] 2017-10-17 Changed signAlgorythm [@SilverFire]
+    - [2606466] 2017-10-13 Docs [@SilverFire]
+    - [80f70d8] 2017-10-11 Refactored to use AbstractMerchant, added more tests [@SilverFire]
+    - [346224f] 2017-10-10 Tests, deep coding [@SilverFire]
+    - [3153201] 2017-10-09 Working on tests [@SilverFire]
+    - [cb2b772] 2017-10-09 Continue refactoring [@SilverFire]
+    - [57c7f3b] 2017-10-09 Dropped old implementation [@SilverFire]
+    - [30280a7] 2017-10-09 Refactored to spread MoneyPHP/Money VO [@SilverFire]
+    - [9d67897] 2017-10-06 Deep coding [@SilverFire]
+    - [365c6e2] 2017-10-04 Deep coding [@SilverFire]
+    - [a43b074] 2017-11-26 quickfixed epayservice test: changed check_key [@hiqsol]
+    - [a5e9c0a] 2017-11-25 fixing build [@hiqsol]
+    - [1639588] 2017-11-25 added dependencies: phpmoney, omnipay freekassa, robokassa, yandexmoney, webmoney [@hiqsol]
+    - [e4d1f34] 2017-11-25 csfixed [@hiqsol]
+    - [ad21c4c] 2017-10-24 Removed redundant `use` operators [@SilverFire]
+- Added BitPay support
+    - [e17acc9] 2017-10-17 BitPay request should return response with GET method [@SilverFire]
+    - [189007b] 2017-10-03 Updated to use hiqdev/omnipay-bitpay [@SilverFire]
+    - [206a1d1] 2017-08-05 csfixed [@hiqsol]
+    - [f4cae51] 2017-08-05 renamed `hidev.yml` [@hiqsol]
+    - [21f1529] 2017-08-02 Implemented bitpay support [@SilverFire]
+    - [abec28c] 2018-01-17 Added corner case handling when BitPay fails to create invoice [@SilverFire]
+- Added YandexMoney support
+    - [a032e95] 2017-03-30 Updated yandexmoney proxy to follow API changes [@SilverFire]
+    - [247cd70] 2017-03-30 added formatting money (sum, amount) for changes in omnipay [@hiqsol]
+    - [184d52a] 2017-03-30 Yandexmoney proxy switched to Omnipay\YandexMoney\P2pGateway [@SilverFire]
+    - [5c8cb6b] 2017-03-28 Added yandexmoney adapter [@SilverFire]
+- Added FreeKassa support
+    - [259fd89] 2017-10-25 Added FreeKassa support [@SilverFire]
+    - [dc79b93] 2017-03-29 added **FreeKassa** to OmnipayMerchant [@hiqsol]
+    - [92357d1] 2017-03-28 Added AbstractMerchant::label, AbstractMerchant::getGatewayNamespacePart() [@SilverFire]
+    - [3b57527] 2017-01-20 Updated CHNAGELOG [@SilverFire]
 - Added `commission_fee` related things to the AbstractRequest
     - [5c419c8] 2017-01-20 csfixed [@SilverFire]
     - [abc99fe] 2017-01-20 Added `commission_fee` to the AbstractRequest [@SilverFire]
+- Other minor changes
+    - [4b9050e] 2018-01-15 Fixed Paxum gateway URL [@BladeRoot]
+    - [d42c545] 2017-12-13 Fixed WebmoneyMerchant to convert time to UTC [@SilverFire]
 
 ## [0.0.3] - 2016-09-16
 
@@ -122,3 +172,45 @@ hiqdev/php-merchant
 [0.0.3]: https://github.com/hiqdev/php-merchant/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/hiqdev/php-merchant/compare/0.0.1...0.0.2
 [0.0.1]: https://github.com/hiqdev/php-merchant/releases/tag/0.0.1
+[74552da]: https://github.com/hiqdev/php-merchant/commit/74552da
+[4dbce47]: https://github.com/hiqdev/php-merchant/commit/4dbce47
+[eafb027]: https://github.com/hiqdev/php-merchant/commit/eafb027
+[e844c6b]: https://github.com/hiqdev/php-merchant/commit/e844c6b
+[abec28c]: https://github.com/hiqdev/php-merchant/commit/abec28c
+[4b9050e]: https://github.com/hiqdev/php-merchant/commit/4b9050e
+[d42c545]: https://github.com/hiqdev/php-merchant/commit/d42c545
+[525b5a4]: https://github.com/hiqdev/php-merchant/commit/525b5a4
+[e1aeba4]: https://github.com/hiqdev/php-merchant/commit/e1aeba4
+[a43b074]: https://github.com/hiqdev/php-merchant/commit/a43b074
+[a5e9c0a]: https://github.com/hiqdev/php-merchant/commit/a5e9c0a
+[1639588]: https://github.com/hiqdev/php-merchant/commit/1639588
+[e4d1f34]: https://github.com/hiqdev/php-merchant/commit/e4d1f34
+[259fd89]: https://github.com/hiqdev/php-merchant/commit/259fd89
+[ad21c4c]: https://github.com/hiqdev/php-merchant/commit/ad21c4c
+[a360367]: https://github.com/hiqdev/php-merchant/commit/a360367
+[c46f53a]: https://github.com/hiqdev/php-merchant/commit/c46f53a
+[a5e274d]: https://github.com/hiqdev/php-merchant/commit/a5e274d
+[ece05ec]: https://github.com/hiqdev/php-merchant/commit/ece05ec
+[148578a]: https://github.com/hiqdev/php-merchant/commit/148578a
+[e17acc9]: https://github.com/hiqdev/php-merchant/commit/e17acc9
+[91b6be4]: https://github.com/hiqdev/php-merchant/commit/91b6be4
+[2606466]: https://github.com/hiqdev/php-merchant/commit/2606466
+[80f70d8]: https://github.com/hiqdev/php-merchant/commit/80f70d8
+[346224f]: https://github.com/hiqdev/php-merchant/commit/346224f
+[3153201]: https://github.com/hiqdev/php-merchant/commit/3153201
+[cb2b772]: https://github.com/hiqdev/php-merchant/commit/cb2b772
+[57c7f3b]: https://github.com/hiqdev/php-merchant/commit/57c7f3b
+[30280a7]: https://github.com/hiqdev/php-merchant/commit/30280a7
+[9d67897]: https://github.com/hiqdev/php-merchant/commit/9d67897
+[365c6e2]: https://github.com/hiqdev/php-merchant/commit/365c6e2
+[189007b]: https://github.com/hiqdev/php-merchant/commit/189007b
+[206a1d1]: https://github.com/hiqdev/php-merchant/commit/206a1d1
+[f4cae51]: https://github.com/hiqdev/php-merchant/commit/f4cae51
+[21f1529]: https://github.com/hiqdev/php-merchant/commit/21f1529
+[a032e95]: https://github.com/hiqdev/php-merchant/commit/a032e95
+[247cd70]: https://github.com/hiqdev/php-merchant/commit/247cd70
+[184d52a]: https://github.com/hiqdev/php-merchant/commit/184d52a
+[dc79b93]: https://github.com/hiqdev/php-merchant/commit/dc79b93
+[92357d1]: https://github.com/hiqdev/php-merchant/commit/92357d1
+[5c8cb6b]: https://github.com/hiqdev/php-merchant/commit/5c8cb6b
+[3b57527]: https://github.com/hiqdev/php-merchant/commit/3b57527

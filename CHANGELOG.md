@@ -3,7 +3,15 @@ hiqdev/php-merchant
 
 ## [Under development]
 
+- Added ePayments support ([@SilverFire])
+- Added 2checkout support ([@SilverFire])
+- Added Robokassa support ([@SilverFire])
+- Completely rewritten to a better architecture style ([@SilverFire], [@hiqsol])
+- Added BitPay support ([@SilverFire], [@hiqsol])
+- Added YandexMoney support ([@SilverFire], [@hiqsol])
+- Added FreeKassa support ([@SilverFire], [@hiqsol])
 - Added `commission_fee` related things to the AbstractRequest ([@SilverFire])
+- Other minor changes ([@BladeRoot], [@SilverFire])
 
 ## [0.0.3] - 2016-09-16
 
