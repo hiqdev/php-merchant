@@ -74,7 +74,7 @@ class EpaymentsMerchant extends AbstractMerchant
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer('')
+            ->setPayer($response->getTransactionReference())
             ->setTime($response->getPaymentDate());
     }
 

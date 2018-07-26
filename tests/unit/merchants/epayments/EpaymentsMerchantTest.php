@@ -110,6 +110,7 @@ class EpaymentsMerchantTest extends AbstractMerchantTest
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('123', $completePurchaseResponse->getTransactionId());
         $this->assertSame('d41d8cd98f00b204e9800998ecf8427e', $completePurchaseResponse->getTransactionReference());
+        $this->assertSame('d41d8cd98f00b204e9800998ecf8427e', $completePurchaseResponse->getPayer());
         $this->assertTrue((new Money(39912, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
