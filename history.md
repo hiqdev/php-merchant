@@ -1,10 +1,11 @@
 hiqdev/php-merchant
 -------------------
 
-## [Under development]
+## [1.0.0] - 2018-07-26
 
 - Added ePayments support
     - [74552da] 2018-07-23 Added ePayments [@SilverFire]
+    - [70a617a] 2018-07-26 Pass TransactionReference as Payer for Epayments [@SilverFire]
 - Added 2checkout support
     - [525b5a4] 2017-12-01 Inited TwoCheckoutPlusMerchant [@SilverFire]
     - [e1aeba4] 2017-12-01 Added collizo4sky/omnipay-2checkout [@SilverFire]
@@ -214,3 +215,5 @@ hiqdev/php-merchant
 [92357d1]: https://github.com/hiqdev/php-merchant/commit/92357d1
 [5c8cb6b]: https://github.com/hiqdev/php-merchant/commit/5c8cb6b
 [3b57527]: https://github.com/hiqdev/php-merchant/commit/3b57527
+[70a617a]: https://github.com/hiqdev/php-merchant/commit/70a617a
+[1.0.0]: https://github.com/hiqdev/php-merchant/compare/0.0.3...1.0.0

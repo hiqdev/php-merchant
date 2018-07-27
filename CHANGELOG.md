@@ -1,7 +1,7 @@
 hiqdev/php-merchant
 -------------------
 
-## [Under development]
+## [1.0.0] - 2018-07-26
 
 - Added ePayments support ([@SilverFire])
 - Added 2checkout support ([@SilverFire])
@@ -44,3 +44,4 @@ hiqdev/php-merchant
 [0.0.3]: https://github.com/hiqdev/php-merchant/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/hiqdev/php-merchant/compare/0.0.1...0.0.2
 [0.0.1]: https://github.com/hiqdev/php-merchant/releases/tag/0.0.1
+[1.0.0]: https://github.com/hiqdev/php-merchant/compare/0.0.3...1.0.0
