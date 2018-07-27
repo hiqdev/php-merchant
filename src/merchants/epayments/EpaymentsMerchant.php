@@ -44,7 +44,7 @@ class EpaymentsMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var PurchaseResponse $response
+         * @var PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'orderId' => $invoice->getId(),

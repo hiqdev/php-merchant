@@ -19,7 +19,7 @@ use Omnipay\ePayments\Gateway;
 use Omnipay\ePayments\Message\DetailsResponse;
 
 /**
- * Class EpaymentsMerchantTest
+ * Class EpaymentsMerchantTest.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -30,8 +30,7 @@ class EpaymentsMerchantTest extends AbstractMerchantTest
 
     protected function buildMerchant()
     {
-        return new class($this->getCredentials(), $this->getGatewayFactory(), $this->getMoneyFormatter(), $this->getMoneyParser()) extends EpaymentsMerchant
-        {
+        return new class($this->getCredentials(), $this->getGatewayFactory(), $this->getMoneyFormatter(), $this->getMoneyParser()) extends EpaymentsMerchant {
             protected function fetchOrderDetails(string $orderId): DetailsResponse
             {
                 $request = $this->gateway->details([
@@ -54,7 +53,7 @@ class EpaymentsMerchantTest extends AbstractMerchantTest
                             'details' => 'foo bar baz',
                             'errorCode' => 0,
                             'paymentTransactionId' => 'd41d8cd98f00b204e9800998ecf8427e',
-                        ]
+                        ],
                     ],
                 ]);
             }
