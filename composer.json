@@ -60,6 +60,7 @@
         "hiqdev/omnipay-bitpay": "<2.0 || dev-master",
         "hiqdev/omnipay-yandexmoney": "<2.0 || dev-master",
         "hiqdev/omnipay-epayments": "<2.0 || dev-master",
+        "hiqdev/omnipay-ikajo": "2.0.x-dev",
         "dercoder/omnipay-webmoney": "<2.0 || dev-master",
         "collizo4sky/omnipay-2checkout": "^1.6",
         "hiqdev/hidev-php": "<2.0 || dev-master",
