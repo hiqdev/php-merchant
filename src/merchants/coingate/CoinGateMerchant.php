@@ -43,6 +43,7 @@ class CoinGateMerchant extends AbstractMerchant
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'returnUrl' => $invoice->getReturnUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
+            'callbackUrl' => $invoice->getNotifyUrl(),
         ])->send();
 
         if ($response->getRedirectUrl() === null) {
