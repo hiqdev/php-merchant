@@ -24,8 +24,7 @@ class CoinGateMerchant extends AbstractMerchant
     {
         return $this->gatewayFactory->build('CoinGate', [
             'apiKey'  => $this->credentials->getKey1(),
-            'currency' => $invoice->getCurrency()->getCode(),
-        ]);
+           ]);
     }
 
     /**
@@ -39,13 +38,21 @@ class CoinGateMerchant extends AbstractMerchant
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
+            'currency' => $invoice->getCurrency()->getCode(),
             'description' => $invoice->getDescription(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'returnUrl' => $invoice->getReturnUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
         ])->send();
 
-        return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        if ($response->getRedirectUrl() === null) {
+            throw new MerchantException('Failed to request purchase');
+        }
+
+        $response = new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        $response->setMethod('GET');
+
+        return $response;
     }
 
     /**
