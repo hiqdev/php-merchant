@@ -11,7 +11,7 @@ use Omnipay\CoinGate\Gateway;
 /**
  * Class CoinGateMerchant.
  *
- * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
+ * @author Yurii Myronchuk <bladeroot@gmail.com>
  */
 class CoinGateMerchant extends AbstractMerchant
 {
