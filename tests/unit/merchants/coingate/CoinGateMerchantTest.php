@@ -1,10 +1,10 @@
 <?php
 
-namespace hiqdev\php\merchant\tests\unit\merchants\ikajo;
+namespace hiqdev\php\merchant\tests\unit\merchants\coingate;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
-use hiqdev\php\merchant\merchants\ikajo\IkajoMerchant;
+use hiqdev\php\merchant\merchants\coingate\CoinGateMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
@@ -12,12 +12,12 @@ use Money\Money;
 
 class IkajoMerchantTest extends AbstractMerchantTest
 {
-    /** @var IkajoMerchant */
+    /** @var CoinGateMerchant */
     protected $merchant;
 
     protected function buildMerchant()
     {
-        return new IkajoMerchant(
+        return new CoinGateMerchant(
             $this->getCredentials(),
             $this->getGatewayFactory(),
             $this->getMoneyFormatter(),
@@ -31,7 +31,6 @@ class IkajoMerchantTest extends AbstractMerchantTest
         $gatewayPropertyReflection->setAccessible(true);
         $gateway = $gatewayPropertyReflection->getValue($this->merchant);
 
-        $this->assertSame($this->getCredentials()->getPurse(), $gateway->getPurse());
         $this->assertSame($this->getCredentials()->getKey1(), $gateway->getSecret());
     }
 
@@ -63,33 +62,13 @@ class IkajoMerchantTest extends AbstractMerchantTest
         };
     }
 
+    protected function getCredentials()
+    {
+        return parent::getCredentials()
+            ->setKey1('q-oRs-HPzZyeJu8WzgoMTqkSuaDq-6RftTxNJHx8');
+    }
+
     public function testCompletePurchase()
     {
-        $_POST = [
-            'id' => 'ikajoId',
-            'order' => 'ourId',
-            'status' => 'SALE',
-            'approval_code' => '00',
-            'card' => '123456****1234',
-            'date' => '2015-12-12 12:12:12',
-            'name' => 'John Doe',
-            'email' => 'foo@bar.baz',
-            'sign' => '989d1af2b61353be8f00ea332fc35888',
-            'amount' => '0.01',
-            'currency' => 'USD',
-        ];
-
-        $this->merchant = $this->buildMerchant();
-
-        $completePurchaseResponse = $this->merchant->completePurchase([]);
-
-        $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
-        $this->assertTrue($completePurchaseResponse->getIsSuccessful());
-        $this->assertSame('ourId', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('ikajoId', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(1, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
-        $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
-        $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
-        $this->assertEquals(new \DateTime('2015-12-12 12:12:12'), $completePurchaseResponse->getTime());
     }
 }
