@@ -14,7 +14,9 @@ use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use Omnipay\YandexMoney\P2pGateway;
+use Omnipay\YandexKassa\Gateway;
+use Omnipay\YandexKassa\Message\CaptureResponse;
+use Omnipay\YandexKassa\Message\DetailsResponse;
 
 /**
  * Class YandexKassaMerchant.
@@ -24,7 +26,7 @@ use Omnipay\YandexMoney\P2pGateway;
 class YandexKassaMerchant extends AbstractMerchant
 {
     /**
-     * @var P2pGateway
+     * @var Gateway
      */
     protected $gateway;
 
@@ -32,18 +34,19 @@ class YandexKassaMerchant extends AbstractMerchant
     {
         return $this->gatewayFactory->build('YandexKassa', [
             'shopId' => $this->credentials->getPurse(),
-            'secretKey' => $this->credentials->getKey1(),
+            'secret' => $this->credentials->getKey1(),
         ]);
     }
 
     /**
      * @param InvoiceInterface $invoice
      * @return RedirectPurchaseResponse
+     * @throws \Omnipay\Common\Exception\InvalidResponseException
      */
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\YandexKassa\Message\PurchaseResponse
+         * @var \Omnipay\YandexKassa\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -53,7 +56,8 @@ class YandexKassaMerchant extends AbstractMerchant
             'returnUrl' => $invoice->getReturnUrl(),
         ])->send();
 
-        return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        return (new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData()))
+            ->setMethod($response->getRedirectMethod());
     }
 
     /**
@@ -62,19 +66,25 @@ class YandexKassaMerchant extends AbstractMerchant
      */
     public function completePurchase($data)
     {
-        // TODO: Implement
-        /** @var \Omnipay\YandexKasssa\Message\CompletePurchaseResponse $response */
-        $response = $this->gateway->completePurchase($data)->send();
+        $notification = $this->gateway->notification($data)->send();
+        /** @var DetailsResponse $details */
+        $details = $this->gateway->details([
+            'transactionReference' => $notification->getTransactionReference()
+        ])->send();
+        /** @var CaptureResponse $response */
+        $response = $this->gateway->capture([
+            'transactionId' => $details->getTransactionId(),
+            'transactionReference' => $details->getTransactionReference(),
+            'amount' => $details->getAmount(),
+            'currency' => $details->getCurrency(),
+        ])->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData()['sender'] ?? $response->getData()['email'] ?? '')
-            ->setTime(
-                (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
-                    ->setTimezone(new \DateTimeZone('UTC'))
-            );
+            ->setPayer($response->getPayer())
+            ->setTime($response->getPaymentDate());
     }
 }
