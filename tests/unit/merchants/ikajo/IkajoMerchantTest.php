@@ -41,7 +41,7 @@ class IkajoMerchantTest extends AbstractMerchantTest
 
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
-        $this->assertSame('https://secure.payinspect.com/post', $purchaseResponse->getRedirectUrl());
+        $this->assertSame('https://secure.servhost.online/payment/auth', $purchaseResponse->getRedirectUrl());
         $this->assertArraySubset([
             'payment' => 'CC',
             'url' => 'https://example.com/return',
