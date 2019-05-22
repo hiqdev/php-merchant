@@ -46,7 +46,7 @@ class IkajoMerchantTest extends AbstractMerchantTest
             'payment' => 'CC',
             'url' => 'https://example.com/return',
             'error_url' => 'https://example.com/cancel',
-            'sign' => '12dd7800b6517c1df5b6eee5efcef67b',
+            'sign' => 'e6488e8e3914a6e25410e1aa97ab5a5e',
         ], $purchaseResponse->getRedirectData());
     }
 

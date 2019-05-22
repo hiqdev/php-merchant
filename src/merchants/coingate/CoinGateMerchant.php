@@ -2,6 +2,7 @@
 
 namespace hiqdev\php\merchant\merchants\coingate;
 
+use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
@@ -34,9 +35,9 @@ class CoinGateMerchant extends AbstractMerchant
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\CoinGate\Message\PurchaseResponse $response
+         * @var \Omnipay\CoinGate\Message\PurchaseResponse $purchaseResponse
          */
-        $response = $this->gateway->purchase([
+        $purchaseResponse = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
             'currency' => $invoice->getCurrency()->getCode(),
             'description' => $invoice->getDescription(),
@@ -46,11 +47,11 @@ class CoinGateMerchant extends AbstractMerchant
             'notifyUrl' => $invoice->getNotifyUrl(),
         ])->send();
 
-        if ($response->getRedirectUrl() === null) {
+        if ($purchaseResponse->getRedirectUrl() === null) {
             throw new MerchantException('Failed to request purchase');
         }
 
-        $response = new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        $response = new RedirectPurchaseResponse($purchaseResponse->getRedirectUrl(), $purchaseResponse->getRedirectData());
         $response->setMethod('GET');
 
         return $response;
