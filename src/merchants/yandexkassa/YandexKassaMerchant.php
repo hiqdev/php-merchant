@@ -50,7 +50,7 @@ class YandexKassaMerchant extends AbstractMerchant
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
-            'details' => $invoice->getDescription(),
+            'description' => $invoice->getDescription(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
             'returnUrl' => $invoice->getReturnUrl(),
