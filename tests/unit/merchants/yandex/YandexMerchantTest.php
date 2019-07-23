@@ -68,7 +68,7 @@ class YandexMerchantTest extends AbstractMerchantTest
             'need-email' => 'yes',
             'need-phone' => 'false',
             'need-address' => 'false',
-            'paymentType' => 'PC',
+            'paymentType' => 'AC',
             'successURL' => $invoice->getReturnUrl(),
             'failURL' => $invoice->getCancelUrl(),
         ], $purchaseResponse->getRedirectData());
