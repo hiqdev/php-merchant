@@ -54,7 +54,7 @@ class YandexP2pMerchant extends AbstractMerchant
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
-            'method' => 'PC', // https://money.yandex.ru/doc.xml?id=526991
+            'method' => 'AC', // https://money.yandex.ru/doc.xml?id=526991
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
