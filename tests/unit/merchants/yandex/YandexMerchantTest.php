@@ -122,7 +122,7 @@ class YandexMerchantTest extends AbstractMerchantTest
         $this->assertSame('ma119annqk', $completePurchaseResponse->getTransactionId());
         $this->assertSame('1122030848336014125', $completePurchaseResponse->getTransactionReference());
         $this->assertTrue((new Money(117968, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
-        $this->assertTrue((new Money(800, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
+        $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
         $this->assertEquals(new \DateTime('2017-10-11T05:37:04'), $completePurchaseResponse->getTime());
         $this->assertEquals('410013314711147', $completePurchaseResponse->getPayer());
