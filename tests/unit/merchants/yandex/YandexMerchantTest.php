@@ -99,12 +99,12 @@ class YandexMerchantTest extends AbstractMerchantTest
     {
         $_POST = [
             'notification_type' => 'p2p-incoming',
-            'amount' => '1171.68',
+            'amount' => '1179.68',
             'datetime' => '2017-10-11T05:37:04Z',
             'codepro' => 'false',
-            'withdraw_amount' => '1177.54',
+            'withdraw_amount' => '1171.68',
             'sender' => '410013314711147',
-            'sha1_hash' => '911c40cad72e66571be07b08674f00bb3ad3c6a9',
+            'sha1_hash' => 'c6fe9265e8a34b731154ddef3771f9f0a35c454a',
             'unaccepted' => 'false',
             'operation_label' => '216fc1aa-0009-5000-8000-00012710eaf3',
             'operation_id' => '1122030848336014125',
@@ -121,8 +121,8 @@ class YandexMerchantTest extends AbstractMerchantTest
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('ma119annqk', $completePurchaseResponse->getTransactionId());
         $this->assertSame('1122030848336014125', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(117168, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
-        $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
+        $this->assertTrue((new Money(117968, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertTrue((new Money(800, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
         $this->assertEquals(new \DateTime('2017-10-11T05:37:04'), $completePurchaseResponse->getTime());
         $this->assertEquals('410013314711147', $completePurchaseResponse->getPayer());
