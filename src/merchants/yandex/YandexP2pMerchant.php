@@ -71,7 +71,7 @@ class YandexP2pMerchant extends AbstractMerchant
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
+            ->setAmount($this->moneyParser->parse($response->getWithdrawAmount(), $response->getCurrency()))
             ->setFee($this->moneyParser->parse($response->getFee(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
