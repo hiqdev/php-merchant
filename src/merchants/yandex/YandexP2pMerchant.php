@@ -74,7 +74,7 @@ class YandexP2pMerchant extends AbstractMerchant
             ->setAmount($this->moneyParser->parse($response->getWithdrawAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData()['sender'] ?? $response->getData()['email'] ?? '')
+            ->setPayer($response->getData()['sender'] ?: $response->getData()['operation_label'] ?: $response->getData()['email'] ?: '')
             ->setTime(
                 (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
                     ->setTimezone(new \DateTimeZone('UTC'))
