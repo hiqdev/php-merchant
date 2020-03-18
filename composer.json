@@ -79,5 +79,10 @@
             "hiqdev\\php\\merchant\\tests\\unit\\": "tests/unit",
             "hiqdev\\php\\merchant\\tests\\phpunit\\": "tests/phpunit"
         }
+    },
+    "extra": {
+        "config-plugin": {
+            "params": "config/params.php"
+        }
     }
 }

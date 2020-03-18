@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\YandexMoney\P2pGateway;
+use Yii;
 
 /**
  * Class YandexP2pMerchant.
@@ -43,9 +44,18 @@ class YandexP2pMerchant extends AbstractMerchant
      */
     public function requestPurchase(InvoiceInterface $invoice)
     {
+        $config = array_filter(Yii::$app->params, function ($k, $v) {
+            return strpos($k, 'php.nerchant.yandex.request.sender') !== false;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        array_walk($config, function($v, $k) {
+            $v = $v === null ? true : $v;
+        });
+
         /**
          * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse
          */
+
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
@@ -54,6 +64,10 @@ class YandexP2pMerchant extends AbstractMerchant
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
+            'need-fio' => json_encode($config['php.nerchant.yandex.request.sender.need-fio']),
+            'need-email' => json_encode($config['php.nerchant.yandex.request.sender.need-email']),
+            'need-phone' => json_encode($config['php.nerchant.yandex.request.sender.need-phone']),
+            'need-address' => json_encode($config['php.nerchant.yandex.request.sender.need-address']),
             'method' => 'AC', // https://money.yandex.ru/doc.xml?id=526991
         ])->send();
 
