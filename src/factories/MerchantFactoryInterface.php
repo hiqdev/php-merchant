@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\merchant\factories;
 
+use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\merchants\MerchantInterface;
 
 /**
@@ -19,5 +20,23 @@ use hiqdev\php\merchant\merchants\MerchantInterface;
  */
 interface MerchantFactoryInterface
 {
+    /**
+     * Builds a merchant using the given $credentials
+     * may be used when credentials could not be distinguished
+     * with the merchant name.
+     *
+     * @param string $name
+     * @param CredentialsInterface $credentials
+     * @return MerchantInterface
+     */
+    public function buildUsingCredentials(string $name, CredentialsInterface $credentials): MerchantInterface;
+
+    /**
+     * Builds a Merchant and guesses the credentials
+     *
+     * @param string $name
+     * @return MerchantInterface
+     */
     public function build(string $name): MerchantInterface;
+
 }
