@@ -13,6 +13,7 @@ namespace hiqdev\php\merchant\merchants\bitpay;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\BitPay\Gateway;
@@ -22,7 +23,7 @@ use Omnipay\BitPay\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class BitPayMerchant extends AbstractMerchant
+class BitPayMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @return Gateway

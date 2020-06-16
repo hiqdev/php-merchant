@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\epayments;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\ePayments\Message\DetailsResponse;
@@ -24,7 +25,7 @@ use Omnipay\ePayments\Message\PurchaseResponse;
  *
  * @property \Omnipay\ePayments\Gateway $gateway
  */
-class EpaymentsMerchant extends AbstractMerchant
+class EpaymentsMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @return \Omnipay\Common\GatewayInterface

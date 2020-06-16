@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\yandex;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\YandexMoney\P2pGateway;
@@ -21,7 +22,7 @@ use Omnipay\YandexMoney\P2pGateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class YandexP2pMerchant extends AbstractMerchant
+class YandexP2pMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var P2pGateway

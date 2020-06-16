@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\paypal;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\PayPal\Gateway;
@@ -21,7 +22,7 @@ use Omnipay\PayPal\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PayPalExpressMerchant extends AbstractMerchant
+class PayPalExpressMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

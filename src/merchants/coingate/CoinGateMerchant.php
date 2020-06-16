@@ -5,6 +5,7 @@ namespace hiqdev\php\merchant\merchants\coingate;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\CoinGate\Gateway;
@@ -14,7 +15,7 @@ use Omnipay\CoinGate\Gateway;
  *
  * @author Yurii Myronchuk <bladeroot@gmail.com>
  */
-class CoinGateMerchant extends AbstractMerchant
+class CoinGateMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

@@ -10,20 +10,19 @@
 
 namespace hiqdev\php\merchant\merchants;
 
-use hiqdev\php\merchant\credentials\CredentialsInterface;
+use hiqdev\cashew\DTO\PaymentFlow\Card\CardPaymentRequest;
 use hiqdev\php\merchant\InvoiceInterface;
-use hiqdev\php\merchant\response\CompletePurchaseResponse;
-use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 
 /**
- * Interface AdapterInterface.
+ * Interface PaymentCardMerchatInterface
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-interface MerchantInterface
+interface PaymentCardMerchantInterface extends MerchantInterface
 {
     /**
-     * @return CredentialsInterface
+     * @param InvoiceInterface $invoice
+     * @return CardPaymentRequest
      */
-    public function getCredentials(): CredentialsInterface;
+    public function requestTransaction(InvoiceInterface $invoice): CardPaymentRequest;
 }

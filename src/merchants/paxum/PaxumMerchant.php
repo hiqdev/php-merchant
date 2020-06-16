@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\paxum;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\WebMoney\Gateway;
@@ -21,7 +22,7 @@ use Omnipay\WebMoney\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class PaxumMerchant extends AbstractMerchant
+class PaxumMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

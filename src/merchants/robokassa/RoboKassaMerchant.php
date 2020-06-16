@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\robokassa;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\RoboKassa\Gateway;
@@ -21,7 +22,7 @@ use Omnipay\RoboKassa\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class RoboKassaMerchant extends AbstractMerchant
+class RoboKassaMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

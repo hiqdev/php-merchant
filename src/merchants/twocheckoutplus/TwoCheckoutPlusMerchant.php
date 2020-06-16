@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\twocheckoutplus;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
@@ -23,7 +24,7 @@ use Omnipay\TwoCheckoutPlus\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class TwoCheckoutPlusMerchant extends AbstractMerchant
+class TwoCheckoutPlusMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

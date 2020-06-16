@@ -12,6 +12,7 @@ namespace hiqdev\php\merchant\merchants\yandexkassa;
 
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Omnipay\YandexKassa\Gateway;
@@ -23,7 +24,7 @@ use Omnipay\YandexKassa\Message\DetailsResponse;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class YandexKassaMerchant extends AbstractMerchant
+class YandexKassaMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
 {
     /**
      * @var Gateway

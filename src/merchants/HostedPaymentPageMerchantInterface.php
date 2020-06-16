@@ -10,20 +10,26 @@
 
 namespace hiqdev\php\merchant\merchants;
 
-use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 
 /**
- * Interface AdapterInterface.
+ * Interface HostedPaymentPageMerchantInterface
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-interface MerchantInterface
+interface HostedPaymentPageMerchantInterface extends MerchantInterface
 {
     /**
-     * @return CredentialsInterface
+     * @param InvoiceInterface $invoice
+     * @return RedirectPurchaseResponse
      */
-    public function getCredentials(): CredentialsInterface;
+    public function requestPurchase(InvoiceInterface $invoice);
+
+    /**
+     * @param array $data
+     * @return CompletePurchaseResponse
+     */
+    public function completePurchase($data);
 }
