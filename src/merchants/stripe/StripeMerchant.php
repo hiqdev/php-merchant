@@ -10,13 +10,11 @@
 
 namespace hiqdev\php\merchant\merchants\stripe;
 
-use hiqdev\cashew\DTO\PaymentFlow\Card\CardPaymentRequest;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
-use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
-use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Stripe\Gateway;
 
 /**
@@ -33,17 +31,19 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
 
     protected function createGateway()
     {
-        return $this->gatewayFactory->build('Stripe', [
+        return $this->gatewayFactory->build('Stripe\PaymentIntents', [
             'apiKey' => $this->credentials->getKey1(),
         ]);
     }
 
     public function requestPurchase(InvoiceInterface $invoice)
     {
-        // TODO: implement
+        $customerReference = $this->fetchCustomerReference($invoice->getClient());
+        $clientSecret = $this->fetchClientSecret($customerReference);
 
         $response = new RedirectPurchaseResponse('', [
-            'clientSecret' => bin2hex(random_bytes(20))
+            'clientSecret' => $clientSecret,
+            'publicKey' => $this->credentials->getKey2()
         ]);
         $response->setMethod('GET');
 
@@ -53,5 +53,25 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
     public function completePurchase($data)
     {
         throw new \Exception('Not implemented');
+    }
+
+    private function fetchCustomerReference(string $email): string
+    {
+        $response = $this->gateway->createCustomer(compact('email'))->send();
+        if (!$response->isSuccessful()) {
+            throw new RuntimeException($response->getMessage());
+        }
+
+        return $response->getCustomerReference();
+    }
+
+    private function fetchClientSecret(string $customerReference): string
+    {
+        $response = $this->gateway->createSetupIntent(compact('customerReference'))->send();
+        if ($response->isSuccessful()) {
+            return $response->getData()['client_secret'];
+        }
+
+        throw new RuntimeException($response->getMessage());
     }
 }
