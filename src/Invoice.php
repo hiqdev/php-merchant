@@ -33,6 +33,7 @@ final class Invoice implements InvoiceInterface
     private $notifyMethod;
     private $cancelMethod;
     private $currency;
+    private $paymentMethod;
 
     /**
      * @return string
@@ -187,6 +188,18 @@ final class Invoice implements InvoiceInterface
     public function setCancelMethod($cancelMethod)
     {
         $this->cancelMethod = $cancelMethod;
+
+        return $this;
+    }
+
+    public function getPreferredPaymentMethod(): ?string
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPreferredPaymentMethod(string $paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
 
         return $this;
     }

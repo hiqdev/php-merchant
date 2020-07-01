@@ -10,10 +10,15 @@
 
 namespace hiqdev\php\merchant\merchants\stripe;
 
+use DateTime;
+use Exception;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
+use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
+use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Stripe\Gateway;
 
@@ -22,7 +27,7 @@ use Omnipay\Stripe\Gateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
+class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, PaymentCardMerchantInterface
 {
     /**
      * @var Gateway
@@ -50,9 +55,42 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
         return $response;
     }
 
+    public function chargeCard(InvoiceInterface $invoice)
+    {
+        $customerReference = $this->fetchCustomerReference($invoice->getClient());
+
+        /** @var \Omnipay\Stripe\Message\Response $response */
+        $response = $this->gateway->purchase([
+            'amount'            => $invoice->getAmount(),
+            'currency'          => $invoice->getCurrency()->getCode(),
+            'description'       => $invoice->getDescription(),
+            'customerReference' => $customerReference,
+            'paymentMethod'     => $invoice->getPreferredPaymentMethod(),
+            'returnUrl'         => $invoice->getReturnUrl(),
+            'confirm'           => true,
+        ])->send();
+
+        if ($response->isRedirect()) {
+            return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+        }
+
+        if ($response->isSuccessful()) {
+            return (new CompletePurchaseResponse())
+                ->setIsSuccessful(true)
+                ->setAmount($invoice->getAmount())
+                ->setFee(new Money(0, $invoice->getAmount()->getCurrency()))
+                ->setTransactionReference($response->getTransactionReference())
+                ->setTransactionId($response->getTransactionId())
+                ->setPayer($response->getCustomerReference())
+                ->setTime(new DateTime());
+        }
+
+        throw new Exception('Neither success nor redirect');
+    }
+
     public function completePurchase($data)
     {
-        throw new \Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
     private function fetchCustomerReference(string $email): string

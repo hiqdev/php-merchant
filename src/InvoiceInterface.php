@@ -134,4 +134,15 @@ interface InvoiceInterface
      * @return InvoiceInterface
      */
     public function setId($id);
+
+    /**
+     * @return string|null
+     */
+    public function getPreferredPaymentMethod(): ?string;
+
+    /**
+     * @param string $paymentMethod
+     * @return InvoiceInterface
+     */
+    public function setPreferredPaymentMethod(string $paymentMethod);
 }
