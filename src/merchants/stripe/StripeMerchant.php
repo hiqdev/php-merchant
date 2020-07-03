@@ -11,26 +11,30 @@
 namespace hiqdev\php\merchant\merchants\stripe;
 
 use DateTime;
+use DateTimeImmutable;
 use Exception;
+use hiqdev\php\merchant\card\CardInformation;
+use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
+use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
-use Omnipay\Stripe\Gateway;
+use Omnipay\Stripe\PaymentIntentsGateway;
 
 /**
  * Class StripeMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, PaymentCardMerchantInterface
+class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, PaymentCardMerchantInterface, RemoteCustomerAwareMerchant
 {
     /**
-     * @var Gateway
+     * @var PaymentIntentsGateway
      */
     protected $gateway;
 
@@ -43,8 +47,7 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
 
     public function requestPurchase(InvoiceInterface $invoice)
     {
-        $customerReference = $this->fetchCustomerReference($invoice->getClient());
-        $clientSecret = $this->fetchClientSecret($customerReference);
+        $clientSecret = $this->fetchClientSecret($invoice->getClient()->remoteId());
 
         $response = new RedirectPurchaseResponse('', [
             'clientSecret' => $clientSecret,
@@ -57,18 +60,20 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
 
     public function chargeCard(InvoiceInterface $invoice)
     {
-        $customerReference = $this->fetchCustomerReference($invoice->getClient());
-
-        /** @var \Omnipay\Stripe\Message\Response $response */
-        $response = $this->gateway->purchase([
-            'amount'            => $invoice->getAmount(),
-            'currency'          => $invoice->getCurrency()->getCode(),
-            'description'       => $invoice->getDescription(),
-            'customerReference' => $customerReference,
-            'paymentMethod'     => $invoice->getPreferredPaymentMethod(),
-            'returnUrl'         => $invoice->getReturnUrl(),
-            'confirm'           => true,
-        ])->send();
+        try {
+            /** @var \Omnipay\Stripe\Message\Response $response */
+            $response = $this->gateway->purchase([
+                'amount' => $this->moneyFormatter->format($invoice->getAmount()),
+                'currency' => $invoice->getCurrency()->getCode(),
+                'description' => $invoice->getDescription(),
+                'customerReference' => $invoice->getClient()->remoteId(),
+                'paymentMethod' => $invoice->getPreferredPaymentMethod(),
+                'returnUrl' => $invoice->getReturnUrl(),
+                'confirm' => true,
+            ])->send();
+        } catch (Exception $exception) {
+            throw new MerchantException('Failed to charge a card', $exception->getCode(), $exception);
+        }
 
         if ($response->isRedirect()) {
             return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
@@ -85,22 +90,16 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
                 ->setTime(new DateTime());
         }
 
-        throw new Exception('Neither success nor redirect');
+        if (isset($response->getData()['error']['message'])) {
+            throw new MerchantException($response->getData()['error']['message']);
+        }
+
+        throw new MerchantException('Failed to charge card');
     }
 
     public function completePurchase($data)
     {
         throw new Exception('Not implemented');
-    }
-
-    private function fetchCustomerReference(string $email): string
-    {
-        $response = $this->gateway->createCustomer(compact('email'))->send();
-        if (!$response->isSuccessful()) {
-            throw new RuntimeException($response->getMessage());
-        }
-
-        return $response->getCustomerReference();
     }
 
     private function fetchClientSecret(string $customerReference): string
@@ -111,5 +110,30 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
         }
 
         throw new RuntimeException($response->getMessage());
+    }
+
+    public function createCustomer(string $email): string
+    {
+        $response = $this->gateway->createCustomer(compact('email'))->send();
+        if (!$response->isSuccessful()) {
+            throw new RuntimeException($response->getMessage());
+        }
+
+        return $response->getCustomerReference();
+    }
+
+    public function fetchCardInformation(string $clientId, string $token): CardInformation
+    {
+        $response = $this->gateway->fetchCard([
+            'paymentMethod' => $token
+        ])->send();
+
+        $card = $response->getData()['card'];
+        $result = new CardInformation();
+        $result->brand = $card['brand'] ?? null;
+        $result->last4 = $card['last4'];
+        $result->expirationTime = DateTimeImmutable::createFromFormat('m/Y', "{$card['exp_month']}/{$card['exp_year']}");
+
+        return $result;
     }
 }

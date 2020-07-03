@@ -10,7 +10,8 @@
 
 namespace hiqdev\php\merchant\merchants;
 
-use hiqdev\cashew\DTO\PaymentFlow\Card\CardPaymentRequest;
+use hiqdev\php\merchant\card\CardInformation;
+use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -25,6 +26,9 @@ interface PaymentCardMerchantInterface extends MerchantInterface
     /**
      * @param InvoiceInterface $invoice
      * @return CompletePurchaseResponse|RedirectPurchaseResponse
+     * @throws MerchantException when charge fails completely
      */
     public function chargeCard(InvoiceInterface $invoice);
+
+    public function fetchCardInformation(string $clientId, string $token): CardInformation;
 }

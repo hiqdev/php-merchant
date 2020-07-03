@@ -61,7 +61,14 @@ final class Invoice implements InvoiceInterface
 
     public function setClient($client)
     {
-        $this->client = (string) $client;
+        if (is_string($client)) {
+            $this->client = new Client();
+            $this->client->login = $client;
+
+            return $this;
+        }
+
+        $this->client = $client;
 
         return $this;
     }

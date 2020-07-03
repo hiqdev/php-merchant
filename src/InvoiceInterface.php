@@ -21,12 +21,12 @@ use Money\Money;
 interface InvoiceInterface
 {
     /**
-     * @return string
+     * @return Client
      */
     public function getClient();
 
     /**
-     * @param string $client
+     * @param string|Client $client
      * @return InvoiceInterface
      */
     public function setClient($client);
