@@ -76,7 +76,7 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
         }
 
         if ($response->isRedirect()) {
-            return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
+            return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData() ?? []);
         }
 
         if ($response->isSuccessful()) {
