@@ -86,9 +86,15 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
                 ->setIsSuccessful(true)
                 ->setAmount($invoice->getAmount())
                 ->setFee(new Money(0, $invoice->getAmount()->getCurrency()))
-                ->setTransactionReference($response->getTransactionReference())
+                ->setTransactionReference(
+                    $response->getTransactionReference()
+                    ?? $response->getData()['charges']['data'][0]['id']
+                )
                 ->setTransactionId($response->getTransactionId())
-                ->setPayer($response->getCustomerReference())
+                ->setPayer(
+                    $response->getCustomerReference()
+                    ?? $response->getData()['charges']['data'][0]['customer']
+                )
                 ->setTime(new DateTime());
         }
 
