@@ -22,6 +22,7 @@ use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Stripe\PaymentIntentsGateway;
@@ -100,7 +101,26 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
 
     public function completePurchase($data)
     {
-        throw new Exception('Not implemented');
+        $response = $this->gateway->confirm([
+            'paymentIntentReference' => $data['payment_intent']
+        ])->send();
+
+        if ($response->isSuccessful()) {
+            return (new CompletePurchaseResponse())
+                ->setIsSuccessful(true)
+                ->setAmount(new Money($response->getData()['amount'], new Currency(strtoupper($response->getData()['currency']))))
+                ->setFee(new Money(0, new Currency(strtoupper($response->getData()['currency']))))
+                ->setTransactionReference($response->getTransactionReference())
+                ->setTransactionId($response->getTransactionId())
+                ->setPayer($response->getData()['customer'] ?? '')
+                ->setTime(new DateTime());
+        }
+
+        if (isset($response->getData()['error']['message'])) {
+            throw new MerchantException('Failed to charge card: ' . $response->getData()['error']['message']);
+        }
+
+        throw new MerchantException('Failed to charge card');
     }
 
     private function fetchClientSecret(string $customerReference): string
