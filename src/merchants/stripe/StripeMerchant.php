@@ -94,6 +94,7 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
                 ->setPayer(
                     $response->getCustomerReference()
                     ?? $response->getData()['charges']['data'][0]['customer']
+                    ?? ''
                 )
                 ->setTime(new DateTime());
         }
