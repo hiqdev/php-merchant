@@ -30,7 +30,7 @@ class RedirectPurchaseResponse
      */
     private $method = 'POST';
 
-    public function __construct(string $url, array $data)
+    public function __construct(string $url, array $data = [])
     {
         $this->url = $url;
         $this->data = $data;
