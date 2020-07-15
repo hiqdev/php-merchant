@@ -18,7 +18,7 @@ use Money\Money;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class CompletePurchaseResponse
+class CompletePurchaseResponse implements CompletePurchaseResponseInterface
 {
     /**
      * @var bool
@@ -53,10 +53,7 @@ class CompletePurchaseResponse
      */
     protected $payer;
 
-    /**
-     * @return string
-     */
-    public function getTransactionId()
+    public function getTransactionId(): string
     {
         return $this->transactionId;
     }
@@ -72,17 +69,11 @@ class CompletePurchaseResponse
         return $this;
     }
 
-    /**
-     * @return Currency
-     */
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    /**
-     * @return Money
-     */
     public function getAmount(): Money
     {
         return $this->amount;
@@ -100,10 +91,7 @@ class CompletePurchaseResponse
         return $this;
     }
 
-    /**
-     * @return Money
-     */
-    public function getFee()
+    public function getFee(): Money
     {
         if ($this->fee !== null) {
             return $this->fee;
@@ -112,21 +100,14 @@ class CompletePurchaseResponse
         return new Money(0, $this->getCurrency());
     }
 
-    /**
-     * @param Money $fee
-     * @return CompletePurchaseResponse
-     */
-    public function setFee($fee)
+    public function setFee($fee): self
     {
         $this->fee = $fee;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime of purchase in UTC
-     */
-    public function getTime()
+    public function getTime(): \DateTime
     {
         return $this->time;
     }
@@ -142,10 +123,7 @@ class CompletePurchaseResponse
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTransactionReference()
+    public function getTransactionReference(): string
     {
         return $this->transactionReference;
     }
@@ -161,10 +139,7 @@ class CompletePurchaseResponse
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPayer()
+    public function getPayer(): string
     {
         return $this->payer;
     }
@@ -191,10 +166,7 @@ class CompletePurchaseResponse
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIsSuccessful()
+    public function getIsSuccessful(): bool
     {
         return $this->isSuccessful;
     }
