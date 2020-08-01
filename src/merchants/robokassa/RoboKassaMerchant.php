@@ -52,7 +52,7 @@ class RoboKassaMerchant extends AbstractMerchant implements HostedPaymentPageMer
             'transaction_id' => $invoice->getId(),
             'description' => $invoice->getDescription(),
             'currency' => $invoice->getCurrency()->getCode(),
-            'client' => $invoice->getClient(),
+            'client' => $invoice->getClient()->login(),
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
