@@ -74,7 +74,7 @@ class TwoCheckoutPlusMerchant extends AbstractMerchant implements HostedPaymentP
      */
     public function completePurchase($data)
     {
-        /** @var \Omnipay\WebMoney\Message\CompletePurchaseResponse $response */
+        /** @var \Omnipay\TwoCheckoutPlus\Message\CompletePurchaseResponse $response */
         $response = $this->gateway->completePurchase($data)->send();
 
         return (new CompletePurchaseResponse())
