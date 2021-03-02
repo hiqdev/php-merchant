@@ -52,6 +52,10 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
      * @var string
      */
     protected $payer;
+    /**
+     * @var string
+     */
+    protected $notificationType;
 
     public function getTransactionId(): string
     {
@@ -169,5 +173,17 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
     public function getIsSuccessful(): bool
     {
         return $this->isSuccessful;
+    }
+
+    public function setNotificationType($value) : self
+    {
+        $this->notificationType = $value;
+
+        return $this;
+    }
+
+    public function getNotificationType() : ?string
+    {
+        return $this->notificationType ?? null;
     }
 }
