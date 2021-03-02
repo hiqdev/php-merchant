@@ -69,7 +69,7 @@ class FreeKassaMerchant extends AbstractMerchant implements HostedPaymentPageMer
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             // TODO: !(>_<)! FreeKassa does not indicate currency.
-            ->setAmount($this->moneyParser->parse($response->getAmount(), 'XXX'))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency() ?? 'RUB'))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
