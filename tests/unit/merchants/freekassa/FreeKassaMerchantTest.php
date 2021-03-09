@@ -59,7 +59,7 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
             'i' => strtolower($invoice->getCurrency()->getCode()),
             'us_client' => $invoice->getClient(),
             'us_system' => 'freekassa',
-            'us_currency' => 'RUB',
+            'us_currency' => 'USD',
         ], $purchaseResponse->getRedirectData());
     }
 
@@ -77,7 +77,7 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
             'us_time' => '1501493104',
             'us_client' => 'silverfire',
             'us_system' => 'freekassa',
-            'us_currency' => 'RUB',
+            'us_currency' => 'USD',
         ];
 
         $this->merchant = $this->buildMerchant();
@@ -88,9 +88,9 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
         $this->assertTrue($completePurchaseResponse->getIsSuccessful());
         $this->assertSame('597ef770b5fcf', $completePurchaseResponse->getTransactionId());
         $this->assertSame('22861661', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(62521, new Currency('RUB')))->equals($completePurchaseResponse->getAmount()));
-        $this->assertTrue((new Money(0, new Currency('RUB')))->equals($completePurchaseResponse->getFee()));
-        $this->assertSame('RUB', $completePurchaseResponse->getCurrency()->getCode());
+        $this->assertTrue((new Money(62521, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
+        $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
         $this->assertSame('silverfire@hiqdev.com / Bitcoin', $completePurchaseResponse->getPayer());
         $this->assertInstanceOf(\DateTime::class, $completePurchaseResponse->getTime());
     }
