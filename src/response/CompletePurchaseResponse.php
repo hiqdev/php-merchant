@@ -175,7 +175,7 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
         return $this->isSuccessful;
     }
 
-    public function setNotificationType($value) : self
+    public function setNotificationType($value): self
     {
         $this->notificationType = $value;
 
