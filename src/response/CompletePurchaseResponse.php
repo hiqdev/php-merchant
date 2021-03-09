@@ -182,7 +182,7 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
         return $this;
     }
 
-    public function getNotificationType() : ?string
+    public function getNotificationType(): ?string
     {
         return $this->notificationType ?? null;
     }
