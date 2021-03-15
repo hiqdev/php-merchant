@@ -47,7 +47,7 @@ class YandexP2pMerchant extends AbstractMerchant implements HostedPaymentPageMer
         /**
          * @var \Omnipay\YandexMoney\Message\p2p\PurchaseResponse
          */
-        $response = $this->gateway->purchase([
+        $response = $this->gateway->purchase(array_filter([
             'transactionId' => $invoice->getId(),
             'description' => $invoice->getDescription(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
@@ -55,8 +55,9 @@ class YandexP2pMerchant extends AbstractMerchant implements HostedPaymentPageMer
             'returnUrl' => $invoice->getReturnUrl(),
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
-            'method' => 'AC', // https://money.yandex.ru/doc.xml?id=526991
-        ])->send();
+            'method' => $invoice->getPreferredPaymentMethod() ?? 'AC', // https://money.yandex.ru/doc.xml?id=526991
+            'need' => $invoice->getAskAdditionalInfo() ?? null,
+        ]))->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
     }
