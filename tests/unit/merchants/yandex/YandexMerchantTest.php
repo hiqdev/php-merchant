@@ -52,7 +52,7 @@ class YandexMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('POST', $purchaseResponse->getMethod());
-        $this->assertSame('https://money.yandex.ru/quickpay/confirm.xml', $purchaseResponse->getRedirectUrl());
+        $this->assertSame('https://yoomoney.ru/quickpay/confirm.xml', $purchaseResponse->getRedirectUrl());
         $this->assertSame([
             'receiver' => $this->getCredentials()->getPurse(),
             'formcomment' => $invoice->getDescription(),
@@ -64,8 +64,8 @@ class YandexMerchantTest extends AbstractMerchantTest
             'targets' => 'Order ' . $invoice->getId(),
             'sum' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'comment' => null,
-            'need-fio' => 'yes',
-            'need-email' => 'yes',
+            'need-fio' => 'false',
+            'need-email' => 'false',
             'need-phone' => 'false',
             'need-address' => 'false',
             'paymentType' => 'AC',
