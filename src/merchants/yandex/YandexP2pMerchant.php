@@ -56,7 +56,6 @@ class YandexP2pMerchant extends AbstractMerchant implements HostedPaymentPageMer
             'notifyUrl' => $invoice->getNotifyUrl(),
             'cancelUrl' => $invoice->getCancelUrl(),
             'method' => $invoice->getPreferredPaymentMethod() ?? 'AC', // https://yoomoney.ru/doc.xml?id=526991
-            'need' => $invoice->getAskAdditionalInfo() ?? null,
         ]))->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
