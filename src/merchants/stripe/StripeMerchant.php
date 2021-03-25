@@ -13,8 +13,6 @@ namespace hiqdev\php\merchant\merchants\stripe;
 use DateTime;
 use DateTimeImmutable;
 use Exception;
-use hiqdev\cashew\Entity\PaymentTransaction\Confirmation;
-use hiqdev\cashew\VO\PaymentOption;
 use hiqdev\php\merchant\card\CardInformation;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
@@ -22,12 +20,14 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentRefundInterface;
+use hiqdev\php\merchant\merchants\RefundEntityInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
+use Omnipay\Stripe\Message\Response;
 use Omnipay\Stripe\PaymentIntentsGateway;
 
 /**
@@ -66,13 +66,13 @@ class StripeMerchant extends AbstractMerchant implements
         return $response;
     }
 
-    public function refund(Confirmation $confirmation, PaymentOption $option)
+    public function refund(RefundEntityInterface $refund): Response
     {
         try {
             /** @var \Omnipay\Stripe\Message\Response $response */
             $response = $this->gateway->refund([
-                'transactionReference' => $confirmation->remoteId(),
-                'amount' => $this->moneyFormatter->format($option->amount()),
+                'transactionReference' => $refund->getRefundTransactionId(),
+                'amount' => $this->moneyFormatter->format($refund->getAmount()),
             ])->send();
 
             if (!$response->isSuccessful()) {
