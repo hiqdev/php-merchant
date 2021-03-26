@@ -5,7 +5,7 @@ namespace hiqdev\php\merchant\merchants;
 
 use Money\Money;
 
-interface RefundEntityInterface
+interface RefundRequestInterface
 {
     public function getRefundTransactionId(): string;
 

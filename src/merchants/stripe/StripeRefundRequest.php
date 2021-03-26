@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace hiqdev\php\merchant\merchants\stripe;
 
-use hiqdev\php\merchant\merchants\RefundEntityInterface;
+use hiqdev\php\merchant\merchants\RefundRequestInterface;
 use Money\Money;
 
-final class StripeRefundEntity implements RefundEntityInterface
+final class StripeRefundRequest implements RefundRequestInterface
 {
     private string $remoteId;
     private Money $amount;

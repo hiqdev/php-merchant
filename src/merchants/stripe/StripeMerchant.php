@@ -20,7 +20,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentRefundInterface;
-use hiqdev\php\merchant\merchants\RefundEntityInterface;
+use hiqdev\php\merchant\merchants\RefundRequestInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -66,7 +66,7 @@ class StripeMerchant extends AbstractMerchant implements
         return $response;
     }
 
-    public function refund(RefundEntityInterface $refund): Response
+    public function refund(RefundRequestInterface $refund): void
     {
         try {
             /** @var \Omnipay\Stripe\Message\Response $response */
@@ -81,8 +81,6 @@ class StripeMerchant extends AbstractMerchant implements
         } catch (Exception $exception) {
             throw new MerchantException('Failed to refund a card: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        return $response;
     }
 
     public function chargeCard(InvoiceInterface $invoice)
