@@ -19,12 +19,15 @@ use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
+use hiqdev\php\merchant\merchants\PaymentRefundInterface;
+use hiqdev\php\merchant\merchants\RefundEntityInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
+use Omnipay\Stripe\Message\Response;
 use Omnipay\Stripe\PaymentIntentsGateway;
 
 /**
@@ -32,7 +35,11 @@ use Omnipay\Stripe\PaymentIntentsGateway;
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, PaymentCardMerchantInterface, RemoteCustomerAwareMerchant
+class StripeMerchant extends AbstractMerchant implements
+    HostedPaymentPageMerchantInterface,
+    PaymentCardMerchantInterface,
+    RemoteCustomerAwareMerchant,
+    PaymentRefundInterface
 {
     /**
      * @var PaymentIntentsGateway
@@ -55,6 +62,25 @@ class StripeMerchant extends AbstractMerchant implements HostedPaymentPageMercha
             'publicKey' => $this->credentials->getKey2()
         ]);
         $response->setMethod('GET');
+
+        return $response;
+    }
+
+    public function refund(RefundEntityInterface $refund): Response
+    {
+        try {
+            /** @var \Omnipay\Stripe\Message\Response $response */
+            $response = $this->gateway->refund([
+                'transactionReference' => $refund->getRefundTransactionId(),
+                'amount' => $this->moneyFormatter->format($refund->getAmount()),
+            ])->send();
+
+            if (!$response->isSuccessful()) {
+                throw new MerchantException('Response is not successful');
+            }
+        } catch (Exception $exception) {
+            throw new MerchantException('Failed to refund a card: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
 
         return $response;
     }
