@@ -51,7 +51,7 @@ class FreeKassaMerchant extends AbstractMerchant implements HostedPaymentPageMer
             'transaction_id' => $invoice->getId(),
             'currency' => $invoice->getCurrency()->getCode(),
             'amount' => $this->moneyFormatter->format($invoice->getAmount()),
-            'client' => $invoice->getClient(),
+            'client' => $invoice->getClient()->login(),
         ])->send();
 
         return new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData());
