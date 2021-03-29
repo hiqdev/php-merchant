@@ -8,18 +8,18 @@ use Money\Money;
 
 final class StripeRefundRequest implements RefundRequestInterface
 {
-    private string $remoteId;
+    private string $refundTransactionId;
     private Money $amount;
 
-    public function __construct(string $remoteId, Money $amount)
+    public function __construct(string $refundTransactionId, Money $amount)
     {
-        $this->remoteId = $remoteId;
+        $this->remoteId = $refundTransactionId;
         $this->amount = $amount;
     }
 
     public function getRefundTransactionId(): string
     {
-        return $this->remoteId;
+        return $this->refundTransactionId;
     }
 
     public function getAmount(): Money

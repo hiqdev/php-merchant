@@ -193,9 +193,12 @@ class StripeMerchant extends AbstractMerchant implements
         return $result;
     }
 
-    public function withIgnore3dSecure(): void
+    public function setIgnore3dSecure(): self
     {
-        $this->ignore3dSecure = true;
+        $self = clone $this;
+        $self->ignore3dSecure = true;
+
+        return $self;
     }
 
     public function is3dSecureIgnorred(): bool
