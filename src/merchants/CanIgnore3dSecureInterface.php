@@ -7,5 +7,5 @@ interface CanIgnore3dSecureInterface
 {
     public function withIgnore3dSecure(): void;
 
-    public function ignore3dSecure(): bool;
+    public function is3dSecureIgnorred(): bool;
 }
