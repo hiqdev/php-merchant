@@ -88,7 +88,7 @@ class StripeMerchant extends AbstractMerchant implements
 
     public function chargeCard(InvoiceInterface $invoice)
     {
-        $ignore3dSecure = $this->is3dSecureIgnorred() ? ['off_session' => true] : [];
+        $ignore3dSecure = $this->is3dSecureIgnored() ? ['off_session' => true] : [];
         try {
             /** @var \Omnipay\Stripe\Message\Response $response */
             $response = $this->gateway->purchase(array_merge([
@@ -201,7 +201,7 @@ class StripeMerchant extends AbstractMerchant implements
         return $self;
     }
 
-    public function is3dSecureIgnorred(): bool
+    public function is3dSecureIgnored(): bool
     {
         return $this->ignore3dSecure;
     }
