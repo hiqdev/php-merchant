@@ -17,6 +17,7 @@ use hiqdev\php\merchant\card\CardInformation;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
+use hiqdev\php\merchant\merchants\CanIgnore3dSecureInterface;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentRefundInterface;
@@ -27,7 +28,6 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
-use Omnipay\Stripe\Message\Response;
 use Omnipay\Stripe\PaymentIntentsGateway;
 
 /**
@@ -39,12 +39,15 @@ class StripeMerchant extends AbstractMerchant implements
     HostedPaymentPageMerchantInterface,
     PaymentCardMerchantInterface,
     RemoteCustomerAwareMerchant,
+    CanIgnore3dSecureInterface,
     PaymentRefundInterface
 {
     /**
      * @var PaymentIntentsGateway
      */
     protected $gateway;
+
+    private bool $ignore3dSecure = false;
 
     protected function createGateway()
     {
@@ -85,9 +88,10 @@ class StripeMerchant extends AbstractMerchant implements
 
     public function chargeCard(InvoiceInterface $invoice)
     {
+        $ignore3dSecure = $this->is3dSecureIgnored() ? ['off_session' => true] : [];
         try {
             /** @var \Omnipay\Stripe\Message\Response $response */
-            $response = $this->gateway->purchase([
+            $response = $this->gateway->purchase(array_merge([
                 'amount' => $this->moneyFormatter->format($invoice->getAmount()),
                 'currency' => $invoice->getCurrency()->getCode(),
                 'description' => $invoice->getDescription(),
@@ -95,7 +99,7 @@ class StripeMerchant extends AbstractMerchant implements
                 'paymentMethod' => $invoice->getPreferredPaymentMethod(),
                 'returnUrl' => $invoice->getReturnUrl(),
                 'confirm' => true,
-            ])->send();
+            ], $ignore3dSecure))->send();
         } catch (Exception $exception) {
             throw new MerchantException('Failed to charge a card', $exception->getCode(), $exception);
         }
@@ -187,5 +191,18 @@ class StripeMerchant extends AbstractMerchant implements
         $result->expirationTime = DateTimeImmutable::createFromFormat('m/Y', "{$card['exp_month']}/{$card['exp_year']}");
 
         return $result;
+    }
+
+    public function withIgnore3dSecure(): self
+    {
+        $self = clone $this;
+        $self->ignore3dSecure = true;
+
+        return $self;
+    }
+
+    public function is3dSecureIgnored(): bool
+    {
+        return $this->ignore3dSecure;
     }
 }
