@@ -191,7 +191,7 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
         return $this->notificationType ?? null;
     }
 
-    public function setPaymentMethod($value): self
+    public function setPaymentMethod(?string $value): self
     {
         $this->paymentMethod = $value;
 
