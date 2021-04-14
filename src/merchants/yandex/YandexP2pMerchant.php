@@ -77,6 +77,7 @@ class YandexP2pMerchant extends AbstractMerchant implements HostedPaymentPageMer
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getData()['sender'] ?: $response->getData()['operation_label'] ?: $response->getData()['email'] ?: '')
             ->setNotificationType($response->getNotificationType())
+            ->setPaymentMethod($response->getPaymentMethod())
             ->setTime(
                 (new \DateTime($response->getTime(), new \DateTimeZone('Europe/Moscow')))
                     ->setTimezone(new \DateTimeZone('UTC'))
