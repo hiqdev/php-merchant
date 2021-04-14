@@ -31,4 +31,8 @@ interface CompletePurchaseResponseInterface
     public function getIsSuccessful(): bool;
 
     public function setFee(Money $fee): self;
+
+    public function setPaymentMethod(?string $method): self;
+
+    public function getPaymentMethod(): ?string;
 }
