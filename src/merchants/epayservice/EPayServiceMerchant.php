@@ -76,7 +76,7 @@ class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageM
             ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
-            ->setPayer($response->getData()['EPS_ACCNUM'])
+            ->setPayer($response->getData()['EPS_ACCNUM'] ?? $response->getData()['us_client'])
             ->setTime((new \DateTime())->setTimezone(new \DateTimeZone('UTC')));
     }
 }
