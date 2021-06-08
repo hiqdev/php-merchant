@@ -47,7 +47,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "moneyphp/money": "^3.0"
+        "moneyphp/money": "^3.3"
     },
     "require-dev": {
         "hiqdev/omnipay-paypal": "dev-master",
