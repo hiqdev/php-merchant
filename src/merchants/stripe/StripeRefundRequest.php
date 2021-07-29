@@ -13,7 +13,7 @@ final class StripeRefundRequest implements RefundRequestInterface
 
     public function __construct(string $refundTransactionId, Money $amount)
     {
-        $this->remoteId = $refundTransactionId;
+        $this->refundTransactionId = $refundTransactionId;
         $this->amount = $amount;
     }
 
