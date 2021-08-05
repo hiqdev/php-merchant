@@ -86,6 +86,22 @@ class StripeMerchant extends AbstractMerchant implements
         }
     }
 
+    public function removePaymentMethod(string $paymentMethod): void
+    {
+        try {
+            /** @var \Omnipay\Stripe\Message\Response $response */
+            $response = $this->gateway->deleteCard([
+                'paymentMethod' => $paymentMethod,
+            ])->send();
+
+            if (!$response->isSuccessful()) {
+                throw new MerchantException('Response is not successful');
+            }
+        } catch (Exception $exception) {
+            throw new MerchantException('Failed to remove a card: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
+
     public function chargeCard(InvoiceInterface $invoice)
     {
         $ignore3dSecure = $this->is3dSecureIgnored() ? ['off_session' => true] : [];

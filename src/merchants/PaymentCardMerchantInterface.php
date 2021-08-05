@@ -31,4 +31,6 @@ interface PaymentCardMerchantInterface extends MerchantInterface
     public function chargeCard(InvoiceInterface $invoice);
 
     public function fetchCardInformation(string $clientId, string $token): CardInformation;
+
+    public function removePaymentMethod(string $paymentMethod): void;
 }
