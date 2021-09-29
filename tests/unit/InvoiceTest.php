@@ -32,9 +32,9 @@ class InvoiceTest extends TestCase
         $this->assertSame('', $invoice->getId());
 
         $invoice->setClient('username');
-        $this->assertSame('username', $invoice->getClient());
+        $this->assertSame('username', $invoice->getClient()->__toString());
         $invoice->setClient(123);
-        $this->assertSame('123', $invoice->getClient());
+        $this->assertSame(123, $invoice->getClient());
 
         $amount = new Money(1246, new Currency('USD'));
         $invoice->setAmount($amount);

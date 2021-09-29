@@ -57,9 +57,8 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
             'oa' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'o' => $invoice->getId(),
             'i' => strtolower($invoice->getCurrency()->getCode()),
-            'us_client' => $invoice->getClient(),
+            'us_client' => $invoice->getClient()->__toString(),
             'us_system' => 'freekassa',
-            'us_currency' => 'USD',
         ], $purchaseResponse->getRedirectData());
     }
 
@@ -77,7 +76,7 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
             'us_time' => '1501493104',
             'us_client' => 'silverfire',
             'us_system' => 'freekassa',
-            'us_currency' => 'USD',
+            'us_currency' => 'USD'
         ];
 
         $this->merchant = $this->buildMerchant();

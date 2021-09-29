@@ -68,6 +68,7 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
             'EPS_AMOUNT' => '10.99',
             'EPS_CURRENCY' => 'USD',
             'EPS_RESULT' => 'done',
+            'MERCHANT_ORDER_ID' => '123',
             'check_key' => '37d7fab99547543d8897ac5004f4c4f1',
         ];
 
