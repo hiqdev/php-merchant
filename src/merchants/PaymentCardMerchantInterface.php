@@ -33,4 +33,20 @@ interface PaymentCardMerchantInterface extends MerchantInterface
     public function fetchCardInformation(string $clientId, string $token): CardInformation;
 
     public function removePaymentMethod(string $paymentMethod): void;
+//    Probably, new API should be imtroduced:
+//
+//    /**
+//     * @param InvoiceInterface $invoice
+//     * @return UncapturedCompletePurchaseResponse|RedirectPurchaseResponse
+//     * @throws MerchantException when unable to authorize a card
+//     */
+//    public function authorizeCard(InvoiceInterface $invoice);
+//
+//    /**
+//     * @param UncapturedCompletePurchaseResponse $purchaseResponse
+//     * @return CompletePurchaseResponse
+//     */
+//    public function captureAuthorizedAmount(UncapturedCompletePurchaseResponse $purchaseResponse, ?Money $amount = null): CompletePurchaseResponse;
+//
+//    public function cancelCardAuthorization(UncapturedCompletePurchaseResponse $purchaseResponse): void;
 }

@@ -160,10 +160,10 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
     }
 
     /**
-     * @param string $isSuccessful
+     * @param bool $isSuccessful
      * @return CompletePurchaseResponse
      */
-    public function setIsSuccessful($isSuccessful)
+    public function setIsSuccessful(bool $isSuccessful): self
     {
         $this->isSuccessful = $isSuccessful;
 

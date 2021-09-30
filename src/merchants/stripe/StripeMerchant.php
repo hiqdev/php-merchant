@@ -17,7 +17,7 @@ use hiqdev\php\merchant\card\CardInformation;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
-use hiqdev\php\merchant\merchants\CanIgnore3dSecureInterface;
+use hiqdev\php\merchant\merchants\CanIgnore3dSecureMerchantInterface;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentRefundInterface;
@@ -39,7 +39,7 @@ class StripeMerchant extends AbstractMerchant implements
     HostedPaymentPageMerchantInterface,
     PaymentCardMerchantInterface,
     RemoteCustomerAwareMerchant,
-    CanIgnore3dSecureInterface,
+    CanIgnore3dSecureMerchantInterface,
     PaymentRefundInterface
 {
     /**
