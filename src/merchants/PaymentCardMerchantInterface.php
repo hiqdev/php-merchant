@@ -33,7 +33,7 @@ interface PaymentCardMerchantInterface extends MerchantInterface
     public function fetchCardInformation(string $clientId, string $token): CardInformation;
 
     public function removePaymentMethod(string $paymentMethod): void;
-//    Probably, new API should be imtroduced:
+//    Probably, new API should be introduced:
 //
 //    /**
 //     * @param InvoiceInterface $invoice
