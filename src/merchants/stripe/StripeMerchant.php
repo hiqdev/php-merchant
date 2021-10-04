@@ -117,7 +117,7 @@ class StripeMerchant extends AbstractMerchant implements
                 'confirm' => true,
             ], $ignore3dSecure))->send();
         } catch (Exception $exception) {
-            throw new MerchantException('Failed to charge a card', $exception->getCode(), $exception);
+            throw new MerchantException('Failed to charge a card: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
 
         if ($response->isRedirect()) {
