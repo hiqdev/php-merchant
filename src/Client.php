@@ -12,6 +12,7 @@ class Client
     public ?string $remoteId = null;
 
     public string $login;
+    public ?string $email = null;
 
     public function __toString(): string
     {
@@ -40,5 +41,10 @@ class Client
     public function login(): string
     {
         return $this->login;
+    }
+
+    public function email(): ?string
+    {
+        return $this->email;
     }
 }
