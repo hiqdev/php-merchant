@@ -23,6 +23,7 @@ use hiqdev\php\merchant\merchants\PaymentCardMerchantInterface;
 use hiqdev\php\merchant\merchants\PaymentRefundInterface;
 use hiqdev\php\merchant\merchants\RefundRequestInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
+use hiqdev\php\merchant\response\CardAuthorizationResponse;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
@@ -220,5 +221,70 @@ class StripeMerchant extends AbstractMerchant implements
     public function is3dSecureIgnored(): bool
     {
         return $this->ignore3dSecure;
+    }
+
+    public function authorizeCard(InvoiceInterface $invoice)
+    {
+        $ignore3dSecure = $this->is3dSecureIgnored() ? ['off_session' => true] : [];
+        try {
+            /** @var \Omnipay\Stripe\Message\Response $response */
+            $response = $this->gateway->authorize(array_merge([
+                'amount' => $this->moneyFormatter->format($invoice->getAmount()),
+                'currency' => $invoice->getCurrency()->getCode(),
+                'description' => $invoice->getDescription(),
+                'customerReference' => $invoice->getClient()->remoteId(),
+                'paymentMethod' => $invoice->getPreferredPaymentMethod(),
+                'returnUrl' => $invoice->getReturnUrl(),
+                'confirm' => true,
+                'capture_method' => 'manual'
+            ], $ignore3dSecure))->send();
+        } catch (Exception $exception) {
+            throw new MerchantException('Failed to authorize a payment card: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
+
+        if ($response->isRedirect()) {
+            return (new RedirectPurchaseResponse($response->getRedirectUrl(), $response->getRedirectData() ?? []))
+                ->setMethod('GET');
+        }
+
+        if ($response->isSuccessful()) {
+            return (new CardAuthorizationResponse())
+                ->setExpirationTime((new DateTimeImmutable())->modify('+7 days'))
+                ->setIsSuccessful(true)
+                ->setAmount($invoice->getAmount())
+                ->setFee(new Money(0, $invoice->getAmount()->getCurrency()))
+                ->setTransactionReference(
+                    $response->getData()['charges']['data'][0]['payment_intent']
+                )
+                ->setTransactionId($response->getTransactionId())
+                ->setPayer(
+                    $response->getCustomerReference()
+                    ?? $response->getData()['charges']['data'][0]['customer']
+                    ?? ''
+                )
+                ->setTime(new DateTime());
+        }
+
+        if (isset($response->getData()['error']['message'])) {
+            throw new MerchantException($response->getData()['error']['message']);
+        }
+
+        throw new MerchantException('Failed to charge card');
+    }
+
+    public function cancelAuthorization(RefundRequestInterface $refundRequest): void
+    {
+        try {
+            /** @var \Omnipay\Stripe\Message\PaymentIntents\Response $response */
+            $response = $this->gateway->cancel([
+                'paymentIntentReference' => $refundRequest->getRefundTransactionId(),
+            ])->send();
+
+            if (!$response->isCancelled()) {
+                throw new MerchantException('Payment has not been canceled, actual status: ' . $response->getStatus());
+            }
+        } catch (Exception $exception) {
+            throw new MerchantException('Failed to cancel a card authorization: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 }

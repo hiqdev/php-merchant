@@ -13,6 +13,7 @@ namespace hiqdev\php\merchant\merchants;
 use hiqdev\php\merchant\card\CardInformation;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
+use hiqdev\php\merchant\response\CardAuthorizationResponse;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 
@@ -33,20 +34,22 @@ interface PaymentCardMerchantInterface extends MerchantInterface
     public function fetchCardInformation(string $clientId, string $token): CardInformation;
 
     public function removePaymentMethod(string $paymentMethod): void;
-//    Probably, new API should be introduced:
-//
+
+    /**
+     * @param InvoiceInterface $invoice
+     * @return CardAuthorizationResponse|RedirectPurchaseResponse
+     * @throws MerchantException when unable to authorize a card
+     */
+    public function authorizeCard(InvoiceInterface $invoice);
+
 //    /**
-//     * @param InvoiceInterface $invoice
-//     * @return UncapturedCompletePurchaseResponse|RedirectPurchaseResponse
-//     * @throws MerchantException when unable to authorize a card
-//     */
-//    public function authorizeCard(InvoiceInterface $invoice);
-//
-//    /**
-//     * @param UncapturedCompletePurchaseResponse $purchaseResponse
+//     * @param RefundRequestInterface $refundRequest
 //     * @return CompletePurchaseResponse
 //     */
-//    public function captureAuthorizedAmount(UncapturedCompletePurchaseResponse $purchaseResponse, ?Money $amount = null): CompletePurchaseResponse;
-//
-//    public function cancelCardAuthorization(UncapturedCompletePurchaseResponse $purchaseResponse): void;
+//    public function captureAuthorized(CardAuthorizationResponse $purchaseResponse, ?Money $amount = null): CompletePurchaseResponse;
+
+    /**
+     * @param RefundRequestInterface $refundRequest
+     */
+    public function cancelAuthorization(RefundRequestInterface $refundRequest): void;
 }
