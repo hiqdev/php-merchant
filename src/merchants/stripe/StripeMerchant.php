@@ -96,7 +96,7 @@ class StripeMerchant extends AbstractMerchant implements
             ])->send();
 
             if (!$response->isSuccessful()) {
-                throw new MerchantException('Response is not successful');
+                throw new MerchantException($response->getData()['message']);
             }
         } catch (Exception $exception) {
             throw new MerchantException('Failed to remove a card: ' . $exception->getMessage(), $exception->getCode(), $exception);
