@@ -10,21 +10,25 @@
 
 namespace hiqdev\php\merchant\merchants\webmoney;
 
+use GuzzleHttp\Psr7\Response;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
+use hiqdev\php\merchant\merchants\SupportsPreflightNotificationRequestInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
 use Omnipay\WebMoney\Gateway;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class WebmoneyMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class WebmoneyMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
+class WebmoneyMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, SupportsPreflightNotificationRequestInterface
 {
     /**
      * @var Gateway
@@ -85,5 +89,15 @@ class WebmoneyMerchant extends AbstractMerchant implements HostedPaymentPageMerc
                 (new \DateTime($response->getData()['LMI_SYS_TRANS_DATE'], new \DateTimeZone('Europe/Moscow')))
                 ->setTimezone(new \DateTimeZone('UTC'))
             );
+    }
+
+    public function handlePreflightCompletePurchaseRequest(ServerRequestInterface $request): ?ResponseInterface
+    {
+        $params = array_merge($request->getQueryParams(), $request->getParsedBody());
+        if (!empty($params)) {
+            return null;
+        }
+
+        return new Response();
     }
 }
