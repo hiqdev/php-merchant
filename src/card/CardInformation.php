@@ -11,5 +11,7 @@ final class CardInformation
 
     public ?string $brand;
 
+    public ?string $fingerprint;
+
     public DateTimeImmutable $expirationTime;
 }

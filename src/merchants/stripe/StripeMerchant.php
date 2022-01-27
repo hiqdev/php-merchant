@@ -205,6 +205,7 @@ class StripeMerchant extends AbstractMerchant implements
         $result = new CardInformation();
         $result->brand = $card['brand'] ?? null;
         $result->last4 = $card['last4'];
+        $result->fingerprint = $card['fingerprint'] ?? null;
         $result->expirationTime = DateTimeImmutable::createFromFormat('m/Y', "{$card['exp_month']}/{$card['exp_year']}");
 
         return $result;
