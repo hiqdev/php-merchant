@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace hiqdev\php\merchant\response;
 
-use DateTime;
+use DateTimeInterface;
 use Money\Currency;
 use Money\Money;
 
@@ -22,7 +22,7 @@ interface CompletePurchaseResponseInterface
 
     public function getFee(): Money;
 
-    public function getTime(): DateTime;
+    public function getTime(): DateTimeInterface;
 
     public function getTransactionReference(): string;
 

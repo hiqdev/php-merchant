@@ -38,7 +38,7 @@ abstract class AbstractMerchantTest extends TestCase
      */
     protected $httpClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
