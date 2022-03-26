@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2015-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\merchant\tests\unit\merchants\epayservice;
+namespace hiqdev\php\merchant\tests\unit\merchants\epayments;
 
 use hiqdev\php\merchant\merchants\epayments\EpaymentsMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -82,7 +82,7 @@ class EpaymentsMerchantTest extends AbstractMerchantTest
 
         $data = $purchaseResponse->getRedirectData();
 
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'orderid' => $invoice->getId(),
             'partnerid' => $this->getCredentials()->getPurse(),
             'amount' => $this->getMoneyFormatter()->format($invoice->getAmount()),

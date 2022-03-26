@@ -46,30 +46,41 @@
         }
     ],
     "require": {
-        "php": "^7.1 || ^8.0",
-        "moneyphp/money": "~3.1.0"
+        "php": "^7.1 | ^8.0",
+        "ext-json": "*",
+        "moneyphp/money": "^3.0 | ^4.0"
     },
     "require-dev": {
-        "hiqdev/omnipay-paypal": "2.0.x-dev",
-        "hiqdev/omnipay-paxum": "2.0.x-dev",
-        "hiqdev/omnipay-freekassa": "2.0.x-dev",
-        "hiqdev/omnipay-interkassa": "2.x-dev",
-        "hiqdev/omnipay-robokassa": "2.0.x-dev",
-        "hiqdev/omnipay-okpay": "2.0.x-dev",
-        "hiqdev/omnipay-epayservice": "2.0.x-dev",
-        "hiqdev/omnipay-bitpay": "2.0.x-dev",
-        "hiqdev/omnipay-yandexmoney": "2.0.x-dev",
-        "hiqdev/omnipay-epayments": "1.0",
-        "hiqdev/omnipay-ikajo": "2.0.x-dev",
-        "hiqdev/omnipay-coingate": "dev-master",
-        "hiqdev/omnipay-yandex-kassa": "2.0.x-dev",
-        "dercoder/omnipay-webmoney": "^2.0",
-        "collizo4sky/omnipay-2checkout": "^1.6",
+        "hiqdev/omnipay-paypal": "^3.0",
+        "hiqdev/omnipay-paxum": "^3.0",
+        "hiqdev/omnipay-freekassa": "^3.0",
+        "hiqdev/omnipay-interkassa": "^3.0",
+        "hiqdev/omnipay-robokassa": "^3.0",
+        "hiqdev/omnipay-okpay": "^3.0",
+        "hiqdev/omnipay-epayservice": "^3.0",
+        "hiqdev/omnipay-bitpay": "^3.1.0",
+        "hiqdev/omnipay-yandexmoney": "^3.0",
+        "hiqdev/omnipay-epayments": "^3.0",
+        "hiqdev/omnipay-ikajo": "^3.0",
+        "hiqdev/omnipay-yandex-kassa": "^3.0",
+        "dercoder/omnipay-webmoney": "dev-php81 as v4.0.0",
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^9.0",
+        "dms/phpunit-arraysubset-asserts": "dev-master",
+        "bitpay/sdk-light": "dev-master as 2.2.3"
     },
     "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/SilverFire/omnipay-webmoney"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/SilverFire/php-bitpay-light-client"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "hiqdev\\php\\merchant\\": "src"
@@ -79,6 +90,11 @@
         "psr-4": {
             "hiqdev\\php\\merchant\\tests\\unit\\": "tests/unit",
             "hiqdev\\php\\merchant\\tests\\phpunit\\": "tests/phpunit"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/composer-config-plugin": true
         }
     }
 }

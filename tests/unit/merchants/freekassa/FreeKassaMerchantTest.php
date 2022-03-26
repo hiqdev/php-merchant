@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2015-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\merchant\tests\unit\merchants\robokassa;
+namespace hiqdev\php\merchant\tests\unit\merchants\freekassa;
 
 use hiqdev\php\merchant\merchants\freekassa\FreeKassaMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -49,14 +49,13 @@ class FreeKassaMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
 
-        $url = 'https://www.free-kassa.ru/merchant/cash.php';
-        $this->assertContains($url, $purchaseResponse->getRedirectUrl());
+        $url = 'https://pay.freekassa.ru/';
+        $this->assertStringContainsString($url, $purchaseResponse->getRedirectUrl());
 
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'm' => $this->getCredentials()->getPurse(),
             'oa' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'o' => $invoice->getId(),
-            'i' => strtolower($invoice->getCurrency()->getCode()),
             'us_client' => $invoice->getClient()->__toString(),
             'us_system' => 'freekassa',
         ], $purchaseResponse->getRedirectData());

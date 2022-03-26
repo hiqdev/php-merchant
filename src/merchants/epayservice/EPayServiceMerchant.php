@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Currency;
 
 /**
  * Class EPayServiceMerchant.
@@ -73,7 +74,7 @@ class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageM
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getData()['EPS_ACCNUM'] ?? $response->getData()['us_client'])

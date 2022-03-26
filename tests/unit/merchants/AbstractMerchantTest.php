@@ -10,8 +10,6 @@
 
 namespace hiqdev\php\merchant\tests\unit\merchants;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\ClientInterface;
 use hiqdev\php\merchant\credentials\Credentials;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\Invoice;
@@ -24,6 +22,8 @@ use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 use Omnipay\Common\GatewayInterface;
 use Omnipay\Common\Helper;
+use Omnipay\Common\Http\Client;
+use Omnipay\Common\Http\ClientInterface;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractMerchantTest extends TestCase

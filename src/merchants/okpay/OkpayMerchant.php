@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Currency;
 
 /**
  * Class OkpayMerchant.
@@ -70,8 +71,8 @@ class OkpayMerchant extends AbstractMerchant implements HostedPaymentPageMerchan
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
-            ->setFee($this->moneyParser->parse($response->getFee(), $response->getCurrency()))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), new Currency($response->getCurrency())))
+            ->setFee($this->moneyParser->parse($response->getFee(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())

@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2015-2018, HiQDev (http://hiqdev.com/)
  */
 
-namespace hiqdev\php\merchant\tests\unit\merchants\paypal;
+namespace hiqdev\php\merchant\tests\unit\merchants\okpay;
 
 use hiqdev\php\merchant\merchants\okpay\OkpayMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
@@ -50,7 +50,7 @@ class OkpayMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://www.okpay.com/process.html', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'ok_receiver' => $this->getCredentials()->getPurse(),
             'ok_item_1_name' => $invoice->getDescription(),
             'ok_currency' => $invoice->getCurrency()->getCode(),
@@ -75,10 +75,13 @@ class OkpayMerchantTest extends AbstractMerchantTest
             'ok_receiver' => $this->merchant->getCredentials()->getPurse(),
             'ok_invoice' => '123456',
             'ok_txn_datetime' => '2017-10-05T01:02:20',
+            'ok_payer_first_name' => 'John',
+            'ok_payer_last_name' => 'Doe',
+            'ok_payer_email' => 'john@example.com',
         ];
 
         $gatewayMock = $this->getMockBuilder(Gateway::class)
-            ->setMethods(['completePurchase'])->getMock();
+            ->onlyMethods(['completePurchase'])->getMock();
 
         $httpClient = $this->buildHttpClient();
         $gatewayMock->method('completePurchase')->willReturn(

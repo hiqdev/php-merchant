@@ -2,18 +2,21 @@
 
 namespace hiqdev\php\merchant\tests\unit\merchants\coingate;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
+use Omnipay\Common\Http\Client;
+use GuzzleHttp\Psr7\Response;
 use hiqdev\php\merchant\merchants\coingate\CoinGateMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
-use Money\Currency;
-use Money\Money;
 
 class CoinGateMerchantTest extends AbstractMerchantTest
 {
     /** @var CoinGateMerchant */
     protected $merchant;
+
+    public function setUp(): void
+    {
+        $this->markTestSkipped('CoinGate merchant support is discontinued');
+    }
 
     protected function buildMerchant()
     {
@@ -43,7 +46,7 @@ class CoinGateMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://secure.payinspect.com/post', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'payment' => 'CC',
             'url' => 'https://example.com/return',
             'error_url' => 'https://example.com/cancel',

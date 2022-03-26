@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Currency;
 use Omnipay\FreeKassa\Gateway;
 
 /**
@@ -69,7 +70,7 @@ class FreeKassaMerchant extends AbstractMerchant implements HostedPaymentPageMer
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
             // TODO: !(>_<)! FreeKassa does not indicate currency.
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency() ?? 'RUB'))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), new Currency($response->getCurrency() ?? 'RUB')))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())

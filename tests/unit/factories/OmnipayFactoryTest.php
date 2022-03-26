@@ -45,6 +45,6 @@ class OmnipayFactoryTest extends TestCase
         ];
 
         $gateway = $this->factory->build('PayPal', $params);
-        $this->assertArraySubset($params, $gateway->getParameters());
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset($params, $gateway->getParameters());
     }
 }

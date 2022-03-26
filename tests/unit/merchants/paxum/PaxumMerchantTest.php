@@ -10,8 +10,8 @@
 
 namespace hiqdev\php\merchant\tests\unit\merchants\paxum;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
+use Omnipay\Common\Http\Client;
+use GuzzleHttp\Psr7\Response;
 use hiqdev\php\merchant\merchants\paxum\PaxumMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
@@ -50,7 +50,7 @@ class PaxumMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://www.paxum.com/payment/phrame.php?action=displayProcessPaymentLogin', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'business_email' => 'purse',
             'amount' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'currency' => $invoice->getCurrency()->getCode(),
@@ -85,6 +85,11 @@ class PaxumMerchantTest extends AbstractMerchantTest
             'transaction_amount' => '10.99',
             'transaction_currency' => 'USD',
             'transaction_date' => '2017-10-09T19:10:42',
+            'key' => 'foobar',
+            'test' => '0',
+            'buyer_name' => 'John Doe',
+            'buyer_username' => 'jdoe',
+            'buyer_id' => '123',
         ];
 
         $this->merchant = $this->buildMerchant();

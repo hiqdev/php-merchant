@@ -50,7 +50,7 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://online.epayservices.com/merchant/index.php', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'EPS_DESCRIPTION' => $invoice->getDescription(),
             'EPS_GUID' => $this->getCredentials()->getPurse(),
             'EPS_AMOUNT' => $this->getMoneyFormatter()->format($invoice->getAmount()),
@@ -68,8 +68,9 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
             'EPS_AMOUNT' => '10.99',
             'EPS_CURRENCY' => 'USD',
             'EPS_RESULT' => 'done',
+            'EPS_GUID' => '9ce29412-3b4b-4f8f-8b05-3f9e9b7fc1d5',
             'MERCHANT_ORDER_ID' => '123',
-            'check_key' => '37d7fab99547543d8897ac5004f4c4f1',
+            'check_key' => 'b586e61468cb85091bad7cd0478942eb',
         ];
 
         $this->merchant = $this->buildMerchant();

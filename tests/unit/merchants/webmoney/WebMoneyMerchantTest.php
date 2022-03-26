@@ -52,7 +52,7 @@ class WebMoneyMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://merchant.wmtransfer.com/lmi/payment.asp', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'LMI_PAYEE_PURSE' => $this->getCredentials()->getPurse(),
             'LMI_PAYMENT_AMOUNT' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'LMI_PAYMENT_NO' => $invoice->getId(),

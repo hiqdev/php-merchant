@@ -51,7 +51,7 @@ class InterKassaMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://sci.interkassa.com/', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'ik_co_id' => $this->getCredentials()->getPurse(),
             'ik_am' => $this->getMoneyFormatter()->format($invoice->getAmount()),
             'ik_pm_no' => $invoice->getId(),
@@ -83,7 +83,8 @@ class InterKassaMerchantTest extends AbstractMerchantTest
             'ik_am'      => '1465.01',
             'ik_cur'     => 'USD',
             'ik_inv_prc' => '2015-12-22 11:07:12',
-            'ik_sign'    => 'tl5gP7V8YljF8O6J2YNOHw==',
+            'ik_pw_via'  => 'visa',
+            'ik_sign'    => 'xHQBxFIGn/ig4Ihl73iRIQ==',
             'ik_inv_st'  => 'success',
         ];
 

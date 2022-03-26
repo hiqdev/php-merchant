@@ -56,8 +56,8 @@ class YandexKassaMerchantTest extends AbstractMerchantTest
         $this->merchant = $this->buildMerchant();
         $gatewayStub = $this->makeGatewayStub();
         $gatewayStub->method('purchase')->willReturnCallback(function () use ($invoice) {
-            $requestMock = $this->getMockBuilder(PurchaseRequest::class)->disableOriginalConstructor()->setMethods(['send'])->getMock();
-            $responseMock = $this->getMockBuilder(PurchaseResponse::class)->disableOriginalConstructor()->setMethods(['getRedirectUrl'])
+            $requestMock = $this->getMockBuilder(PurchaseRequest::class)->disableOriginalConstructor()->onlyMethods(['send'])->getMock();
+            $responseMock = $this->getMockBuilder(PurchaseResponse::class)->disableOriginalConstructor()->onlyMethods(['getRedirectUrl'])
                                  ->getMock();
 
             $responseMock->method('getRedirectUrl')
@@ -107,7 +107,7 @@ class YandexKassaMerchantTest extends AbstractMerchantTest
         $gatewayStub = $this->makeGatewayStub();
         $gatewayStub->method('notification')->willReturnCallback(function () {
                 $requestMock = $this->getMockBuilder(IncomingNotificationRequest::class)
-                                    ->disableOriginalConstructor()->setMethods(['send'])
+                                    ->disableOriginalConstructor()->onlyMethods(['send'])
                                     ->getMock();
 
                 $reflection = new \ReflectionClass(IncomingNotificationResponse::class);
@@ -122,7 +122,7 @@ class YandexKassaMerchantTest extends AbstractMerchantTest
             });
         $gatewayStub->method('details')->willReturnCallback(function () {
                 $requestMock = $this->getMockBuilder(DetailsRequest::class)
-                                    ->disableOriginalConstructor()->setMethods(['send'])
+                                    ->disableOriginalConstructor()->onlyMethods(['send'])
                                     ->getMock();
 
                 $reflection = new \ReflectionClass(DetailsResponse::class);
@@ -138,7 +138,7 @@ class YandexKassaMerchantTest extends AbstractMerchantTest
             });
         $gatewayStub->method('capture')->willReturnCallback(function () {
                 $requestMock = $this->getMockBuilder(CaptureRequest::class)
-                                    ->disableOriginalConstructor()->setMethods(['send'])
+                                    ->disableOriginalConstructor()->onlyMethods(['send'])
                                     ->getMock();
 
                 $reflection = new \ReflectionClass(CaptureResponse::class);
@@ -182,7 +182,7 @@ class YandexKassaMerchantTest extends AbstractMerchantTest
     private function makeGatewayStub()
     {
         return $this->getMockBuilder(Gateway::class)
-                    ->setMethods(['purchase', 'capture', 'notification', 'details'])
+                    ->onlyMethods(['purchase', 'capture', 'notification', 'details'])
                     ->getMock();
     }
 }

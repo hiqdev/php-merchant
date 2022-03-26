@@ -2,8 +2,8 @@
 
 namespace hiqdev\php\merchant\tests\unit\merchants\ikajo;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
+use Omnipay\Common\Http\Client;
+use GuzzleHttp\Psr7\Response;
 use hiqdev\php\merchant\merchants\ikajo\IkajoMerchant;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
@@ -42,7 +42,7 @@ class IkajoMerchantTest extends AbstractMerchantTest
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://secure.servhost.online/payment/auth', $purchaseResponse->getRedirectUrl());
-        $this->assertArraySubset([
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'payment' => 'CC',
             'url' => 'https://example.com/return',
             'error_url' => 'https://example.com/cancel',

@@ -80,7 +80,7 @@ class WebmoneyMerchant extends AbstractMerchant implements HostedPaymentPageMerc
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), new Currency($response->getCurrency())))
             ->setFee(new Money(0, new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())

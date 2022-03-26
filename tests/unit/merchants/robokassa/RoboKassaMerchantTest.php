@@ -50,13 +50,12 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
         $this->assertSame('https://merchant.roboxchange.com/Index.aspx', $purchaseResponse->getRedirectUrl());
 
-        $this->assertArraySubset([
-            'MrchLogin' => $this->getCredentials()->getPurse(),
+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
+            'MerchantLogin' => $this->getCredentials()->getPurse(),
             'OutSum' => $this->getMoneyFormatter()->format($invoice->getAmount()),
-            'Desc' => $invoice->getDescription(),
-            'IncCurrLabel' => $invoice->getCurrency()->getCode(),
-            'Shp_Client' => $invoice->getClient(),
-            'Shp_Currency' => $invoice->getCurrency()->getCode(),
+            'Description' => $invoice->getDescription(),
+            'Shp_Client' => $invoice->getClient()->login(),
+            'OutSumCurrency' => $invoice->getCurrency()->getCode(),
             'Shp_TransactionId' => $invoice->getId(),
         ], $purchaseResponse->getRedirectData());
     }
@@ -69,13 +68,13 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
             'inv_id' => '1010566870',
             'InvId' => '1010566870',
             'crc' => '364AF43DA9AF4AFF18D96775E07586F6',
-            'SignatureValue' => '364AF43DA9AF4AFF18D96775E07586F6',
+            'SignatureValue' => 'a50e8cae67abd617a2724bb8b29270b6',
             'PaymentMethod' => 'BankCard',
             'IncSum' => '139.530000',
             'IncCurrLabel' => 'QCardR',
             'Shp_Client' => 'silverfire',
             'Shp_TransactionId' => '123',
-            'Shp_Currency' => 'RUB',
+            'OutSumCurrency' => 'RUB',
         ];
 
         $this->merchant = $this->buildMerchant();

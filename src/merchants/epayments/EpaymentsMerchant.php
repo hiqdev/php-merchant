@@ -15,6 +15,7 @@ use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use Money\Currency;
 use Omnipay\ePayments\Message\DetailsResponse;
 use Omnipay\ePayments\Message\PurchaseResponse;
 
@@ -72,7 +73,7 @@ class EpaymentsMerchant extends AbstractMerchant implements HostedPaymentPageMer
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
-            ->setAmount($this->moneyParser->parse($response->getAmount(), $response->getCurrency()))
+            ->setAmount($this->moneyParser->parse($response->getAmount(), new Currency($response->getCurrency())))
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getTransactionReference())
