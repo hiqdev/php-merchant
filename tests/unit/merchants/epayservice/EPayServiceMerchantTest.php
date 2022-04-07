@@ -85,4 +85,25 @@ class EPayServiceMerchantTest extends AbstractMerchantTest
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
         $this->assertInstanceOf(\DateTime::class, $completePurchaseResponse->getTime());
     }
+
+    public function testCompletePurchaseWithEpsWalletnum()
+    {
+        $_POST = [
+            'EPS_TRID' => '123',
+            'EPS_WALLETNUM'  => '12312984109284',
+            'EPS_AMOUNT' => '10.99',
+            'EPS_CURRENCY' => 'USD',
+            'EPS_RESULT' => 'done',
+            'EPS_GUID' => '9ce29412-3b4b-4f8f-8b05-3f9e9b7fc1d5',
+            'MERCHANT_ORDER_ID' => '123',
+            'check_key' => 'b586e61468cb85091bad7cd0478942eb',
+        ];
+
+        $this->merchant = $this->buildMerchant();
+        $completePurchaseResponse = $this->merchant->completePurchase([]);
+
+        $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
+        $this->assertTrue($completePurchaseResponse->getIsSuccessful());
+        $this->assertSame('12312984109284', $completePurchaseResponse->getPayer());
+    }
 }
