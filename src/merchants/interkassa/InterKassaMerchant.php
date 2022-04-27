@@ -10,6 +10,7 @@
 
 namespace hiqdev\php\merchant\merchants\interkassa;
 
+use DateTimeZone;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
@@ -17,9 +18,10 @@ use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Omnipay\InterKassa\Gateway;
+use Omnipay\InterKassa\Message\PurchaseResponse;
 
 /**
- * Class PaxumMerchant.
+ * Class InterKassaMerchant
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
@@ -46,7 +48,7 @@ class InterKassaMerchant extends AbstractMerchant implements HostedPaymentPageMe
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\Paxum\Message\PurchaseResponse
+         * @var PurchaseResponse
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),
@@ -76,6 +78,6 @@ class InterKassaMerchant extends AbstractMerchant implements HostedPaymentPageMe
             ->setTransactionReference($response->getTransactionReference())
             ->setTransactionId($response->getTransactionId())
             ->setPayer($response->getPayer())
-            ->setTime((new \DateTime($response->getTime()))->setTimezone(new \DateTimeZone('UTC')));
+            ->setTime((new \DateTime($response->getTime()))->setTimezone(new DateTimeZone('UTC')));
     }
 }
