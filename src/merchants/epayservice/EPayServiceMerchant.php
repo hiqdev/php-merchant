@@ -10,19 +10,23 @@
 
 namespace hiqdev\php\merchant\merchants\epayservice;
 
+use GuzzleHttp\Psr7\Response;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\HostedPaymentPageMerchantInterface;
+use hiqdev\php\merchant\merchants\SupportsPreflightNotificationRequestInterface;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class EPayServiceMerchant.
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
-class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface
+class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageMerchantInterface, SupportsPreflightNotificationRequestInterface
 {
     /**
      * @var \Omnipay\ePayService\Gateway
@@ -84,5 +88,14 @@ class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageM
                 ?? ''
             )
             ->setTime((new \DateTime())->setTimezone(new \DateTimeZone('UTC')));
+    }
+
+    public function handlePreflightCompletePurchaseRequest(ServerRequestInterface $request): ?ResponseInterface
+    {
+        if (($request->getParsedBody()['EPS_REQUEST'] ?? '') !== 'check') {
+            return null;
+        }
+
+        return new Response(200, [], '"OK"');
     }
 }
