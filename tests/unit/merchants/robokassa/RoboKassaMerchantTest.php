@@ -48,7 +48,7 @@ class RoboKassaMerchantTest extends AbstractMerchantTest
 
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
         $this->assertInstanceOf(RedirectPurchaseResponse::class, $purchaseResponse);
-        $this->assertSame('https://merchant.roboxchange.com/Index.aspx', $purchaseResponse->getRedirectUrl());
+        $this->assertSame('https://auth.robokassa.ru/Merchant/Index.aspx', $purchaseResponse->getRedirectUrl());
 
         \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset([
             'MerchantLogin' => $this->getCredentials()->getPurse(),
