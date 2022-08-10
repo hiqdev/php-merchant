@@ -59,7 +59,7 @@ class CompletePurchaseResponse implements CompletePurchaseResponseInterface
 
     public function getTransactionId(): string
     {
-        return $this->transactionId;
+        return $this->transactionId ?? $this->transactionReference;
     }
 
     /**
