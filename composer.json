@@ -82,13 +82,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "hiqdev\\php\\merchant\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "hiqdev\\php\\merchant\\tests\\unit\\": "tests/unit",
-            "hiqdev\\php\\merchant\\tests\\phpunit\\": "tests/phpunit"
+            "hiqdev\\php\\merchant\\": "src",
+            "hiqdev\\php\\merchant\\tests\\": "tests"
         }
     },
     "config": {
