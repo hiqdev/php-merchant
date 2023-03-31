@@ -11,6 +11,7 @@
 namespace hiqdev\php\merchant\tests\unit\merchants;
 
 use hiqdev\php\merchant\credentials\Credentials;
+use hiqdev\php\merchant\credentials\CredentialsInterface;
 use hiqdev\php\merchant\factories\GatewayFactoryInterface;
 use hiqdev\php\merchant\Invoice;
 use hiqdev\php\merchant\merchants\MerchantInterface;
@@ -47,7 +48,7 @@ abstract class AbstractMerchantTest extends TestCase
     }
 
     /**
-     * @return Credentials
+     * @return CredentialsInterface
      */
     protected function getCredentials()
     {
