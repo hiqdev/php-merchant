@@ -1,0 +1,26 @@
+{
+  "type": "payment",
+  "uuid": "e1bf6e4a-4465-40b4-849e-60dfe7bced49",
+  "order_id": "rGrIxUZFVknrFwbYvB",
+  "amount": "10.00000000",
+  "payment_amount": "10.00000000",
+  "payment_amount_usd": "10.000000",
+  "merchant_amount": "9.94000000",
+  "commission": "0.06000000",
+  "is_final": true,
+  "status": "paid",
+  "from": "THgEWubVc8tPKXLJ4VZ5zbiiAK7AgqSeGH",
+  "wallet_address_uuid": null,
+  "network": "tron",
+  "currency": "USD",
+  "payer_currency": "USDT",
+  "additional_data": null,
+  "convert": {
+    "to_currency": "USDT",
+    "commission": null,
+    "rate": "1",
+    "amount": "10.00000000"
+  },
+  "txid": "6f0d9c8374db57cac0d806251473de754f361c83a03cd805f74aa9da3193486b",
+  "sign": "a881b2f8e67bc344d85589187dceb237"
+}

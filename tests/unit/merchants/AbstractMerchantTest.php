@@ -26,6 +26,7 @@ use Omnipay\Common\Helper;
 use Omnipay\Common\Http\Client;
 use Omnipay\Common\Http\ClientInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
 
 abstract class AbstractMerchantTest extends TestCase
 {
