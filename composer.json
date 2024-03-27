@@ -63,20 +63,17 @@
         "hiqdev/omnipay-epayments": "^3.0",
         "hiqdev/omnipay-ikajo": "^3.0",
         "hiqdev/omnipay-cryptomus": "dev-main",
-        "dercoder/omnipay-webmoney": "dev-php81 as v4.0.0",
+        "dercoder/omnipay-webmoney": "^5.0",
         "hiqdev/hidev-php": "dev-master",
         "hiqdev/hidev-hiqdev": "dev-master",
         "phpunit/phpunit": "^9.0",
         "dms/phpunit-arraysubset-asserts": "dev-master",
         "bitpay/sdk-light": "dev-master as 2.2.3",
-        "php-http/mock-client": "^1.0"
+        "php-http/mock-client": "^1.0",
+        "php-http/guzzle7-adapter": "1.x-dev"
     },
     "minimum-stability": "dev",
     "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/SilverFire/omnipay-webmoney"
-        },
         {
             "type": "git",
             "url": "https://github.com/SilverFire/php-bitpay-light-client"
@@ -90,7 +87,8 @@
     },
     "config": {
         "allow-plugins": {
-            "yiisoft/composer-config-plugin": true
+            "yiisoft/composer-config-plugin": true,
+            "php-http/discovery": true
         }
     }
 }
