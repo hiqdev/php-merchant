@@ -153,9 +153,14 @@ class StripeMerchant extends AbstractMerchant implements
 
     public function completePurchase($data)
     {
-        $response = $this->gateway->confirm([
+        $response = $this->gateway->fetchPaymentIntent([
             'paymentIntentReference' => $data['payment_intent']
         ])->send();
+        if ($response->getData()['confirmation_method'] === 'manual' && $response->getData()['status'] === 'requires_confirmation') {
+            $response = $this->gateway->confirm([
+                'paymentIntentReference' => $data['payment_intent']
+            ])->send();
+        }
 
         if ($response->isSuccessful()) {
             return (new CompletePurchaseResponse())
