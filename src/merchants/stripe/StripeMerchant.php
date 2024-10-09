@@ -25,6 +25,7 @@ use hiqdev\php\merchant\merchants\RefundRequestInterface;
 use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CardAuthorizationResponse;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
+use hiqdev\php\merchant\response\InsufficientFundsResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
@@ -173,8 +174,31 @@ class StripeMerchant extends AbstractMerchant implements
                 ->setTime(new DateTime());
         }
 
-        if (isset($response->getData()['error']['message'])) {
-            throw new MerchantException('Failed to charge card: ' . $response->getData()['error']['message']);
+        if (
+            isset($response->getData()['last_payment_error'])
+            && $response->getData()['last_payment_error']['code'] === 'card_declined'
+            && $response->getData()['last_payment_error']['decline_code'] === 'insufficient_funds'
+        ) {
+            return (new InsufficientFundsResponse())
+                ->setIsSuccessful(true)
+                ->setAmount(new Money($response->getData()['amount'], new Currency(strtoupper($response->getData()['currency']))))
+                ->setFee(new Money(0, new Currency(strtoupper($response->getData()['currency']))))
+                ->setTransactionReference(
+                    $response->getData()['charges']['data'][0]['payment_intent']
+                )
+                ->setTransactionId($response->getTransactionId())
+                ->setPayer(
+                    $response->getCustomerReference()
+                    ?? $response->getData()['charges']['data'][0]['customer']
+                    ?? ''
+                )
+                ->setMessage($response->getData()['last_payment_error']['message'])
+                ->setTime(new DateTime());
+        }
+
+        if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
+            $message = $response->getData()['error']['message'] ?? $response->getData()['last_payment_error']['message'];
+            throw new MerchantException("Failed to charge card:\n" . $message);
         }
 
         throw new MerchantException('Failed to charge card');
