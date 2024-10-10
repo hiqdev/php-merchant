@@ -14,6 +14,7 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use hiqdev\php\merchant\card\CardInformation;
+use hiqdev\php\merchant\exceptions\InsufficientFundsException;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
@@ -179,21 +180,7 @@ class StripeMerchant extends AbstractMerchant implements
             && $response->getData()['last_payment_error']['code'] === 'card_declined'
             && $response->getData()['last_payment_error']['decline_code'] === 'insufficient_funds'
         ) {
-            return (new InsufficientFundsResponse())
-                ->setIsSuccessful(true)
-                ->setAmount(new Money($response->getData()['amount'], new Currency(strtoupper($response->getData()['currency']))))
-                ->setFee(new Money(0, new Currency(strtoupper($response->getData()['currency']))))
-                ->setTransactionReference(
-                    $response->getData()['charges']['data'][0]['payment_intent']
-                )
-                ->setTransactionId($response->getTransactionId())
-                ->setPayer(
-                    $response->getCustomerReference()
-                    ?? $response->getData()['charges']['data'][0]['customer']
-                    ?? ''
-                )
-                ->setMessage($response->getData()['last_payment_error']['message'])
-                ->setTime(new DateTime());
+            throw new InsufficientFundsException($response->getData()['last_payment_error']['message']);
         }
 
         if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
