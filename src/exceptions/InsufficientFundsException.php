@@ -6,17 +6,17 @@ use Exception;
 
 class InsufficientFundsException extends Exception
 {
-    protected string $context;
+    protected array $contextData = [];
 
-    public function setContext(string $context): self
+    public function setContextData(array $contextData): self
     {
-        $this->context = $context;
+        $this->contextData = $contextData;
 
         return $this;
     }
 
-    public function getContext(): string
+    public function getContextData(): array
     {
-        return $this->context;
+        return $this->contextData;
     }
 }
