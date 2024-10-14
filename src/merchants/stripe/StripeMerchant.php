@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Generalization over Omnipay and Payum
  *
@@ -14,6 +14,7 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use hiqdev\php\merchant\card\CardInformation;
+use hiqdev\php\merchant\exceptions\InsufficientFundsException;
 use hiqdev\php\merchant\exceptions\MerchantException;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
@@ -173,8 +174,20 @@ class StripeMerchant extends AbstractMerchant implements
                 ->setTime(new DateTime());
         }
 
-        if (isset($response->getData()['error']['message'])) {
-            throw new MerchantException('Failed to charge card: ' . $response->getData()['error']['message']);
+        if (
+            isset($response->getData()['last_payment_error'])
+            && isset($response->getData()['last_payment_error']['code'])
+            && isset($response->getData()['last_payment_error']['decline_code'])
+            && $response->getData()['last_payment_error']['code'] === 'card_declined'
+            && $response->getData()['last_payment_error']['decline_code'] === 'insufficient_funds'
+        ) {
+            $message = $response->getData()['last_payment_error']['message'] ?? 'Insufficient funds';
+            throw (new InsufficientFundsException($message))->setContextData($response->getData());
+        }
+
+        if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
+            $message = $response->getData()['error']['message'] ?? $response->getData()['last_payment_error']['message'];
+            throw new MerchantException("Failed to charge card:\n" . $message);
         }
 
         throw new MerchantException('Failed to charge card');
