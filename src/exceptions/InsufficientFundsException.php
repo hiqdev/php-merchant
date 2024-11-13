@@ -2,13 +2,11 @@
 
 namespace hiqdev\php\merchant\exceptions;
 
-use Exception;
-
-class InsufficientFundsException extends Exception
+class InsufficientFundsException extends MerchantException
 {
     protected array $contextData = [];
 
-    public function setContextData(array $contextData): self
+    public function withContextData(array $contextData): self
     {
         $this->contextData = $contextData;
 
