@@ -182,7 +182,7 @@ class StripeMerchant extends AbstractMerchant implements
             && $response->getData()['last_payment_error']['decline_code'] === 'insufficient_funds'
         ) {
             $message = $response->getData()['last_payment_error']['message'] ?? 'Insufficient funds';
-            throw (new InsufficientFundsException($message))->setContextData($response->getData());
+            throw (new InsufficientFundsException($message))->withContextData($response->getData());
         }
 
         if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
