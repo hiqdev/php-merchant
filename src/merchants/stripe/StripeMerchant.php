@@ -27,6 +27,7 @@ use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CardAuthorizationResponse;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
+use hiqdev\Site\Merchant\Service\Exception\MeaningfulForUserMerchantException;
 use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
@@ -187,7 +188,7 @@ class StripeMerchant extends AbstractMerchant implements
 
         if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
             $message = $response->getData()['error']['message'] ?? $response->getData()['last_payment_error']['message'];
-            throw new MerchantException("Failed to charge card:\n" . $message);
+            throw new MeaningfulForUserMerchantException("Failed to charge card:\n" . $message);
         }
 
         throw new MerchantException('Failed to charge card');
