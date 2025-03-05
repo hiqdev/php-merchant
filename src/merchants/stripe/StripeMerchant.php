@@ -14,8 +14,8 @@ use DateTime;
 use DateTimeImmutable;
 use Exception;
 use hiqdev\php\merchant\card\CardInformation;
-use hiqdev\php\merchant\exceptions\InsufficientFundsException;
 use hiqdev\php\merchant\exceptions\MerchantException;
+use hiqdev\php\merchant\Invoice;
 use hiqdev\php\merchant\InvoiceInterface;
 use hiqdev\php\merchant\merchants\AbstractMerchant;
 use hiqdev\php\merchant\merchants\CanIgnore3dSecureMerchantInterface;
@@ -27,11 +27,10 @@ use hiqdev\php\merchant\merchants\RemoteCustomerAwareMerchant;
 use hiqdev\php\merchant\response\CardAuthorizationResponse;
 use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
-use hiqdev\Site\Merchant\Service\Exception\MeaningfulForUserMerchantException;
-use Money\Currency;
 use Money\Money;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Stripe\PaymentIntentsGateway;
+use Stripe\StripeClient;
 
 /**
  * Class StripeMerchant
@@ -51,9 +50,12 @@ class StripeMerchant extends AbstractMerchant implements
     protected $gateway;
 
     private bool $ignore3dSecure = false;
+    private ?StripeClient $stripe = null;
 
     protected function createGateway()
     {
+        $this->stripe = new StripeClient($this->credentials->getKey1());
+
         return $this->gatewayFactory->build('Stripe\PaymentIntents', [
             'apiKey' => $this->credentials->getKey1(),
         ]);
@@ -61,11 +63,16 @@ class StripeMerchant extends AbstractMerchant implements
 
     public function requestPurchase(InvoiceInterface $invoice)
     {
-        $clientSecret = $this->fetchClientSecret($invoice->getClient()->remoteId());
+        $clientSecret = $this->fetchClientSecret($invoice);
 
         $response = new RedirectPurchaseResponse('', [
-            'clientSecret' => $clientSecret,
-            'publicKey' => $this->credentials->getKey2()
+            'paymentClientSecret' => $clientSecret['payment_client_secret'],
+            'setupClientSecret' => $clientSecret['client_secret'],
+            'customerSessionClientSecret' => $clientSecret['customer_session_client_secret'],
+            'publicKey' => $this->credentials->getKey2(),
+            'notifyUrl' => $invoice->getNotifyUrl(),
+            'returnUrl' => $invoice->getReturnUrl(),
+            'errorUrl' => $invoice->getCancelUrl(),
         ]);
         $response->setMethod('GET');
 
@@ -155,53 +162,73 @@ class StripeMerchant extends AbstractMerchant implements
 
     public function completePurchase($data)
     {
-        $response = $this->gateway->fetchPaymentIntent([
-            'paymentIntentReference' => $data['payment_intent']
-        ])->send();
-        if ($response->getData()['confirmation_method'] === 'manual' && $response->getData()['status'] === 'requires_confirmation') {
-            $response = $this->gateway->confirm([
-                'paymentIntentReference' => $data['payment_intent']
-            ])->send();
-        }
-
-        if ($response->isSuccessful()) {
-            return (new CompletePurchaseResponse())
-                ->setIsSuccessful(true)
-                ->setAmount(new Money($response->getData()['amount'], new Currency(strtoupper($response->getData()['currency']))))
-                ->setFee(new Money(0, new Currency(strtoupper($response->getData()['currency']))))
-                ->setTransactionReference($response->getTransactionReference())
-                ->setTransactionId($response->getTransactionId())
-                ->setPayer($response->getData()['customer'] ?? '')
-                ->setTime(new DateTime());
-        }
-
-        if (
-            isset($response->getData()['last_payment_error'])
-            && isset($response->getData()['last_payment_error']['code'])
-            && isset($response->getData()['last_payment_error']['decline_code'])
-            && $response->getData()['last_payment_error']['code'] === 'card_declined'
-            && $response->getData()['last_payment_error']['decline_code'] === 'insufficient_funds'
-        ) {
-            $message = $response->getData()['last_payment_error']['message'] ?? 'Insufficient funds';
-            throw (new InsufficientFundsException($message))->withContextData($response->getData());
-        }
-
-        if (isset($response->getData()['error']['message']) || isset($response->getData()['last_payment_error']['message'])) {
-            $message = $response->getData()['error']['message'] ?? $response->getData()['last_payment_error']['message'];
-            throw new MeaningfulForUserMerchantException("Failed to charge card:\n" . $message);
-        }
-
-        throw new MerchantException('Failed to charge card');
+        return (new ConfirmationStrategy($this->gateway, $this->credentials->getKey3()))->confirm($data);
     }
 
-    private function fetchClientSecret(string $customerReference): string
+    private function fetchClientSecret(Invoice $invoice): array
     {
-        $response = $this->gateway->createSetupIntent(compact('customerReference'))->send();
+        $customerReference = $invoice->getClient()->remoteId();
+
+        $setupIntent = $this->stripe->setupIntents->create([
+            'customer' => $customerReference,
+            'automatic_payment_methods' => ['enabled' => false],
+            'payment_method_types' => ['card'],
+            'metadata' => [
+                'transactionId' => $invoice->getId(),
+            ],
+        ]);
+
+        $paymentIntent = $this->stripe->paymentIntents->create([
+            'customer' => $customerReference,
+            'automatic_payment_methods' => ['enabled' => true],
+            'amount' => $invoice->getAmount()->getAmount(),
+            'currency' => $invoice->getAmount()->getCurrency()->getCode(),
+            'metadata' => [
+                'transactionId' => $invoice->getId(),
+            ],
+        ]);
+
+//        $paymentIntent = $this->stripe->setupIntents->create([
+//            'customer' => $customerReference,
+//            'automatic_payment_methods' => ['enabled' => true],
+////            'amount' => $invoice->getAmount()->getAmount(),
+////            'currency' => $invoice->getAmount()->getCurrency()->getCode(),
+//            'metadata' => [
+//                'transactionId' => $invoice->getId(),
+//            ]
+//        ]);
+
+        $customer_session = $this->stripe->customerSessions->create([
+            'customer' => $customerReference,
+            'components' => [
+                'payment_element' => [
+                    'enabled' => true,
+                    'features' => [
+                        'payment_method_redisplay' => 'enabled',
+                        'payment_method_save' => 'enabled',
+                        'payment_method_save_usage' => 'on_session',
+                        'payment_method_remove' => 'enabled',
+                    ],
+                ],
+            ],
+        ]);
+//        $payment_method_types = ['card'];
+//        $response = $this->gateway->createSetupIntent([
+//            'customerReference' => $customerReference,
+//            'customer' => $customerReference,
+//            'payment_method_types' => $payment_method_types,
+//            'automatic_payment_methods' => ['enabled' => true],
+//        ])->send();
+        return [
+            'payment_client_secret' => $paymentIntent->client_secret,
+            'client_secret' => $setupIntent->client_secret,
+            'customer_session_client_secret' => $customer_session->client_secret,
+        ];
         if ($response->isSuccessful()) {
             return $response->getData()['client_secret'];
         }
 
-        throw new RuntimeException($response->getMessage());
+//        throw new RuntimeException($response->getMessage());
     }
 
     public function createCustomer(string $email): string
@@ -217,7 +244,7 @@ class StripeMerchant extends AbstractMerchant implements
     public function fetchCardInformation(string $clientId, string $token): CardInformation
     {
         $response = $this->gateway->fetchCard([
-            'paymentMethod' => $token
+            'paymentMethod' => $token,
         ])->send();
 
         $card = $response->getData()['card'];
@@ -256,10 +283,12 @@ class StripeMerchant extends AbstractMerchant implements
                 'paymentMethod' => $invoice->getPreferredPaymentMethod(),
                 'returnUrl' => $invoice->getReturnUrl(),
                 'confirm' => true,
-                'capture_method' => 'manual'
+                'capture_method' => 'manual',
             ], $ignore3dSecure))->send();
         } catch (Exception $exception) {
-            throw new MerchantException('Failed to authorize a payment card: ' . $exception->getMessage(), $exception->getCode(), $exception);
+            throw new MerchantException('Failed to authorize a payment card: ' . $exception->getMessage(),
+                $exception->getCode(),
+                $exception);
         }
 
         if ($response->isRedirect()) {
@@ -304,7 +333,9 @@ class StripeMerchant extends AbstractMerchant implements
                 throw new MerchantException('Payment has not been canceled, actual status: ' . $response->getStatus());
             }
         } catch (Exception $exception) {
-            throw new MerchantException('Failed to cancel a card authorization: ' . $exception->getMessage(), $exception->getCode(), $exception);
+            throw new MerchantException('Failed to cancel a card authorization: ' . $exception->getMessage(),
+                $exception->getCode(),
+                $exception);
         }
     }
 }
