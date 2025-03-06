@@ -18,7 +18,7 @@ class ConfirmationStrategy
 {
     public function __construct(
         private PaymentIntentsGateway $gateway,
-        private string $webhookSecret,
+        private ?string $webhookSecret,
     )
     {
     }
@@ -35,6 +35,20 @@ class ConfirmationStrategy
     {
         if (isset($data['payment_intent']) && ($response = $this->confirmByPaymentIntent($data['payment_intent']))) {
             return $this->createPurchaseResponse($response);
+        }
+
+        $completePurchaseResponse = $this->handleWebHook();
+        if ($completePurchaseResponse === null) {
+            throw new MerchantException('Failed to confirm payment via WebHook');
+        }
+
+        return $completePurchaseResponse;
+    }
+
+    private function handleWebHook(): ?CompletePurchaseResponse
+    {
+        if ($this->webhookSecret === null) {
+            throw new MerchantException('Stripe webhook secret is not set');
         }
 
         $payload = @file_get_contents('php://input');
@@ -58,7 +72,6 @@ class ConfirmationStrategy
         // Handle the event
         switch ($event->type) {
             case 'payment_intent.payment_failed':
-                $paymentIntent = $event->data->object;
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object;
             // ... handle other event types
@@ -66,12 +79,13 @@ class ConfirmationStrategy
                 echo 'Received unknown event type ' . $event->type;
         }
         $pi = $paymentIntent->id;
+
         $request = $this->confirmByPaymentIntent($pi);
         if ($request) {
             return $this->createPurchaseResponse($request);
         }
 
-        throw new MerchantException("Skip");
+        return null;
     }
 
     private function confirmByPaymentIntent(mixed $paymentIntent): Response
