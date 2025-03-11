@@ -14,4 +14,6 @@ final class CardInformation
     public ?string $fingerprint;
 
     public DateTimeImmutable $expirationTime;
+
+    public bool $removeAfterFirstUse = false;
 }
