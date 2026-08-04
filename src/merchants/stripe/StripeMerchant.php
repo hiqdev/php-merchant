@@ -253,7 +253,7 @@ class StripeMerchant extends AbstractMerchant implements
         $result->brand = $card['brand'] ?? null;
         $result->last4 = $card['last4'];
         $result->fingerprint = $card['fingerprint'] ?? null;
-        $result->expirationTime = DateTimeImmutable::createFromFormat('m/Y', "{$card['exp_month']}/{$card['exp_year']}");
+        $result->expirationTime = DateTimeImmutable::createFromFormat('!m/Y', "{$card['exp_month']}/{$card['exp_year']}");
         if ($data['allow_redisplay'] === 'limited') {
             $result->removeAfterFirstUse = true;
         }
