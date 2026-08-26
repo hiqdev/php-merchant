@@ -27,6 +27,7 @@ class UnityFinanceMerchant extends InterKassaMerchant
         return $this->gatewayFactory->build(UnityFinanceGateway::class, [
             'checkoutId' => $this->credentials->getPurse(),
             'signKey' => $this->credentials->getKey1(),
+            'signAlgorithm' => 'md5',
         ]);
     }
 }

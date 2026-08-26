@@ -48,7 +48,7 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
 
         $this->assertSame($this->getCredentials()->getPurse(), $gateway->getCheckoutId());
         $this->assertSame($this->getCredentials()->getKey1(), $gateway->getSignKey());
-        $this->assertSame('sha256', $gateway->getSignAlgorithm());
+        $this->assertSame('md5', $gateway->getSignAlgorithm());
     }
 
     public function testRequestPurchase()
@@ -84,7 +84,7 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
             'ik_cur'     => 'USD',
             'ik_inv_prc' => '2015-12-22 11:07:12',
             'ik_pw_via'  => 'visa',
-            'ik_sign'    => '9oHj7FytS3x3L4HhX8htIKOZD6k1iu0ju6W2t+6r+DE=',
+            'ik_sign'    => 'xHQBxFIGn/ig4Ihl73iRIQ==',
             'ik_inv_st'  => 'success',
         ];
 
