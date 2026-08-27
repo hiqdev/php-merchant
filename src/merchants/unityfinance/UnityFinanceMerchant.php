@@ -18,6 +18,12 @@ use Omnipay\InterKassa\UnityFinanceGateway;
  * different domain (`old-pay.unityfinance.com` instead of `sci.interkassa.com`), so this
  * only overrides which gateway class gets built.
  *
+ * The sign algorithm is configured per checkout by UnityFinance support and isn't
+ * necessarily the same for every account (unlike InterKassaMerchant's checkout, which is
+ * known to be MD5), so it's read from the credentials' second key slot rather than
+ * hardcoded. Defaults to SHA256, the algorithm UnityFinance currently documents as the
+ * checkout default, when support hasn't specified otherwise.
+ *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */
 class UnityFinanceMerchant extends InterKassaMerchant
@@ -27,7 +33,7 @@ class UnityFinanceMerchant extends InterKassaMerchant
         return $this->gatewayFactory->build(UnityFinanceGateway::class, [
             'checkoutId' => $this->credentials->getPurse(),
             'signKey' => $this->credentials->getKey1(),
-            'signAlgorithm' => 'md5',
+            'signAlgorithm' => $this->credentials->getKey2() ?: 'sha256',
         ]);
     }
 }

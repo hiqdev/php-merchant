@@ -39,16 +39,38 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
             ->setKey1('Zp2zfdSJzbS61L32');
     }
 
+    private function getGateway(UnityFinanceMerchant $merchant): UnityFinanceGateway
+    {
+        $gatewayPropertyReflection = (new \ReflectionObject($merchant))->getProperty('gateway');
+        $gatewayPropertyReflection->setAccessible(true);
+
+        return $gatewayPropertyReflection->getValue($merchant);
+    }
+
     public function testCredentialsWereMappedCorrectly()
     {
-        $gatewayPropertyReflection = (new \ReflectionObject($this->merchant))->getProperty('gateway');
-        $gatewayPropertyReflection->setAccessible(true);
-        /** @var UnityFinanceGateway $gateway */
-        $gateway = $gatewayPropertyReflection->getValue($this->merchant);
+        $gateway = $this->getGateway($this->merchant);
 
         $this->assertSame($this->getCredentials()->getPurse(), $gateway->getCheckoutId());
         $this->assertSame($this->getCredentials()->getKey1(), $gateway->getSignKey());
-        $this->assertSame('md5', $gateway->getSignAlgorithm());
+    }
+
+    public function testSignAlgorithmDefaultsToSha256WhenSupportHasNotConfiguredOne()
+    {
+        $this->assertNull($this->getCredentials()->getKey2());
+        $this->assertSame('sha256', $this->getGateway($this->merchant)->getSignAlgorithm());
+    }
+
+    public function testSignAlgorithmIsConfigurableViaCredentialsSecondKey()
+    {
+        $merchant = new UnityFinanceMerchant(
+            $this->getCredentials()->setKey2('md5'),
+            $this->getGatewayFactory(),
+            $this->getMoneyFormatter(),
+            $this->getMoneyParser()
+        );
+
+        $this->assertSame('md5', $this->getGateway($merchant)->getSignAlgorithm());
     }
 
     public function testRequestPurchase()
@@ -72,7 +94,44 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
         $this->assertNotEmpty($purchaseResponse->getRedirectData()['ik_sign']);
     }
 
-    public function testCompletePurchase()
+    private function assertCompletePurchaseSucceeds($completePurchaseResponse)
+    {
+        $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
+        $this->assertTrue($completePurchaseResponse->getIsSuccessful());
+        $this->assertSame('123', $completePurchaseResponse->getTransactionId());
+        $this->assertSame('tax_num_id', $completePurchaseResponse->getTransactionReference());
+        $this->assertTrue((new Money(146501, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
+        $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
+    }
+
+    public function testCompletePurchaseWithDefaultSha256Algorithm()
+    {
+        $_POST = [
+            'ik_co_id'   => '887ac1234c1eeee1488b156b',
+            'ik_trn_id'  => 'ID_123456',
+            'ik_inv_id'  => 'tax_num_id',
+            'ik_pm_no'   => '123',
+            'ik_desc'    => 'Test Transaction long description',
+            'ik_am'      => '1465.01',
+            'ik_cur'     => 'USD',
+            'ik_inv_prc' => '2015-12-22 11:07:12',
+            'ik_pw_via'  => 'visa',
+            'ik_sign'    => '9oHj7FytS3x3L4HhX8htIKOZD6k1iu0ju6W2t+6r+DE=',
+            'ik_inv_st'  => 'success',
+        ];
+
+        $this->merchant = $this->buildMerchant();
+
+        $this->assertCompletePurchaseSucceeds($this->merchant->completePurchase([]));
+    }
+
+    /**
+     * Regression test for the live UnityFinance checkout (purse
+     * 53dfab7bbf4efc7b7b6421ff), which turned out to be configured for MD5, not the
+     * SHA256 default — a real notification failed signature validation until this was
+     * made configurable via credentials.getKey2().
+     */
+    public function testCompletePurchaseWithMd5AlgorithmConfiguredBySupport()
     {
         $_POST = [
             'ik_co_id'   => '887ac1234c1eeee1488b156b',
@@ -88,15 +147,13 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
             'ik_inv_st'  => 'success',
         ];
 
-        $this->merchant = $this->buildMerchant();
+        $merchant = new UnityFinanceMerchant(
+            $this->getCredentials()->setKey2('md5'),
+            $this->getGatewayFactory(),
+            $this->getMoneyFormatter(),
+            $this->getMoneyParser()
+        );
 
-        $completePurchaseResponse = $this->merchant->completePurchase([]);
-
-        $this->assertInstanceOf(\hiqdev\php\merchant\response\CompletePurchaseResponse::class, $completePurchaseResponse);
-        $this->assertTrue($completePurchaseResponse->getIsSuccessful());
-        $this->assertSame('123', $completePurchaseResponse->getTransactionId());
-        $this->assertSame('tax_num_id', $completePurchaseResponse->getTransactionReference());
-        $this->assertTrue((new Money(146501, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
-        $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
+        $this->assertCompletePurchaseSucceeds($merchant->completePurchase([]));
     }
 }
