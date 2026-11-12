@@ -16,6 +16,7 @@ use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use hiqdev\php\merchant\tests\unit\merchants\AbstractMerchantTest;
 use Money\Currency;
 use Money\Money;
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\WebMoney\Gateway;
 
 class WebMoneyMerchantTest extends AbstractMerchantTest
@@ -121,5 +122,35 @@ class WebMoneyMerchantTest extends AbstractMerchantTest
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
         $this->assertEquals(new \DateTime('2017-10-11 07:40:17'), $completePurchaseResponse->getTime());
         $this->assertEquals('Z954135551122', $completePurchaseResponse->getPayer());
+    }
+
+    public function testCompletePurchaseWithoutHashIsRejectedWithoutWarnings()
+    {
+        $_POST = [
+            'LMI_MODE' => '1',
+            'LMI_PAYMENT_AMOUNT' => '24.50',
+            'LMI_PAYEE_PURSE' => 'Z202718489231',
+            'LMI_PAYMENT_NO' => '4181adfm',
+        ];
+        $this->merchant = $this->buildMerchant();
+
+        $warnings = [];
+        $previousLevel = error_reporting(E_ALL);
+        set_error_handler(static function (int $errno, string $errstr) use (&$warnings): bool {
+            $warnings[] = $errstr;
+
+            return true;
+        });
+        try {
+            $this->merchant->completePurchase([]);
+            $this->fail('A notification without a hash must be rejected');
+        } catch (InvalidResponseException $e) {
+            $this->assertSame('Invalid signature type', $e->getMessage());
+        } finally {
+            restore_error_handler();
+            error_reporting($previousLevel);
+        }
+
+        $this->assertSame([], $warnings);
     }
 }

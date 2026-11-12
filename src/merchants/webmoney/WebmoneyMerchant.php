@@ -19,6 +19,7 @@ use hiqdev\php\merchant\response\CompletePurchaseResponse;
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use Money\Currency;
 use Money\Money;
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\WebMoney\Gateway;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -75,8 +76,12 @@ class WebmoneyMerchant extends AbstractMerchant implements HostedPaymentPageMerc
      */
     public function completePurchase($data)
     {
+        $request = $this->gateway->completePurchase($data);
+        if (empty($request->getData()['LMI_HASH'])) {
+            throw new InvalidResponseException('Invalid signature type');
+        }
         /** @var \Omnipay\WebMoney\Message\CompletePurchaseResponse $response */
-        $response = $this->gateway->completePurchase($data)->send();
+        $response = $request->send();
 
         return (new CompletePurchaseResponse())
             ->setIsSuccessful($response->isSuccessful())
