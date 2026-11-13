@@ -99,6 +99,6 @@ class InterKassaMerchantTest extends AbstractMerchantTest
         $this->assertTrue((new Money(146501, new Currency('USD')))->equals($completePurchaseResponse->getAmount()));
         $this->assertTrue((new Money(0, new Currency('USD')))->equals($completePurchaseResponse->getFee()));
         $this->assertSame('USD', $completePurchaseResponse->getCurrency()->getCode());
-        $this->assertEquals(new \DateTime('2015-12-22 08:07:12'), $completePurchaseResponse->getTime());
+        $this->assertEquals(new \DateTime('2015-12-22 09:07:12'), $completePurchaseResponse->getTime());
     }
 }
