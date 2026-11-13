@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.4', '8.0', '8.1', '8.2', '8.3' ]
+        php: [ '8.5' ]
         coverage-driver: [ pcov ]
     name: PHP ${{ matrix.php }}
     steps:
@@ -26,18 +26,10 @@ jobs:
           coverage: pcov
           tools: composer:v2, infection
 
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-
       - name: Update composer
         run: composer self-update
 
       - name: Composer install
-        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install -n
 
       - name: PHPUnit

@@ -36,7 +36,8 @@ class UnityFinanceMerchantTest extends AbstractMerchantTest
     {
         return parent::getCredentials()
             ->setPurse('887ac1234c1eeee1488b156b')
-            ->setKey1('Zp2zfdSJzbS61L32');
+            ->setKey1('Zp2zfdSJzbS61L32')
+            ->setKey2(null);
     }
 
     private function getGateway(UnityFinanceMerchant $merchant): UnityFinanceGateway

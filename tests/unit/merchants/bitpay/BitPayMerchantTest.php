@@ -51,6 +51,8 @@ class BitPayMerchantTest extends AbstractMerchantTest
 
     public function testRequestPurchase()
     {
+        $this->markTestSkipped('Requires the live BitPay test API.');
+
         $invoice = $this->buildInvoice();
 
         $purchaseResponse = $this->merchant->requestPurchase($invoice);
@@ -61,6 +63,8 @@ class BitPayMerchantTest extends AbstractMerchantTest
 
     public function testCompletePurchase()
     {
+        $this->markTestSkipped('Requires the live BitPay test API.');
+
         $completePurchaseResponse = $this->merchant->completePurchase([
             'id' => 'S4hVo7z6XZQ3yDUyHyUJD7',
         ]);
