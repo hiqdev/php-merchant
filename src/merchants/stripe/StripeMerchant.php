@@ -165,6 +165,9 @@ class StripeMerchant extends AbstractMerchant implements
         return (new ConfirmationStrategy($this->gateway, $this->credentials->getKey3()))->confirm($data);
     }
 
+    /**
+     * @return array{payment_client_secret: ?string, client_secret: ?string, customer_session_client_secret: string}
+     */
     private function fetchClientSecret(Invoice $invoice): array
     {
         $customerReference = $invoice->getClient()->remoteId();
@@ -224,15 +227,11 @@ class StripeMerchant extends AbstractMerchant implements
             'client_secret' => $setupIntent->client_secret,
             'customer_session_client_secret' => $customer_session->client_secret,
         ];
-        if ($response->isSuccessful()) {
-            return $response->getData()['client_secret'];
-        }
-
-//        throw new RuntimeException($response->getMessage());
     }
 
     public function createCustomer(string $email): string
     {
+        /** @var \Omnipay\Stripe\Message\Response $response */
         $response = $this->gateway->createCustomer(compact('email'))->send();
         if (!$response->isSuccessful()) {
             throw new RuntimeException($response->getMessage());

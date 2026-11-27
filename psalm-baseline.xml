@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.x-dev@7fcf2a074d1f14f0a795c2094ee3e55df1c40b65">
+  <file src="src/Invoice.php">
+    <ParamNameMismatch>
+      <code><![CDATA[$amount]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/merchants/coingate/CoinGateMerchant.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$purchaseResponse]]></code>
+      <code><![CDATA[$purchaseResponse]]></code>
+      <code><![CDATA[$purchaseResponse]]></code>
+      <code><![CDATA[$purchaseResponse]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[Gateway]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/merchants/robokassa/RoboKassaTransactionFinder.php">
+    <PossiblyUndefinedStringArrayOffset>
+      <code><![CDATA[$request->getParsedBody()['InvId']]]></code>
+    </PossiblyUndefinedStringArrayOffset>
+  </file>
+  <file src="src/merchants/stripe/ConfirmationStrategy.php">
+    <PossiblyUndefinedStringArrayOffset>
+      <code><![CDATA[$_SERVER['HTTP_STRIPE_SIGNATURE']]]></code>
+    </PossiblyUndefinedStringArrayOffset>
+    <UndefinedClass>
+      <code><![CDATA[MeaningfulForUserMerchantException]]></code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code><![CDATA[MeaningfulForUserMerchantException]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/merchants/stripe/StripeMerchant.php">
+    <InvalidArgument>
+      <code><![CDATA[[
+            'customer' => $customerReference,
+            'automatic_payment_methods' => ['enabled' => false],
+            'payment_method_types' => ['card'],
+            'metadata' => [
+                'transactionId' => $invoice->getId(),
+            ],
+        ]]]></code>
+      <code><![CDATA[[
+            'customer' => $customerReference,
+            'automatic_payment_methods' => ['enabled' => true],
+            'amount' => $invoice->getAmount()->getAmount(),
+            'currency' => $invoice->getAmount()->getCurrency()->getCode(),
+            'metadata' => [
+                'transactionId' => $invoice->getId(),
+            ],
+        ]]]></code>
+    </InvalidArgument>
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[$response->getCustomerReference()]]></code>
+    </NullableReturnStatement>
+    <ParamNameMismatch>
+      <code><![CDATA[$refund]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/merchants/twocheckoutplus/TwoCheckoutPlusMerchant.php">
+    <InvalidClone>
+      <code><![CDATA[clone $this->gateway]]></code>
+    </InvalidClone>
+    <UndefinedDocblockClass>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[Gateway]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/merchants/yandexkassa/YandexKassaMerchant.php">
+    <UndefinedDocblockClass>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$details]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$response]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[$this->gateway]]></code>
+      <code><![CDATA[Gateway]]></code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="src/response/CompletePurchaseResponse.php">
+    <ParamNameMismatch>
+      <code><![CDATA[$value]]></code>
+    </ParamNameMismatch>
+  </file>
+</files>
