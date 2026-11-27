@@ -52,7 +52,7 @@ class EPayServiceMerchant extends AbstractMerchant implements HostedPaymentPageM
     public function requestPurchase(InvoiceInterface $invoice)
     {
         /**
-         * @var \Omnipay\ePayService\Gateway
+         * @var \Omnipay\ePayService\Message\PurchaseResponse $response
          */
         $response = $this->gateway->purchase([
             'transactionId' => $invoice->getId(),

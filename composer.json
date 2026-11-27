@@ -68,7 +68,10 @@
         "dms/phpunit-arraysubset-asserts": "dev-master",
         "bitpay/sdk-light": "dev-master as 2.2.3",
         "php-http/mock-client": "^1.0",
-        "php-http/guzzle7-adapter": "1.x-dev"
+        "php-http/guzzle7-adapter": "1.x-dev",
+        "omnipay/stripe": "^3.1",
+        "stripe/stripe-php": "^16.6",
+        "vimeo/psalm": "^6.0"
     },
     "minimum-stability": "dev",
     "repositories": [
